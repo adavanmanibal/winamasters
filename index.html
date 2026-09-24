@@ -390,6 +390,12 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .rpill.r-S{background:linear-gradient(90deg,#ff5fc1,#ffd45e,#6dffac,#5ec8ff,#a97dff);color:#1A1030}
 .dots i.r-S.seen{background:conic-gradient(#ff5fc1,#ffd45e,#6dffac,#5ec8ff,#a97dff,#ff5fc1)}
 
+.ov-x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:26px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:5}
+.ov-x:hover{background:rgba(255,255,255,.18)}
+.bp-tag{position:absolute;top:10%;left:-6px;z-index:6;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:#FFFFFF;color:#0B1B3A;box-shadow:0 3px 8px rgba(0,0,0,.35)}
+.bp-tag.bought{background:#F2C94C;color:#3A2600}
+.stock .reserve{display:flex;flex-direction:column;gap:2px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13.5px}
+.stock .reserve b{font-weight:900}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -418,7 +424,7 @@ const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SU
 const PACK_SIZE = 5;
 const RORDER = ["C","U","R","E","L","S"];
 
-let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,per_slot:2,next_at:null};
+let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={};
 let me=null, inv={}, players=[], listings=[], trades=[], feed=[], board=[];
 let tab="booster", brandFilter="all", collFilter="all", lastPull=null, flipped=new Set(), adminDirty=false, busy=false;
@@ -466,6 +472,8 @@ function cardHTML(c,{count=0,locked=false,tag="div",attrs=""}={}){
 
 /* ---------- boosters gratuits ---------- */
 function tokens(){return bstate.available||0}
+function reserve(){return bstate.bought||0}
+function totalPacks(){return tokens()+reserve()}
 function hoursText(){const h=cfg.free_hours||[10,15];return h.map(x=>x+"h").join(" et ")}
 function nextText(){
   if(!bstate.next_at) return "";
@@ -514,15 +522,18 @@ async function act(fn,okMsg){
 async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
 
 /* ---------- actions ---------- */
-async function openBooster(paid){
-  if(busy) return; busy=true; let ids;
-  try{ ids=await rpc("open_booster",{paid}); }
-  catch(e){ toast(errMsg(e)); busy=false; render(); return; }
-  busy=false; lastPull=ids;
-  showOpening(ids);
-  loadGame().then(()=>{ if(!document.getElementById("ov")) render(); else { renderWallet(); } }).catch(()=>{});
+async function buyBooster(){
+  if(busy) return; busy=true;
+  try{ await rpc("buy_booster",{}); await loadGame(); render(); toast("Booster ajouté à ta réserve. Ouvre-le quand tu veux !"); }
+  catch(e){ toast(errMsg(e)); }
+  finally{ busy=false; }
 }
-
+function openBooster(paid){
+  if(document.getElementById("ov")) return;
+  if(paid?reserve()<1:tokens()<1){ toast(paid?"Tu n'as pas de booster acheté en réserve.":"Plus de booster gratuit pour l'instant."); return; }
+  showOpening(paid);
+}
+function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) openBooster(true); }
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
@@ -535,24 +546,33 @@ function packInner(){
   return `<div class="bp-in"><div class="bpf"><span class="crimp t"></span><span class="tear"></span><div class="body"><div class="holo">W</div><div class="ttl">WINAMASTERS</div><div class="ed">Édition 2026</div><div class="brands">${bl}</div><div class="count">5 CARTES</div></div><div class="foot">1 carte rare minimum</div><span class="crimp b"></span></div></div>`;
 }
 (function(){const n=24,t=[],b=[];for(let i=0;i<=n;i++){const x=(i/n*100).toFixed(2);t.push(`${x}% ${i%2?1.5:0}%`);b.push(`${(100-i/n*100).toFixed(2)}% ${i%2?98.5:100}%`)}document.documentElement.style.setProperty("--zz",`polygon(${t.join(",")},${b.join(",")})`)})();
-function showOpening(ids){
+function showOpening(paid){
   closeOverlay(true);
   const ov=document.createElement("div"); ov.className="ov"; ov.id="ov";
-  ov.innerHTML=`<div class="big-hint">Déchire ton booster !</div>
+  ov.innerHTML=`<button class="ov-x" data-ov="close" aria-label="Fermer">×</button>
+    <div class="big-hint">Déchire ton booster !</div>
     <button class="op idle" id="op" data-ov="tear" aria-label="Déchirer le booster"><div class="peek"></div><div class="layer p-body">${packInner()}</div><div class="layer p-top">${packInner()}</div></button>
-    <button class="btn cta pulse" id="tearBtn" data-ov="tear">Déchirer le booster</button>`;
+    <button class="btn cta pulse" id="tearBtn" data-ov="tear">Déchirer le booster</button>
+    <button class="linkbtn light" id="laterBtn" data-ov="close">Garder pour plus tard</button>`;
   document.body.appendChild(ov); document.body.style.overflow="hidden";
-  ovState={ids,idx:0,seen:new Set(),phase:"pack"};
+  ovState={ids:null,paid,idx:0,seen:new Set(),phase:"pack"};
 }
-function tearPack(){
+async function tearPack(){
   if(!ovState||ovState.phase!=="pack") return; ovState.phase="tearing";
+  const st=ovState;
   const op=document.getElementById("op"); op.classList.remove("idle");
-  const h=document.querySelector("#ov .big-hint"); if(h) h.style.visibility="hidden";
-  const tb=document.getElementById("tearBtn"); if(tb) tb.style.visibility="hidden";
+  ["#ov .big-hint","#tearBtn","#laterBtn","#ov .ov-x"].forEach(q=>{const e=document.querySelector(q); if(e) e.style.visibility="hidden"});
   op.classList.add("shake");
-  setTimeout(()=>{op.classList.remove("shake");op.classList.add("torn")},450);
-  setTimeout(()=>op.classList.add("drop"),950);
-  setTimeout(()=>{if(ovState){ovState.phase="reveal";renderReveal()}},1650);
+  const wait=new Promise(r=>setTimeout(r,450));
+  let ids;
+  try{ ids=await rpc("open_booster",{paid:st.paid}); }
+  catch(e){ closeOverlay(); toast(errMsg(e)); return; }
+  await wait; if(ovState!==st) return;
+  st.ids=ids; lastPull=ids;
+  loadGame().then(()=>{ if(!document.getElementById("ov")) render(); else renderWallet(); }).catch(()=>{});
+  op.classList.remove("shake"); op.classList.add("torn");
+  setTimeout(()=>op.classList.add("drop"),500);
+  setTimeout(()=>{ if(ovState===st){ st.phase="reveal"; renderReveal(); } },1200);
 }
 function bigScale(){return Math.max(0.85,Math.min(1.8,(innerHeight-340)/296,(innerWidth-100)/200))}
 function dotsHTML(){
@@ -614,7 +634,7 @@ function renderSummary(){
   const ov=document.getElementById("ov"); if(!ov||!ovState) return;
   ovState.phase="summary"; ovState.ids.forEach((_,i)=>ovState.seen.add(i));
   const s=innerWidth<640?Math.min(0.72,(innerWidth-60)/400):0.9;
-  const t=tokens();
+  const t=totalPacks();
   ov.innerHTML=`<div class="rv"><div class="big-hint">Booster ouvert !</div>
     <div class="done-sub">Ces 5 cartes sont rangées dans ta collection. Clique sur une carte pour l'agrandir.</div>
     <div class="summary">${ovState.ids.map(id=>zoomBtn(cardById[id],s)).join("")}</div>
@@ -631,11 +651,12 @@ function closeOverlay(silent){
 function ovAction(a,ds){
   if(!ovState&&a!=="close") return;
   if(a==="tear"){tearPack();return}
+  if(a==="close"&&ovState&&ovState.phase==="tearing") return;
   if(a==="big"){ if(Date.now()-lastSwipe<400) return; if(!ovState.seen.has(ovState.idx)) flipCurrent(); else nextCard(); return}
   if(a==="collection"){closeOverlay(true);tab="collection";collFilter="all";render(true);scrollTo(0,0);return}
   if(a==="all"){renderSummary();return}
   if(a==="close"){closeOverlay();return}
-  if(a==="again"){closeOverlay(true);openBooster(false);return}
+  if(a==="again"){closeOverlay(true);openNext();return}
 }
 document.addEventListener("keydown",e=>{
   if(!ovState) return;
@@ -669,10 +690,10 @@ function renderTabs(){
 }
 function renderWallet(){
   if(!me){$("#wallet").innerHTML="";return}
-  const t=tokens(), per=bstate.per_slot||cfg.free_per_slot||2;
-  const packs=Array.from({length:per},(_,i)=>`<span class="mini-pack ${i<t?"":"off"}"></span>`).join("");
+  const t=totalPacks(), per=Math.max(bstate.per_slot||cfg.free_per_slot||2,t);
+  const packs=Array.from({length:Math.min(per,4)},(_,i)=>`<span class="mini-pack ${i<t?"":"off"}"></span>`).join("");
   $("#wallet").innerHTML=`<span class="pill"><span class="drop" aria-hidden="true"></span><b>${me.coins}</b> bidons</span>
-    <button class="pill" data-tab="booster" title="Boosters gratuits">${packs}<b>${t}</b> booster${t>1?"s":""}</button>
+    <button class="pill" data-tab="booster" title="Boosters à ouvrir">${packs}<b>${t}</b> booster${t>1?"s":""}</button>
     <button class="pill" data-act="pseudo" title="Mon compte">${esc(me.pseudo)}</button>`;
 }
 function render(force){
@@ -698,20 +719,22 @@ function viewFeed(){
   return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}<span class="when">${ago(f.created_at)}</span></li>`).join("")}</ul></section>`;
 }
 function viewBooster(){
-  const t=tokens(), per=bstate.per_slot||cfg.free_per_slot||2;
+  const t=tokens(), b=reserve(), per=bstate.per_slot||cfg.free_per_slot||2;
   const slots=Array.from({length:per},(_,i)=>`<span class="slot ${i<t?"":"off"}"></span>`).join("");
-  const packs=t>0
-    ? Array.from({length:t},()=>`<div class="bpw"><button class="bp" data-act="free" aria-label="Ouvrir un booster gratuit">${packInner()}</button><button class="btn open-cta" data-act="free">Ouvrir ce booster</button></div>`).join("")
-    : `<div class="bpw"><div class="bp off" aria-hidden="true">${packInner()}</div><div class="bp-label">Plus de booster gratuit pour l'instant</div></div>`;
+  const pack=(act,tag)=>`<div class="bpw"><button class="bp" data-act="${act}" aria-label="Ouvrir ce booster">${packInner()}<span class="bp-tag ${act==="openbought"?"bought":""}">${tag}</span></button><button class="btn open-cta" data-act="${act}">Ouvrir ce booster</button></div>`;
+  const packs=(t+b)>0
+    ? Array.from({length:t},()=>pack("free","Gratuit")).join("")+Array.from({length:b},()=>pack("openbought","Acheté")).join("")
+    : `<div class="bpw"><div class="bp off" aria-hidden="true">${packInner()}</div><div class="bp-label">Plus de booster pour l'instant</div></div>`;
   const last=lastPull?`<h3>Ton dernier booster</h3><div class="lastpull">${lastPull.map(id=>zoomBtn(cardById[id],innerWidth<640?0.55:0.7)).join("")}</div>`:"";
-  return `<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter un à tout moment pour ${cfg.booster_price} bidons.</p>
+  return `<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
   <div class="bstage">
     <div class="packs">${packs}</div>
     <aside class="stock">
       <div class="lbl">Boosters gratuits</div>
       <div class="big"><div class="slots">${slots}</div><div class="n">${t?`${t} disponible${t>1?"s":""}`:"Aucun pour l'instant"}</div></div>
       <div class="next">Prochaine distribution : <span id="nextTxt">${nextText()}</span></div>
-      <div class="rule">Les boosters non ouverts ne se cumulent pas : à chaque distribution, tu repars avec ${per} boosters.</div>
+      <div class="rule">Les boosters gratuits non ouverts ne se cumulent pas : à chaque distribution, tu repars avec ${per} boosters.</div>
+      <div class="reserve"><span class="lbl">Réserve</span><span>${b?`<b>${b}</b> booster${b>1?"s":""} acheté${b>1?"s":""}, sans limite de temps`:"Aucun booster acheté"}</span></div>
       <button class="btn buy" style="width:100%;margin-top:12px" data-act="paid" ${me.coins<cfg.booster_price?"disabled":""}><span class="buy-l1">Acheter un booster</span><span class="buy-l2"><span class="drop" aria-hidden="true"></span>${cfg.booster_price} bidons</span></button>
     </aside>
   </div>${last}${viewFeed()}`;
@@ -879,8 +902,9 @@ document.addEventListener("click",async e=>{
   if(ds.tcancel){t.disabled=true;await act(()=>rpc("cancel_trade",{trade_id:+ds.tcancel}),"Proposition annulée, carte récupérée.");return}
   if(ds.upl){uploadFor(ds.upl);return}
   switch(ds.act){
-    case "free": t.disabled=true; await openBooster(false); break;
-    case "paid": t.disabled=true; await openBooster(true); break;
+    case "free": openBooster(false); break;
+    case "paid": t.disabled=true; await buyBooster(); break;
+    case "openbought": openBooster(true); break;
     case "flipall": lastPull&&lastPull.forEach((_,i)=>flipped.add(i)); document.querySelectorAll(".flip").forEach(f=>f.classList.add("on")); break;
     case "close": closeDlg(); break;
     case "pseudo": openPseudoDlg(); break;
