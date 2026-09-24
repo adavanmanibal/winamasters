@@ -168,9 +168,9 @@ button.card:hover{transform:translateY(-3px)}
 .flip .back{border-radius:12px;background:radial-gradient(100% 60% at 30% 15%,rgba(88,140,255,.5),transparent 60%),linear-gradient(165deg,#1B3A80,#0B1B3A 60%,#050C1E);display:flex;align-items:center;justify-content:center;overflow:hidden}
 .flip .back::before{content:"";position:absolute;inset:8px;border:1.5px solid rgba(255,255,255,.5);border-radius:8px}
 .flip .back span{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-stretch:125%;font-weight:900;color:#fff;font-size:30px}
-.flip .back.hint-R{box-shadow:0 0 0 3px var(--r-R),0 0 16px rgba(47,107,255,.6)}
-.flip .back.hint-E{box-shadow:0 0 0 3px var(--r-E),0 0 20px rgba(155,92,255,.7)}
-.flip .back.hint-L{box-shadow:0 0 0 3px var(--r-L),0 0 28px rgba(227,169,31,.9);animation:pulse 1.2s infinite}
+.cback.hint-R,.flip .back.hint-R{box-shadow:0 0 0 3px var(--r-R),0 0 16px rgba(47,107,255,.6)}
+.flip .back.hint-E,.cback.hint-E{box-shadow:0 0 0 3px #DCE6FF,0 0 22px rgba(200,215,255,.85)}
+.cback.hint-L,.flip .back.hint-L{box-shadow:0 0 0 3px var(--r-L),0 0 28px rgba(227,169,31,.9);animation:pulse 1.2s infinite}
 @keyframes pulse{50%{box-shadow:0 0 0 3px var(--r-L),0 0 8px rgba(227,169,31,.5)}}
 
 /* ---------- collection ---------- */
@@ -189,8 +189,6 @@ button.card:hover{transform:translateY(-3px)}
 /* ---------- listes ---------- */
 .list{display:flex;flex-direction:column;gap:10px}
 .item{display:grid;grid-template-columns:86px 1fr auto;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
-.item .card{font-size:0;aspect-ratio:5/6.2;padding:3px}
-.item .card .nm,.item .card .ds,.item .card .st,.item .card .ct,.item .card .cnt{display:none}
 .item .ttl{font-weight:800;font-stretch:95%}
 .item .meta{color:var(--soft);font-size:13px}
 .item .price{font-weight:900;font-stretch:115%;font-size:18px;display:flex;align-items:center;gap:6px;justify-content:flex-end}
@@ -232,6 +230,105 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .login form{display:flex;flex-direction:column;gap:12px}
 .err{color:var(--danger);font-size:13.5px;font-weight:600;min-height:1em}
 .linkbtn{background:none;border:0;color:var(--soft);text-decoration:underline;padding:0;font-size:13.5px}
+
+/* ===== vrais boosters ===== */
+.bstage{display:grid;grid-template-columns:1fr 300px;gap:28px;align-items:start}
+@media (max-width:820px){.bstage{grid-template-columns:1fr}}
+.packs{display:flex;flex-wrap:wrap;gap:26px;align-items:flex-end;min-height:200px}
+.bpw{display:flex;flex-direction:column;align-items:center}
+.bp{--rx:0deg;--ry:0deg;--mx:30%;position:relative;display:block;width:min(260px,42vw);aspect-ratio:220/340;border:0;padding:0;background:none;cursor:pointer;perspective:900px}
+.bp-in{position:absolute;inset:0;transform:rotateX(var(--rx)) rotateY(var(--ry));transition:transform .18s ease-out;filter:drop-shadow(0 18px 22px rgba(6,13,31,.45))}
+.bp:not(.off):hover .bp-in{filter:drop-shadow(0 24px 30px rgba(6,13,31,.55))}
+.bp.off{cursor:default;filter:grayscale(.9) brightness(.7);opacity:.7}
+.bpf{position:absolute;inset:0;clip-path:var(--zz);overflow:hidden;color:#fff;container-type:inline-size;
+  background:
+   linear-gradient(115deg,transparent 0,transparent calc(var(--mx) - 20%),rgba(255,255,255,.26) var(--mx),transparent calc(var(--mx) + 20%)),
+   repeating-linear-gradient(97deg,rgba(255,255,255,.035) 0 2px,transparent 2px 11px),
+   repeating-linear-gradient(8deg,rgba(0,0,0,.06) 0 3px,transparent 3px 17px),
+   radial-gradient(120% 60% at 20% 8%,rgba(96,150,255,.55),transparent 60%),
+   radial-gradient(80% 50% at 90% 95%,rgba(47,107,255,.35),transparent 60%),
+   linear-gradient(165deg,#1C3C86 0%,#0C1D40 50%,#050B1C 100%)}
+.bpf::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.35),transparent 12%,transparent 88%,rgba(0,0,0,.35));pointer-events:none}
+.bpf .crimp{position:absolute;left:0;right:0;height:9%;background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 2px,rgba(0,0,0,.28) 2px 4px),linear-gradient(180deg,#9DB3E2,#34508F)}
+.bpf .crimp.t{top:0}.bpf .crimp.b{bottom:0}
+.bpf .tear{position:absolute;left:5%;right:5%;top:14.4%;border-top:1.5px dashed rgba(255,255,255,.55)}
+.bpf .tear::after{content:"déchirer ici";position:absolute;right:0;top:-14px;font-size:8.5px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.7}
+.bpf .body{position:absolute;inset:19% 7% 15%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;text-align:center}
+.bpf .holo{width:40%;aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-stretch:125%;font-size:clamp(28px,5vw,46px);color:#0B1B3A;
+  background:conic-gradient(from var(--ang,0deg),#ffd6e8,#fff3b0,#c8ffd9,#b8e6ff,#dccbff,#ffd6e8);box-shadow:0 0 0 3px rgba(255,255,255,.9),0 0 24px rgba(160,190,255,.6),inset 0 -6px 12px rgba(0,0,0,.15)}
+.bpf .ttl{font-weight:900;font-stretch:125%;font-size:clamp(15px,2.6vw,21px);letter-spacing:.03em;line-height:1;text-shadow:0 2px 0 rgba(0,0,0,.35)}
+.bpf .ed{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;opacity:.75}
+.bpf .brands{display:flex;gap:4px;flex-wrap:wrap;justify-content:center}
+.bpf .brands i{font-style:normal;font-size:9px;font-weight:800;padding:2px 5px;border-radius:3px;background:var(--c);color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.35)}
+.bpf .count{font-weight:900;font-size:11px;letter-spacing:.12em;background:#fff;color:#0B1B3A;padding:4px 10px;border-radius:999px}
+.bpf .foot{position:absolute;left:0;right:0;bottom:11%;text-align:center;font-size:8.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+@container (max-width:210px){.bpf .foot{display:none}.bpf .body{gap:6px;inset:18% 6% 12%}.bpf .brands i{font-size:8px;padding:1px 4px}.bpf .tear::after{font-size:7.5px}}
+.bp-label{margin-top:12px;text-align:center;font-weight:700;font-size:13.5px;color:var(--soft)}
+.lastpull{display:flex;gap:14px;flex-wrap:wrap}
+
+/* ===== ouverture ===== */
+.ov{position:fixed;inset:0;z-index:50;background:radial-gradient(circle at 50% 40%,#16306A,#030814 75%);display:flex;flex-direction:column;align-items:center;justify-content:flex-start;gap:16px;padding:20px;padding-top:calc(20px + env(safe-area-inset-top,0px));padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));color:#fff;animation:fadein .25s;overflow:auto}
+.ov>:first-child{margin-top:auto}.ov>:last-child{margin-bottom:auto}
+@keyframes fadein{from{opacity:0}}
+.ov .hint{font-weight:700;opacity:.85;font-size:15px;min-height:1.4em;text-align:center}
+.ov .hint.small{font-size:13px;opacity:.65;font-weight:600}
+.ov .btn{background:#fff;color:#0B1B3A}
+.ov .btn.ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.25)}
+.op{position:relative;display:block;width:min(300px,68vw);aspect-ratio:220/340;cursor:pointer;border:0;padding:0;background:none;color:inherit}
+.op>.layer{position:absolute;inset:0;filter:drop-shadow(0 26px 34px rgba(0,0,0,.55))}
+.op>.layer .bp-in{filter:none}
+.op .p-top{clip-path:polygon(0 0,100% 0,100% 14.6%,93% 15.9%,86% 14.2%,79% 15.7%,72% 14%,65% 15.8%,58% 14.3%,51% 16%,44% 14.1%,37% 15.6%,30% 14.2%,23% 15.9%,16% 14.4%,9% 15.7%,0 14.5%)}
+.op .p-body{clip-path:polygon(0 14.5%,9% 15.7%,16% 14.4%,23% 15.9%,30% 14.2%,37% 15.6%,44% 14.1%,51% 16%,58% 14.3%,65% 15.8%,72% 14%,79% 15.7%,86% 14.2%,93% 15.9%,100% 14.6%,100% 100%,0 100%)}
+.op .peek{position:absolute;left:13%;right:13%;top:12%;bottom:22%;border-radius:10px;background:radial-gradient(100% 60% at 30% 15%,rgba(88,140,255,.5),transparent 60%),linear-gradient(165deg,#1B3A80,#0B1B3A 60%,#050C1E);box-shadow:0 0 0 2px rgba(255,255,255,.6),6px 6px 0 -2px #16306A,12px 12px 0 -4px #0B1B3A;opacity:0;transform:translateY(25%)}
+.op.shake{animation:tug .45s}
+@keyframes tug{20%{transform:rotate(-4deg)}40%{transform:rotate(4deg) scale(1.03)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
+.op.torn .p-top{transition:transform .75s cubic-bezier(.25,.7,.3,1),opacity .75s;transform:translate(110px,-240px) rotate(32deg);opacity:0}
+.op.drop .p-body{transition:transform .65s cubic-bezier(.55,0,.75,.35),opacity .65s;transform:translateY(80%);opacity:0}
+.op.drop .peek{transition:transform .6s .05s cubic-bezier(.2,.8,.2,1),opacity .3s;transform:translateY(-18%);opacity:1}
+.rv{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.bigwrap{position:relative;animation:pop .35s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes pop{from{transform:scale(.85);opacity:0}}
+.bigin{position:absolute;left:0;top:0;width:200px;transform-origin:top left}
+.bigin .flip{width:200px;display:block;cursor:pointer}
+.bigwrap .burst{position:absolute;inset:-35%;pointer-events:none;border-radius:50%;opacity:0}
+.bigwrap .burst.go-L{background:radial-gradient(circle,rgba(255,214,90,.75),rgba(255,214,90,.15) 45%,transparent 65%);animation:burst 1.3s ease-out}
+.bigwrap .burst.go-E{background:radial-gradient(circle,rgba(210,225,255,.75),rgba(210,225,255,.12) 45%,transparent 65%);animation:burst 1.1s ease-out}
+.bigwrap .burst.go-R{background:radial-gradient(circle,rgba(47,107,255,.6),transparent 60%);animation:burst .9s ease-out}
+@keyframes burst{0%{opacity:0;transform:scale(.4)}25%{opacity:1}100%{opacity:0;transform:scale(1.25)}}
+.rv-title{font-weight:900;font-stretch:115%;font-size:20px;text-align:center;display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap;min-height:28px}
+.minis{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.mini{position:relative;border:0;padding:0;background:none;opacity:.5;transition:opacity .2s,transform .2s;cursor:pointer}
+.mini.seen{opacity:.95}
+.mini.cur{opacity:1;transform:translateY(-6px);outline:2px solid #fff;outline-offset:3px;border-radius:10px}
+.rv-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.summary{display:flex;gap:14px;flex-wrap:wrap;justify-content:center;max-width:1100px}
+.sc{position:relative;flex:none}
+.sc>.sci{position:absolute;left:0;top:0;width:200px;transform-origin:top left}
+.cback{position:relative;width:200px;aspect-ratio:5/7.4;border-radius:12px;background:radial-gradient(100% 60% at 30% 15%,rgba(88,140,255,.5),transparent 60%),linear-gradient(165deg,#1B3A80,#0B1B3A 60%,#050C1E);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.cback::before{content:"";position:absolute;inset:8px;border:1.5px solid rgba(255,255,255,.5);border-radius:8px}
+.cback span{width:56px;height:56px;border-radius:50%;border:2px solid rgba(255,255,255,.85);display:flex;align-items:center;justify-content:center;font-stretch:125%;font-weight:900;color:#fff;font-size:30px}
+
+/* ===== zoom & échanges ===== */
+.zoomable{position:relative;border:0;padding:0;background:none;cursor:zoom-in;border-radius:10px;flex:none}
+.zoomable .zi{position:absolute;right:-7px;top:-7px;width:26px;height:26px;border-radius:50%;background:var(--btn-bg);color:var(--btn-ink);display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.3);z-index:5}
+.zoomable:hover .sc{transform:translateY(-2px)}
+.rpill{display:inline-block;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--r-C);color:#fff;white-space:nowrap}
+.rpill.r-U{background:#6FA8C4}
+.rpill.r-R{background:var(--r-R)}
+.rpill.r-E{background:linear-gradient(90deg,#C9D4E8,#FFFFFF,#B9C7E0);color:#13203F;box-shadow:inset 0 0 0 1px #9FB0D6}
+.rpill.r-L{background:linear-gradient(90deg,#F7DB7A,#D9A62A);color:#2B1A00}
+.trade{display:grid;grid-template-columns:auto auto auto 1fr;gap:18px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px}
+@media (max-width:680px){.trade{grid-template-columns:1fr auto 1fr}.trade .tinfo{grid-column:1/-1}}
+.tside{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;width:120px;justify-self:center;align-self:start}
+.tlabel{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
+.tname{font-weight:800;font-size:13px;line-height:1.15}
+.twarn{font-size:11.5px;font-weight:700;color:var(--danger)}
+.tarrow{font-size:24px;color:var(--soft);font-weight:900}
+.tgift{width:84px;height:124px;border:2px dashed var(--line);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-direction:column;color:var(--soft);font-weight:700;font-size:13px;line-height:1.2}
+.tinfo .ttl{font-weight:800;font-stretch:95%}
+.tinfo .meta{color:var(--soft);font-size:13px;margin:2px 0 10px}
+.item{grid-template-columns:auto 1fr auto}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -357,9 +454,128 @@ async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(erro
 
 /* ---------- actions ---------- */
 async function openBooster(paid){
-  const packEl=$(".pack"); if(packEl){packEl.classList.remove("shake");void packEl.offsetWidth;packEl.classList.add("shake")}
-  const res=await act(()=>rpc("open_booster",{paid}));
-  if(res){lastPull=res;flipped=new Set();render()}
+  if(busy) return; busy=true; let ids;
+  try{ ids=await rpc("open_booster",{paid}); }
+  catch(e){ toast(errMsg(e)); busy=false; render(); return; }
+  busy=false; lastPull=ids;
+  showOpening(ids);
+  loadGame().then(()=>{ if(!document.getElementById("ov")) render(); else { renderWallet(); } }).catch(()=>{});
+}
+
+/* ---------- ouverture animée ---------- */
+let ovState=null;
+function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
+function cardBack(c){return `<div class="cback ${c&&["R","E","L"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
+function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
+const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
+function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
+function packInner(){
+  const bl=Object.values(brands).filter(b=>b.id!=="winalco").map(b=>`<i style="--c:${esc(b.color)}">${esc(b.name)}</i>`).join("");
+  return `<div class="bp-in"><div class="bpf"><span class="crimp t"></span><span class="tear"></span><div class="body"><div class="holo">W</div><div class="ttl">WINAMASTERS</div><div class="ed">Édition 2026</div><div class="brands">${bl}</div><div class="count">5 CARTES</div></div><div class="foot">1 carte rare minimum</div><span class="crimp b"></span></div></div>`;
+}
+(function(){const n=24,t=[],b=[];for(let i=0;i<=n;i++){const x=(i/n*100).toFixed(2);t.push(`${x}% ${i%2?1.5:0}%`);b.push(`${(100-i/n*100).toFixed(2)}% ${i%2?98.5:100}%`)}document.documentElement.style.setProperty("--zz",`polygon(${t.join(",")},${b.join(",")})`)})();
+function showOpening(ids){
+  closeOverlay(true);
+  const ov=document.createElement("div"); ov.className="ov"; ov.id="ov";
+  ov.innerHTML=`<div class="hint">Clique sur le booster pour le déchirer</div>
+    <button class="op" id="op" data-ov="tear" aria-label="Déchirer le booster"><div class="peek"></div><div class="layer p-body">${packInner()}</div><div class="layer p-top">${packInner()}</div></button>
+    <button class="btn ghost small" data-ov="skip">Passer l'animation</button>`;
+  document.body.appendChild(ov); document.body.style.overflow="hidden";
+  ovState={ids,idx:0,seen:new Set(),phase:"pack"};
+}
+function tearPack(){
+  if(!ovState||ovState.phase!=="pack") return; ovState.phase="tearing";
+  const op=document.getElementById("op"); const hint=document.querySelector("#ov .hint"); if(hint) hint.textContent="";
+  op.classList.add("shake");
+  setTimeout(()=>{op.classList.remove("shake");op.classList.add("torn")},450);
+  setTimeout(()=>op.classList.add("drop"),950);
+  setTimeout(()=>{if(ovState){ovState.phase="reveal";renderReveal()}},1650);
+}
+function bigScale(){return Math.max(0.9,Math.min(1.9,(innerHeight-290)/296,(innerWidth-40)/200))}
+function renderMinis(){
+  const st=ovState;
+  return st.ids.map((id,i)=>{const c=cardById[id];const seen=st.seen.has(i);
+    return `<button class="mini ${i===st.idx?"cur":""} ${seen?"seen":""}" data-ov="goto" data-i="${i}" aria-label="Carte ${i+1}">${scaledCard(seen?cardHTML(c):cardBack(c),0.3)}</button>`}).join("");
+}
+function revealTitle(){
+  const st=ovState,c=cardById[st.ids[st.idx]];
+  return st.seen.has(st.idx)?`<span>${esc(c.name)}</span>${rpill(c.rarity)}`:`<span>Carte ${st.idx+1} sur ${st.ids.length}</span>`;
+}
+function revealHint(){
+  const st=ovState;
+  if(!st.seen.has(st.idx)) return "Clique sur la carte pour la retourner";
+  return st.idx<st.ids.length-1?"Clique pour passer à la suivante":"Clique pour voir tout le booster";
+}
+function renderReveal(){
+  const ov=document.getElementById("ov"); if(!ov||!ovState) return;
+  const st=ovState, c=cardById[st.ids[st.idx]], s=bigScale(), on=st.seen.has(st.idx);
+  ov.innerHTML=`<div class="rv">
+    <div class="rv-title" id="rvTitle">${revealTitle()}</div>
+    <div class="bigwrap" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="burst" id="burst"></div>
+      <div class="bigin" style="transform:scale(${s})"><button class="flip ${on?"on":""}" data-ov="big" aria-label="Retourner la carte"><div class="fi"><div class="back ${["R","E","L"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div></div>
+    <div class="hint small" id="rvHint">${revealHint()}</div>
+    <div class="minis" id="minis">${renderMinis()}</div>
+    <div class="rv-actions"><button class="btn ghost small" data-ov="all">Tout révéler</button></div></div>`;
+}
+function flipCurrent(){
+  const st=ovState; const c=cardById[st.ids[st.idx]];
+  const f=document.querySelector("#ov .bigin .flip"); if(f) f.classList.add("on");
+  st.seen.add(st.idx);
+  const bu=document.getElementById("burst");
+  if(bu&&["R","E","L"].includes(c.rarity)){setTimeout(()=>{bu.className="burst go-"+c.rarity},280)}
+  document.getElementById("rvTitle").innerHTML=revealTitle();
+  document.getElementById("rvHint").textContent=revealHint();
+  document.getElementById("minis").innerHTML=renderMinis();
+}
+function nextCard(){
+  const st=ovState;
+  if(st.idx<st.ids.length-1){st.idx++;renderReveal()} else renderSummary();
+}
+function renderSummary(){
+  const ov=document.getElementById("ov"); if(!ov||!ovState) return;
+  ovState.phase="summary"; ovState.ids.forEach((_,i)=>ovState.seen.add(i));
+  const s=innerWidth<640?Math.min(0.72,(innerWidth-60)/400):0.95;
+  const t=tokens();
+  ov.innerHTML=`<div class="rv"><div class="rv-title">Ton booster</div>
+    <div class="summary">${ovState.ids.map(id=>zoomBtn(cardById[id],s)).join("")}</div>
+    <div class="hint small">Les cartes sont déjà rangées dans ta collection.</div>
+    <div class="rv-actions">${t>0?`<button class="btn" data-ov="again">Ouvrir le booster suivant (${t} restant${t>1?"s":""})</button>`:""}<button class="btn ${t>0?"ghost":""}" data-ov="close">Fermer</button></div></div>`;
+}
+function closeOverlay(silent){
+  const o=document.getElementById("ov"); if(o) o.remove();
+  document.body.style.overflow=""; ovState=null; if(!silent) render();
+}
+function ovAction(a,ds){
+  if(!ovState&&a!=="close") return;
+  if(a==="tear"){tearPack();return}
+  if(a==="skip"){ovState.phase="reveal";renderReveal();return}
+  if(a==="big"){ if(!ovState.seen.has(ovState.idx)) flipCurrent(); else nextCard(); return}
+  if(a==="goto"){ovState.idx=+ds.i;renderReveal();return}
+  if(a==="all"){renderSummary();return}
+  if(a==="close"){closeOverlay();return}
+  if(a==="again"){closeOverlay(true);openBooster(false);return}
+}
+document.addEventListener("keydown",e=>{
+  if(!ovState) return;
+  if(e.key==="Escape"){closeOverlay();return}
+  if([" ","Enter","ArrowRight"].includes(e.key)){e.preventDefault();
+    if(ovState.phase==="pack") tearPack(); else if(ovState.phase==="reveal") ovAction("big",{});}
+});
+document.addEventListener("pointermove",e=>{
+  const b=e.target.closest&&e.target.closest(".bp:not(.off)");
+  document.querySelectorAll(".bp.tilt").forEach(x=>{if(x!==b){x.classList.remove("tilt");["--rx","--ry","--mx","--ang"].forEach(v=>x.style.removeProperty(v))}});
+  if(!b) return; const r=b.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+  b.classList.add("tilt"); b.style.setProperty("--ry",((px-.5)*18).toFixed(1)+"deg"); b.style.setProperty("--rx",((.5-py)*12).toFixed(1)+"deg"); b.style.setProperty("--mx",(px*100).toFixed(0)+"%"); b.style.setProperty("--ang",(px*360).toFixed(0)+"deg");
+});
+function openZoom(id){
+  const c=cardById[id]; if(!c) return;
+  const s=Math.max(1,Math.min(1.7,(innerHeight-230)/296,(innerWidth-80)/200)); const n=inv[id]||0; const b=brands[c.brand];
+  const d=$("#dlg");
+  d.innerHTML=`<div style="position:relative;padding:24px 18px 20px;display:flex;flex-direction:column;align-items:center;gap:14px"><button class="close" data-act="close" aria-label="Fermer">×</button>
+    ${scaledCard(cardHTML(c),s)}
+    <div style="text-align:center"><div style="font-weight:900;font-stretch:115%;font-size:20px">${esc(c.name)}</div>
+    <div style="margin-top:6px;display:flex;gap:8px;justify-content:center;align-items:center;flex-wrap:wrap">${rpill(c.rarity)}<span style="color:var(--soft);font-size:13px">${esc(b?.name||"")} · ${n?`tu en as ${n}`:"tu ne l'as pas encore"}</span></div></div></div>`;
+  d.showModal();
 }
 
 /* ---------- rendu ---------- */
@@ -401,27 +617,21 @@ function viewFeed(){
 function viewBooster(){
   const t=tokens(), per=bstate.per_slot||cfg.free_per_slot||2;
   const slots=Array.from({length:per},(_,i)=>`<span class="slot ${i<t?"":"off"}"></span>`).join("");
-  const pull=lastPull?`<div class="pull-grid">${lastPull.map((id,i)=>{const c=cardById[id];if(!c)return"";const on=flipped.has(i);
-      return `<button class="flip ${on?"on":""}" data-flip="${i}" aria-label="${on?esc(c.name):"Retourner la carte"}"><div class="fi"><div class="back ${["R","E","L"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button>`}).join("")}</div>
-      <div class="row" style="margin-top:14px"><button class="btn ghost" data-act="flipall">Tout retourner</button></div>`
-    :`<div class="empty">Ouvre un booster : 5 produits du groupe, dont au moins une carte rare.</div>`;
+  const packs=t>0
+    ? Array.from({length:t},()=>`<div class="bpw"><button class="bp" data-act="free" aria-label="Ouvrir un booster gratuit">${packInner()}</button><div class="bp-label">Clique pour ouvrir</div></div>`).join("")
+    : `<div class="bpw"><div class="bp off" aria-hidden="true">${packInner()}</div><div class="bp-label">Plus de booster gratuit pour l'instant</div></div>`;
+  const last=lastPull?`<h3>Ton dernier booster</h3><div class="lastpull">${lastPull.map(id=>zoomBtn(cardById[id],innerWidth<640?0.55:0.7)).join("")}</div>`:"";
   return `<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter un à tout moment pour ${cfg.booster_price} bidons.</p>
-  <div class="booster-stage">
-    <div>
-      <div class="stock">
-        <div class="lbl">Boosters gratuits</div>
-        <div class="big"><div class="slots">${slots}</div><div class="n">${t?`${t} disponible${t>1?"s":""}`:"Aucun pour l'instant"}</div></div>
-        <div class="next">Prochaine distribution : <span id="nextTxt">${nextText()}</span></div>
-        <div class="rule">Les boosters non ouverts ne se cumulent pas : à chaque distribution, tu repars avec ${per} boosters.</div>
-      </div>
-      <div class="pack ${t<1?"empty-pack":""}"><span class="sheen"></span><div class="mono">W</div><div class="t">WinaMasters</div><div class="s">GS27 · Restom · Spheretech · Abnet</div><div class="g">5 cartes · 1 rare minimum</div></div>
-      <div class="row" style="margin-top:14px">
-        <button class="btn" data-act="free" ${t<1?"disabled":""}>${t?"Ouvrir un booster gratuit":"Plus de booster gratuit"}</button>
-        <button class="btn ghost" data-act="paid" ${me.coins<cfg.booster_price?"disabled":""}>Acheter · ${cfg.booster_price} bidons</button>
-      </div>
-    </div>
-    <div>${pull}</div>
-  </div>${viewFeed()}`;
+  <div class="bstage">
+    <div class="packs">${packs}</div>
+    <aside class="stock">
+      <div class="lbl">Boosters gratuits</div>
+      <div class="big"><div class="slots">${slots}</div><div class="n">${t?`${t} disponible${t>1?"s":""}`:"Aucun pour l'instant"}</div></div>
+      <div class="next">Prochaine distribution : <span id="nextTxt">${nextText()}</span></div>
+      <div class="rule">Les boosters non ouverts ne se cumulent pas : à chaque distribution, tu repars avec ${per} boosters.</div>
+      <button class="btn ghost" style="width:100%;margin-top:12px" data-act="paid" ${me.coins<cfg.booster_price?"disabled":""}>Acheter un booster · ${cfg.booster_price} bidons</button>
+    </aside>
+  </div>${last}${viewFeed()}`;
 }
 function visibleCards(){return cards.filter(c=>c.active||has(c.id))}
 function viewCollection(){
@@ -446,7 +656,7 @@ function viewCollection(){
 function viewMarket(){
   const mine=listings.filter(l=>l.seller===uid), others=listings.filter(l=>l.seller!==uid);
   const item=(l,own)=>{const c=cardById[l.card];if(!c)return"";
-    return `<div class="item">${cardHTML(c)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${esc(rlabel(c.rarity))} · ${own?"ton offre":"vendu par "+esc(who(l.seller))} · ${ago(l.created_at)}${!own&&has(c.id)?" · déjà dans ta collection":""}</div></div>
+    return `<div class="item">${zoomBtn(c,0.4)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${rpill(c.rarity)} · ${own?"ton offre":"vendu par "+esc(who(l.seller))} · ${ago(l.created_at)}${!own&&has(c.id)?" · déjà dans ta collection":""}</div></div>
     <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>`}</div></div>`};
   return `<h2>Marché</h2><p class="sub">Les collègues vendent leurs cartes ici. Le vendeur touche ses bidons dès que la carte est achetée.</p>
     ${others.length?`<div class="list">${others.map(l=>item(l,false)).join("")}</div>`:`<div class="empty">Rien en vente pour l'instant. Mets une de tes cartes en vente depuis ta collection.</div>`}
@@ -454,10 +664,14 @@ function viewMarket(){
 }
 function viewTrades(){
   const inc=trades.filter(t=>t.to_player===uid), out=trades.filter(t=>t.from_player===uid);
+  const side=(label,c,note)=>`<div class="tside"><div class="tlabel">${label}</div>${c?zoomBtn(c,0.42):`<div class="tgift">Rien<small>c'est un cadeau</small></div>`}${c?`<div class="tname">${esc(c.name)}</div>${rpill(c.rarity)}`:""}${note||""}</div>`;
   const row=(t,incoming)=>{const g=cardById[t.give],w=t.want?cardById[t.want]:null;
-    return `<div class="item">${cardHTML(g)}<div><div class="ttl">${incoming?esc(who(t.from_player))+" te propose":"Tu proposes à "+esc(who(t.to_player))} ${esc(g?.name||"?")}</div>
-      <div class="meta">${w?`en échange de ta carte ${esc(w.name)}`:"en cadeau"} · ${ago(t.created_at)}${incoming&&w&&!has(w.id)?" · tu n'as pas cette carte":""}</div></div>
-      <div class="act row">${incoming?`<button class="btn small" data-accept="${t.id}" ${w&&!has(w.id)?"disabled":""}>Accepter</button><button class="btn ghost small" data-decline="${t.id}">Refuser</button>`:`<button class="btn ghost small" data-tcancel="${t.id}">Annuler</button>`}</div></div>`};
+    const left=incoming?side("Tu reçois",g):side("Tu donnes",g);
+    const right=incoming?side("Tu donnes",w,w&&!has(w.id)?`<div class="twarn">Tu ne l'as plus</div>`:""):side("Tu demandes",w);
+    return `<div class="trade">${left}<div class="tarrow">⇄</div>${right}
+      <div class="tinfo"><div class="ttl">${incoming?esc(who(t.from_player))+" te propose un échange":"Proposition envoyée à "+esc(who(t.to_player))}</div>
+      <div class="meta">${ago(t.created_at)} · clique sur une carte pour l'agrandir</div>
+      <div class="row">${incoming?`<button class="btn small" data-accept="${t.id}" ${w&&!has(w.id)?"disabled":""}>Accepter</button><button class="btn ghost small" data-decline="${t.id}">Refuser</button>`:`<button class="btn ghost small" data-tcancel="${t.id}">Annuler</button>`}</div></div></div>`};
   return `<h2>Échanges</h2><p class="sub">Propose une de tes cartes contre une carte d'un collègue, ou offre-la simplement. Ta carte est mise de côté jusqu'à sa réponse.</p>
     <div class="row"><button class="btn" data-act="newtrade">Proposer un échange</button></div>
     <h3>Reçues</h3>${inc.length?`<div class="list">${inc.map(t=>row(t,true)).join("")}</div>`:`<div class="empty">Aucune proposition en attente.</div>`}
@@ -566,6 +780,8 @@ function openPseudoDlg(){
 document.addEventListener("click",async e=>{
   const t=e.target.closest("button"); if(!t) return;
   const ds=t.dataset;
+  if(ds.ov){ovAction(ds.ov,ds);return}
+  if(ds.zoom){if($("#dlg").open) closeDlg(); openZoom(ds.zoom);return}
   if(ds.tab){tab=ds.tab;render(true);return}
   if(ds.brand){brandFilter=ds.brand;render();return}
   if(ds.coll){collFilter=ds.coll;render();return}
