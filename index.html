@@ -511,7 +511,7 @@ function uploadFor(cid){
   inp.onchange=async()=>{const file=inp.files[0];if(!file)return;
     const ext=(file.name.split(".").pop()||"png").toLowerCase().replace(/[^a-z0-9]/g,"");
     const path=`${cid}-${Date.now()}.${ext}`;
-    const up=await sb.storage.from("cards").upload(path,file,{upsert:true,contentType:file.type});
+    const up=await sb.storage.from("cards").upload(path,file,{upsert:false,contentType:file.type||undefined});
     if(up.error) return toast("Envoi de la photo impossible : "+errMsg(up.error));
     const url=sb.storage.from("cards").getPublicUrl(path).data.publicUrl;
     const f=readAdminForm(); const c=f.c.find(x=>x.id===cid); if(c) c.img=url;
