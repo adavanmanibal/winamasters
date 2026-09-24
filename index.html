@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>WinaMasters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#E9ECE7; --panel:#FFFFFF; --ink:#191C1A; --soft:#5C635E; --line:#CDD3CC;
+  --yellow:#F2C230; --yellow-ink:#2A2300; --green:#1E6B3A; --danger:#B3261E;
+  --shadow:0 1px 0 rgba(0,0,0,.06);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --bg:#141719; --panel:#1D2124; --ink:#E7EBE6; --soft:#9AA39C; --line:#2F3539; --shadow:none; }
+}
+:root[data-theme="dark"]{ --bg:#141719; --panel:#1D2124; --ink:#E7EBE6; --soft:#9AA39C; --line:#2F3539; --shadow:none; }
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.45}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+img{max-width:100%}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding:12px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.logo{font-weight:900;font-stretch:125%;font-size:22px;letter-spacing:-.02em;line-height:1;display:flex;align-items:center;gap:8px}
+.logo .stripe{width:18px;height:26px;background:linear-gradient(var(--green) 0 50%,var(--yellow) 50% 100%);border-radius:3px;transform:skewX(-12deg)}
+.wallet{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--panel);border:1px solid var(--line);font-weight:600;font-size:14px;white-space:nowrap}
+.pill b{font-stretch:110%;font-weight:800}
+.drop{width:10px;height:13px;background:var(--yellow);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
+nav.tabs{max-width:1180px;margin:0 auto;padding:0 16px;display:flex;gap:4px;overflow-x:auto}
+nav.tabs button{background:none;border:0;padding:10px 12px;font-weight:700;font-stretch:95%;color:var(--soft);border-bottom:3px solid transparent;white-space:nowrap}
+nav.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--yellow)}
+nav.tabs .badge{background:var(--danger);color:#fff;border-radius:999px;font-size:11px;padding:1px 6px;margin-left:4px}
+
+main{max-width:1180px;margin:0 auto;padding:20px 16px 60px}
+h2{font-stretch:120%;font-weight:900;font-size:28px;letter-spacing:-.02em;margin:0 0 4px;line-height:1.1}
+h3{font-stretch:110%;font-weight:800;font-size:18px;margin:24px 0 10px}
+.sub{color:var(--soft);margin:0 0 18px;max-width:62ch}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{border:0;border-radius:8px;padding:10px 16px;font-weight:800;font-stretch:105%;background:var(--yellow);color:var(--yellow-ink)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.ghost{background:var(--panel);color:var(--ink);border:1px solid var(--line)}
+.btn.small{padding:6px 10px;font-size:13px}
+.btn.danger{background:var(--danger);color:#fff}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:600;color:var(--soft)}
+.field input,.field select,.field textarea{padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--panel);font-weight:500;color:var(--ink)}
+.empty{padding:28px;border:2px dashed var(--line);border-radius:12px;color:var(--soft);text-align:center}
+
+/* booster zone */
+.booster-stage{display:grid;grid-template-columns:minmax(220px,300px) 1fr;gap:28px;align-items:start}
+@media (max-width:760px){.booster-stage{grid-template-columns:1fr}}
+.pack{position:relative;aspect-ratio:3/4.2;border-radius:14px;overflow:hidden;background:var(--green);color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:18px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+.pack::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(-28deg,transparent 0 22px,rgba(242,194,48,.9) 22px 38px);clip-path:polygon(0 58%,100% 38%,100% 62%,0 82%)}
+.pack::after{content:"";position:absolute;left:0;right:0;top:0;height:14px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.35) 0 6px,transparent 6px 12px)}
+.pack .t{position:relative;font-stretch:125%;font-weight:900;font-size:30px;line-height:.95;letter-spacing:-.02em}
+.pack .s{position:relative;font-weight:600;font-size:13px;opacity:.9}
+.pack.shake{animation:shake .5s}
+@keyframes shake{20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
+.pull-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.card{--b:#333;--a:#ddd;position:relative;aspect-ratio:5/7.4;border-radius:12px;background:var(--b);padding:7px;color:#fff;display:flex;flex-direction:column;border:0;text-align:left;width:100%;overflow:hidden;isolation:isolate;box-shadow:0 4px 14px rgba(0,0,0,.14)}
+.card .inner{flex:1;display:flex;flex-direction:column;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(0,0,0,.15));border-radius:7px;border:1px solid rgba(255,255,255,.25);padding:7px;min-height:0}
+.card .ct{display:flex;justify-content:space-between;align-items:center;font-size:10.5px;font-weight:800;font-stretch:90%;gap:4px}
+.card .brand{background:var(--a);color:var(--b);padding:1px 6px;border-radius:4px}
+.card .rar{display:flex;gap:2px}
+.card .rar i{width:6px;height:6px;border-radius:50%;background:var(--a);display:block}
+.card .art{flex:1;min-height:0;margin:6px 0;border-radius:6px;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.28),rgba(255,255,255,0) 70%),rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.card .art svg{height:78%;width:auto}
+.card .art img{width:100%;height:100%;object-fit:contain}
+.card .nm{font-weight:800;font-stretch:88%;font-size:14px;line-height:1.1;min-height:2.2em}
+.card .ds{font-size:10.5px;line-height:1.25;opacity:.85;margin-top:3px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.card .st{display:flex;justify-content:space-between;margin-top:6px;font-size:11px;font-weight:800;font-stretch:90%}
+.card .st span{background:rgba(0,0,0,.28);padding:2px 6px;border-radius:4px}
+.card .cnt{position:absolute;top:-1px;right:-1px;background:var(--yellow);color:var(--yellow-ink);font-weight:900;font-size:12px;padding:3px 8px;border-radius:0 12px 0 10px;z-index:3}
+.card.r-E::after,.card.r-L::after{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;mix-blend-mode:overlay;opacity:.55;background:conic-gradient(from 210deg at 30% 20%,#ff8a8a,#ffe38a,#8affc1,#8ad8ff,#c68aff,#ff8a8a);}
+.card.r-L{box-shadow:0 0 0 3px var(--yellow),0 8px 26px rgba(242,194,48,.45)}
+.card.r-L::after{opacity:.7}
+.card.locked{filter:grayscale(1) brightness(.55);opacity:.55}
+.card.locked .art svg,.card.locked .art img{opacity:.25}
+button.card:hover{transform:translateY(-2px)}
+button.card{transition:transform .15s}
+
+/* flip for reveal */
+.flip{perspective:900px;aspect-ratio:5/7.4;background:none;border:0;padding:0}
+.flip .fi{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+.flip.on .fi{transform:rotateY(180deg)}
+.flip .face,.flip .back{position:absolute;inset:0;backface-visibility:hidden}
+.flip .face{transform:rotateY(180deg)}
+.flip .back{border-radius:12px;background:var(--green);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.flip .back::before{content:"";position:absolute;inset:8px;border:2px solid var(--yellow);border-radius:8px}
+.flip .back span{font-stretch:125%;font-weight:900;color:var(--yellow);font-size:26px;transform:rotate(-12deg)}
+.flip .back.hint-R{box-shadow:0 0 0 3px #9CC3F0}
+.flip .back.hint-E{box-shadow:0 0 0 3px #C68AFF}
+.flip .back.hint-L{box-shadow:0 0 0 3px var(--yellow),0 0 26px var(--yellow);animation:pulse 1.2s infinite}
+@keyframes pulse{50%{box-shadow:0 0 0 3px var(--yellow),0 0 6px var(--yellow)}}
+
+/* brand progress */
+.progress{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-bottom:18px}
+.prog{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;text-align:left}
+.prog[aria-pressed="true"]{outline:2px solid var(--ink)}
+.prog .n{font-weight:800;font-stretch:110%}
+.prog .bar{height:6px;background:var(--line);border-radius:3px;margin-top:6px;overflow:hidden}
+.prog .bar i{display:block;height:100%}
+.prog small{color:var(--soft)}
+
+/* lists */
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:grid;grid-template-columns:86px 1fr auto;gap:14px;align-items:center;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px}
+.item .card{font-size:0}
+.item .card .nm,.item .card .ds,.item .card .st,.item .card .ct{display:none}
+.item .card{aspect-ratio:5/6.2;padding:4px}
+.item .ttl{font-weight:800;font-stretch:95%}
+.item .meta{color:var(--soft);font-size:13px}
+.item .price{font-weight:900;font-stretch:115%;font-size:18px;display:flex;align-items:center;gap:6px;justify-content:flex-end}
+@media (max-width:560px){.item{grid-template-columns:64px 1fr}.item .act{grid-column:1/-1}}
+.lb{width:100%;border-collapse:collapse;background:var(--panel);border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.lb th,.lb td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line)}
+.lb th{font-size:12px;color:var(--soft);font-weight:700}
+.lb tr.me td{background:rgba(242,194,48,.18)}
+.lb td.rk{font-weight:900;font-stretch:115%;width:48px}
+.tablewrap{overflow-x:auto}
+
+.feed{margin-top:28px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.feed h3{margin:0 0 8px;font-size:15px}
+.feed li{font-size:13.5px;padding:4px 0;border-bottom:1px solid var(--line);list-style:none}
+.feed ul{margin:0;padding:0;max-height:260px;overflow:auto}
+.feed li:last-child{border-bottom:0}
+.feed .when{color:var(--soft);font-size:12px;margin-left:6px}
+
+/* modal */
+dialog{border:0;border-radius:16px;padding:0;background:var(--panel);color:var(--ink);max-width:min(560px,94vw);width:100%}
+dialog::backdrop{background:rgba(10,12,11,.55)}
+.mdl{display:grid;grid-template-columns:190px 1fr;gap:18px;padding:18px}
+@media (max-width:520px){.mdl{grid-template-columns:1fr}.mdl>.card{max-width:200px;margin:0 auto}}
+.mdl h4{margin:0;font-stretch:115%;font-weight:900;font-size:20px;line-height:1.1}
+.mdl .acts{display:flex;flex-direction:column;gap:12px;margin-top:12px}
+.mdl .box{border-top:1px solid var(--line);padding-top:10px}
+.close{position:absolute;top:8px;right:10px;background:none;border:0;font-size:22px;color:var(--soft)}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:10px;font-weight:600;z-index:100;max-width:90vw;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.admin-row{display:grid;grid-template-columns:70px 1.6fr 1fr 1fr 2fr 60px 60px 100px 70px;gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);min-width:900px}
+.admin-row input,.admin-row select{padding:6px;border:1px solid var(--line);border-radius:6px;background:var(--panel);width:100%}
+.thumb{width:60px;height:60px;border-radius:6px;background:var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;font-size:11px;color:var(--soft);cursor:pointer;border:0}
+.thumb img{width:100%;height:100%;object-fit:contain}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.login{max-width:420px;margin:8vh auto;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:28px}
+.login .pack{max-width:170px;margin:0 auto 20px;padding:14px}
+.login .pack .t{font-size:22px}
+.login h2{text-align:center}
+.login .sub{text-align:center;margin-left:auto;margin-right:auto}
+.login form{display:flex;flex-direction:column;gap:12px}
+.err{color:var(--danger);font-size:13.5px;font-weight:600;min-height:1em}
+.admin-row.off{opacity:.5}
+.linkbtn{background:none;border:0;color:var(--soft);text-decoration:underline;padding:0;font-size:13.5px}
+</style>
+</head>
+<body>
+<header class="top" id="top" hidden>
+  <div class="top-in">
+    <div class="logo"><span class="stripe" aria-hidden="true"></span>WinaMasters</div>
+    <div class="wallet" id="wallet"></div>
+  </div>
+  <nav class="tabs" id="tabs" role="tablist"></nav>
+</header>
+<main id="main"><div class="empty">Chargement du jeu…</div></main>
+<dialog id="dlg"></dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.1/dist/umd/supabase.js"></script>
+<script>
+"use strict";
+/* ================== À REMPLIR ================== */
+const SUPABASE_URL      = "https://lueshhoohfeuxwojfqbc.supabase.co";   // Supabase > Project Settings > API > Project URL
+const SUPABASE_ANON_KEY = "sb_publishable_iLbvEUj5MqfRhM4ex1w5mA_YQNU3HQb";  // Supabase > Project Settings > API > anon public
+const LOGIN_DOMAIN      = "winamasters.adavan.fr";  // sert juste à fabriquer un identifiant interne, aucun mail n'est envoyé
+/* =============================================== */
+
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const PACK_SIZE = 5;
+const RORDER = ["C","U","R","E","L"];
+const DOTS = {C:1,U:2,R:3,E:4,L:5};
+
+let uid=null, cfg={booster_price:60,free_every_hours:4,max_free:2,is_admin:false};
+let RAR={}, brands={}, cards=[], cardById={};
+let me=null, inv={}, players=[], listings=[], trades=[], feed=[], board=[];
+let tab="booster", brandFilter="all", lastPull=null, flipped=new Set(), adminDirty=false, busy=false;
+let loginMode="login";
+
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function toast(msg){const t=document.createElement("div");t.className="toast";t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3400)}
+function ts(x){return typeof x==="number"?x:Date.parse(x)}
+function ago(x){const s=Math.round((Date.now()-ts(x))/1000);if(s<60)return"à l'instant";const m=Math.round(s/60);if(m<60)return`il y a ${m} min`;const h=Math.round(m/60);if(h<24)return`il y a ${h} h`;return`il y a ${Math.round(h/24)} j`}
+function fmtDur(ms){const m=Math.ceil(ms/60000);const h=Math.floor(m/60);return h?`${h} h ${String(m%60).padStart(2,"0")}`:`${m} min`}
+function who(id){ if(id===uid) return "Toi"; const p=players.find(x=>x.id===id); return (p&&p.pseudo)||"Un collègue"; }
+function errMsg(e){return (e&&(e.message||e.error_description))||"Une erreur est survenue."}
+function has(id){return (inv[id]||0)>0}
+
+/* ---------- card art ---------- */
+function shapeSVG(shape){
+  const s='stroke="rgba(0,0,0,.35)" stroke-width="2"';
+  const A={
+    spray:`<path d="M34 30h22v10H34z" fill="rgba(255,255,255,.9)" ${s}/><path d="M56 32l14 4v4l-14-2z" fill="rgba(255,255,255,.9)" ${s}/><path d="M40 40h12v8H40z" fill="var(--a)" ${s}/><path d="M34 48h24c4 0 6 3 6 7v48c0 4-3 7-7 7H35c-4 0-7-3-7-7V55c0-4 3-7 6-7z" fill="var(--a)" ${s}/><rect x="32" y="66" width="28" height="24" rx="3" fill="rgba(255,255,255,.85)"/>`,
+    flacon:`<rect x="41" y="22" width="14" height="10" rx="2" fill="rgba(255,255,255,.9)" ${s}/><path d="M42 32h12l2 10c8 3 12 9 12 17v44c0 4-3 7-7 7H35c-4 0-7-3-7-7V59c0-8 4-14 12-17z" fill="var(--a)" ${s}/><rect x="34" y="66" width="28" height="26" rx="3" fill="rgba(255,255,255,.85)"/>`,
+    bidon:`<path d="M58 24h10v10H58z" fill="rgba(255,255,255,.9)" ${s}/><path d="M30 36h28l12 0v68c0 4-3 6-6 6H30c-3 0-6-2-6-6V42c0-3 3-6 6-6z" fill="var(--a)" ${s}/><path d="M32 40h16v8H32z" fill="none" ${s}/><rect x="30" y="62" width="34" height="28" rx="3" fill="rgba(255,255,255,.85)"/>`,
+    eponge:`<rect x="20" y="44" width="58" height="42" rx="12" fill="var(--a)" ${s}/><g fill="rgba(0,0,0,.18)"><circle cx="34" cy="56" r="4"/><circle cx="50" cy="62" r="5"/><circle cx="64" cy="54" r="3"/><circle cx="40" cy="74" r="4"/><circle cx="62" cy="74" r="5"/></g>`,
+    pot:`<rect x="26" y="44" width="46" height="10" rx="3" fill="rgba(255,255,255,.9)" ${s}/><path d="M28 54h42v40c0 5-4 8-8 8H36c-4 0-8-3-8-8z" fill="var(--a)" ${s}/><rect x="32" y="64" width="34" height="20" rx="3" fill="rgba(255,255,255,.85)"/>`,
+    kit:`<path d="M18 50l31-14 31 14v42l-31 14-31-14z" fill="var(--a)" ${s}/><path d="M18 50l31 14 31-14M49 64v42" fill="none" ${s}/><path d="M34 43l31 14v10" fill="none" stroke="rgba(255,255,255,.9)" stroke-width="5"/>`,
+    legende:`<path d="M49 16c6 14 20 22 20 42 0 14-9 26-20 26S29 72 29 58c0-10 5-15 9-20 0 8 3 12 7 12-2-12 2-24 4-34z" fill="var(--a)" ${s}/><rect x="26" y="88" width="46" height="18" rx="4" fill="rgba(255,255,255,.9)" ${s}/>`
+  };
+  return `<svg viewBox="0 0 98 120" aria-hidden="true">${A[shape]||A.flacon}</svg>`;
+}
+function rlabel(r){return (RAR[r]&&RAR[r].label)||r}
+function cardHTML(c,{count=0,locked=false,tag="div",attrs=""}={}){
+  if(!c) return "";
+  const b=brands[c.brand]||{name:c.brand,color:"#333",accent:"#ddd"};
+  const art=c.img?`<img src="${esc(c.img)}" alt="">`:shapeSVG(c.shape);
+  const dots=Array.from({length:DOTS[c.rarity]||1},()=>"<i></i>").join("");
+  return `<${tag} class="card r-${esc(c.rarity)} ${locked?"locked":""}" style="--b:${esc(b.color)};--a:${esc(b.accent)}" ${attrs} aria-label="${esc(locked?"Carte non obtenue":c.name)}, ${esc(rlabel(c.rarity))}">
+    ${count>1?`<span class="cnt">×${count}</span>`:""}
+    <div class="inner">
+      <div class="ct"><span class="brand">${esc(b.name)}</span><span class="rar" title="${esc(rlabel(c.rarity))}">${dots}</span></div>
+      <div class="art">${locked?shapeSVG(c.shape):art}</div>
+      <div class="nm">${locked?"???":esc(c.name)}</div>
+      <div class="ds">${locked?esc(rlabel(c.rarity)):esc(c.descr)}</div>
+      <div class="st"><span>ATK ${locked?"?":c.atk}</span><span>DEF ${locked?"?":c.def}</span></div>
+    </div></${tag}>`;
+}
+
+/* ---------- boosters gratuits (calcul identique au serveur) ---------- */
+function period(){return cfg.free_every_hours*3600e3}
+function tokens(){if(!me)return 0;const g=Math.floor((Date.now()-ts(me.token_at))/period());return Math.min(cfg.max_free,me.tokens+g)}
+function nextIn(){return tokens()>=cfg.max_free?0:period()-((Date.now()-ts(me.token_at))%period())}
+
+/* ---------- chargement ---------- */
+async function loadCatalog(){
+  const [r,b,c]=await Promise.all([
+    sb.from("rarities").select("*").order("ord"),
+    sb.from("brands").select("*").order("sort"),
+    sb.from("cards").select("*").order("sort")]);
+  if(r.error||b.error||c.error) throw (r.error||b.error||c.error);
+  RAR=Object.fromEntries(r.data.map(x=>[x.code,x]));
+  brands=Object.fromEntries(b.data.map(x=>[x.id,x]));
+  cards=c.data; cardById=Object.fromEntries(cards.map(x=>[x.id,x]));
+}
+async function loadGame(){
+  const [p,i,pl,l,t,f,lb]=await Promise.all([
+    sb.from("players").select("*").eq("id",uid).single(),
+    sb.from("inventory").select("card,qty").eq("player",uid),
+    sb.from("players").select("id,pseudo"),
+    sb.from("listings").select("*").eq("status","open").order("created_at",{ascending:false}).limit(300),
+    sb.from("trades").select("*").eq("status","pending").order("created_at",{ascending:false}),
+    sb.from("feed").select("*").order("created_at",{ascending:false}).limit(30),
+    sb.from("leaderboard").select("*").order("score",{ascending:false}).limit(200)]);
+  if(p.error) throw p.error;
+  me=p.data; inv=Object.fromEntries((i.data||[]).map(x=>[x.card,x.qty]));
+  players=pl.data||[]; listings=l.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
+}
+let reloadTimer=null;
+function scheduleReload(){clearTimeout(reloadTimer);reloadTimer=setTimeout(async()=>{try{await loadGame();render()}catch(e){}},500)}
+async function act(fn,okMsg){
+  if(busy) return; busy=true;
+  try{const r=await fn(); if(okMsg) toast(typeof okMsg==="function"?okMsg(r):okMsg); await loadGame(); render(); return r;}
+  catch(e){toast(errMsg(e))}
+  finally{busy=false}
+}
+async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
+
+/* ---------- actions ---------- */
+async function openBooster(paid){
+  const packEl=$(".pack"); if(packEl){packEl.classList.remove("shake");void packEl.offsetWidth;packEl.classList.add("shake")}
+  const res=await act(()=>rpc("open_booster",{paid}));
+  if(res){lastPull=res;flipped=new Set();render()}
+}
+
+/* ---------- rendu ---------- */
+const TABS=[["booster","Boosters"],["collection","Collection"],["market","Marché"],["trades","Échanges"],["ranking","Classement"]];
+function renderTabs(){
+  const incoming=trades.filter(t=>t.to_player===uid).length;
+  const list=[...TABS]; if(cfg.is_admin) list.push(["admin","Catalogue"]);
+  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${tab===k}" data-tab="${k}">${l}${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}</button>`).join("");
+}
+function renderWallet(){
+  if(!me){$("#wallet").innerHTML="";return}
+  const t=tokens();
+  $("#wallet").innerHTML=`<span class="pill"><span class="drop" aria-hidden="true"></span><b>${me.coins}</b> bidons</span>
+    <span class="pill">${t>0?`<b>${t}</b> booster${t>1?"s":""} gratuit${t>1?"s":""}`:`Prochain gratuit dans ${fmtDur(nextIn())}`}</span>
+    <button class="pill" data-act="pseudo" title="Mon compte">${esc(me.pseudo)}</button>`;
+}
+function render(force){
+  $("#top").hidden=false;
+  renderTabs(); renderWallet();
+  if(!me) return;
+  if(tab==="admin"&&adminDirty&&!force&&document.querySelector("#cardsEd")) return;
+  const m=$("#main");
+  if(tab==="booster") m.innerHTML=viewBooster();
+  else if(tab==="collection") m.innerHTML=viewCollection();
+  else if(tab==="market") m.innerHTML=viewMarket();
+  else if(tab==="trades") m.innerHTML=viewTrades();
+  else if(tab==="ranking") m.innerHTML=viewRanking();
+  else if(tab==="admin") m.innerHTML=viewAdmin();
+}
+function viewFeed(){
+  if(!feed.length) return "";
+  const line=f=>{const c=cardById[f.card];const n=c?`<b>${esc(c.name)}</b> (${esc(rlabel(c.rarity).toLowerCase())})`:"une carte";
+    if(f.kind==="pull")return`${esc(who(f.player))} a tiré ${n}`;
+    if(f.kind==="sale")return`${esc(who(f.player))} a acheté ${n} à ${esc(who(f.other))} pour ${f.price} bidons`;
+    if(f.kind==="trade")return`${esc(who(f.player))} et ${esc(who(f.other))} ont échangé ${n}`;return""};
+  return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}<span class="when">${ago(f.created_at)}</span></li>`).join("")}</ul></section>`;
+}
+function viewBooster(){
+  const t=tokens();
+  const pull=lastPull?`<div class="pull-grid">${lastPull.map((id,i)=>{const c=cardById[id];if(!c)return"";const on=flipped.has(i);
+      return `<button class="flip ${on?"on":""}" data-flip="${i}" aria-label="${on?esc(c.name):"Retourner la carte"}"><div class="fi"><div class="back ${["R","E","L"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>WM</span></div><div class="face">${cardHTML(c)}</div></div></button>`}).join("")}</div>
+      <div class="row" style="margin-top:14px"><button class="btn ghost" data-act="flipall">Tout retourner</button></div>`
+    :`<div class="empty">Ouvre un booster : 5 produits du groupe, dont au moins une rare.</div>`;
+  return `<h2>Boosters</h2><p class="sub">Un booster gratuit toutes les ${cfg.free_every_hours} heures (${cfg.max_free} en réserve max), ou ${cfg.booster_price} bidons pour en ouvrir un tout de suite.</p>
+  <div class="booster-stage">
+    <div>
+      <div class="pack"><div class="t">Wina<br>Masters</div><div class="s">5 cartes · GS27 · Restom · Spheretech · Abnet</div></div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" data-act="free" ${t<1?"disabled":""}>Ouvrir gratuitement</button>
+        <button class="btn ghost" data-act="paid" ${me.coins<cfg.booster_price?"disabled":""}>Acheter (${cfg.booster_price} bidons)</button>
+      </div>
+      ${t<1?`<p class="sub" style="margin-top:8px">Prochain booster gratuit dans ${fmtDur(nextIn())}.</p>`:""}
+    </div>
+    <div>${pull}</div>
+  </div>${viewFeed()}`;
+}
+function visibleCards(){return cards.filter(c=>c.active||has(c.id))}
+function viewCollection(){
+  const vis=visibleCards();
+  const brandList=Object.values(brands).filter(b=>vis.some(c=>c.brand===b.id));
+  const own=vis.filter(c=>has(c.id)).length, total=vis.length;
+  const prog=brandList.map(b=>{const all=vis.filter(c=>c.brand===b.id);const o=all.filter(c=>has(c.id)).length;
+    return `<button class="prog" data-brand="${esc(b.id)}" aria-pressed="${brandFilter===b.id}"><div class="n">${esc(b.name)}</div><small>${o} / ${all.length} cartes</small><div class="bar"><i style="width:${Math.round(o/all.length*100)}%;background:${esc(b.color)}"></i></div></button>`}).join("");
+  const list=vis.filter(c=>brandFilter==="all"||c.brand===brandFilter)
+    .sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity))
+    .map(c=>{const n=inv[c.id]||0;return cardHTML(c,{count:n,locked:!n,tag:n?"button":"div",attrs:n?`data-card="${esc(c.id)}"`:""})}).join("");
+  const mine=board.find(b=>b.id===uid);
+  return `<h2>Collection</h2><p class="sub">${own} cartes différentes sur ${total}${mine?` · score ${mine.score}`:""}. Clique sur une carte pour la vendre, l'échanger ou la défausser.</p>
+    <div class="progress"><button class="prog" data-brand="all" aria-pressed="${brandFilter==="all"}"><div class="n">Tout le groupe</div><small>${own} / ${total} cartes</small><div class="bar"><i style="width:${Math.round(own/Math.max(1,total)*100)}%;background:var(--yellow)"></i></div></button>${prog}</div>
+    <div class="cards">${list}</div>`;
+}
+function viewMarket(){
+  const mine=listings.filter(l=>l.seller===uid), others=listings.filter(l=>l.seller!==uid);
+  const item=(l,own)=>{const c=cardById[l.card];if(!c)return"";
+    return `<div class="item">${cardHTML(c)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${esc(rlabel(c.rarity))} · ${own?"ton offre":"vendu par "+esc(who(l.seller))} · ${ago(l.created_at)}${!own&&has(c.id)?" · déjà dans ta collection":""}</div></div>
+    <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>`}</div></div>`};
+  return `<h2>Marché</h2><p class="sub">Les collègues vendent leurs cartes ici. Le vendeur touche ses bidons dès que la carte est achetée.</p>
+    ${others.length?`<div class="list">${others.map(l=>item(l,false)).join("")}</div>`:`<div class="empty">Rien en vente pour l'instant. Mets une de tes cartes en vente depuis ta collection.</div>`}
+    ${mine.length?`<h3>Tes offres</h3><div class="list">${mine.map(l=>item(l,true)).join("")}</div>`:""}`;
+}
+function viewTrades(){
+  const inc=trades.filter(t=>t.to_player===uid), out=trades.filter(t=>t.from_player===uid);
+  const row=(t,incoming)=>{const g=cardById[t.give],w=t.want?cardById[t.want]:null;
+    return `<div class="item">${cardHTML(g)}<div><div class="ttl">${incoming?esc(who(t.from_player))+" te propose":"Tu proposes à "+esc(who(t.to_player))} ${esc(g?.name||"?")}</div>
+      <div class="meta">${w?`en échange de ta carte ${esc(w.name)}`:"en cadeau"} · ${ago(t.created_at)}${incoming&&w&&!has(w.id)?" · tu n'as pas cette carte":""}</div></div>
+      <div class="act row">${incoming?`<button class="btn small" data-accept="${t.id}" ${w&&!has(w.id)?"disabled":""}>Accepter</button><button class="btn ghost small" data-decline="${t.id}">Refuser</button>`:`<button class="btn ghost small" data-tcancel="${t.id}">Annuler</button>`}</div></div>`};
+  return `<h2>Échanges</h2><p class="sub">Propose une de tes cartes contre une carte d'un collègue, ou offre-la simplement. Ta carte est mise de côté jusqu'à sa réponse.</p>
+    <div class="row"><button class="btn" data-act="newtrade">Proposer un échange</button></div>
+    <h3>Reçues</h3>${inc.length?`<div class="list">${inc.map(t=>row(t,true)).join("")}</div>`:`<div class="empty">Aucune proposition en attente.</div>`}
+    <h3>Envoyées</h3>${out.length?`<div class="list">${out.map(t=>row(t,false)).join("")}</div>`:`<div class="empty">Tu n'as rien proposé pour l'instant.</div>`}`;
+}
+function viewRanking(){
+  const total=cards.filter(c=>c.active).length;
+  return `<h2>Classement</h2><p class="sub">Le score compte chaque carte selon sa rareté, avec un petit bonus pour les doubles.</p>
+  <div class="tablewrap"><table class="lb"><thead><tr><th>#</th><th>Joueur</th><th>Score</th><th>Collection</th><th>Boosters</th></tr></thead><tbody>
+  ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}"><td class="rk">${i+1}</td><td>${esc(p.id===uid?(p.pseudo+" (toi)"):p.pseudo)}</td><td><b>${p.score}</b></td><td>${p.uniq} / ${total}</td><td>${p.opened}</td></tr>`).join("")}
+  </tbody></table></div>${viewFeed()}`;
+}
+
+/* ---------- catalogue (admin) ---------- */
+function viewAdmin(){
+  const bopts=k=>Object.values(brands).map(b=>`<option value="${esc(b.id)}" ${b.id===k?"selected":""}>${esc(b.name)}</option>`).join("");
+  const ropts=r=>RORDER.map(x=>`<option value="${x}" ${x===r?"selected":""}>${esc(rlabel(x))}</option>`).join("");
+  const sopts=s=>["spray","flacon","bidon","eponge","pot","kit","legende"].map(x=>`<option ${x===s?"selected":""}>${x}</option>`).join("");
+  return `<h2>Catalogue</h2><p class="sub">Visible par les admins uniquement. Modifie les produits, ajoute des photos (clique sur la vignette), puis enregistre. Décocher « En jeu » retire la carte des boosters sans l'enlever à ceux qui l'ont déjà.</p>
+  <h3>Marques</h3>
+  <div class="row" id="brandsEd">${Object.values(brands).map(b=>`<div class="field" data-bk="${esc(b.id)}" style="min-width:180px"><span>${esc(b.id)}</span><input data-f="name" value="${esc(b.name)}"><div class="row"><input type="color" data-f="color" value="${esc(b.color)}" aria-label="Couleur"><input type="color" data-f="accent" value="${esc(b.accent)}" aria-label="Couleur secondaire"></div></div>`).join("")}</div>
+  <h3>Cartes</h3>
+  <div class="tablewrap"><div id="cardsEd">
+  <div class="admin-row" style="font-size:12px;color:var(--soft);font-weight:700"><span>Photo</span><span>Nom</span><span>Marque</span><span>Rareté</span><span>Texte</span><span>ATK</span><span>DEF</span><span>Forme</span><span>En jeu</span></div>
+  ${cards.map(c=>`<div class="admin-row ${c.active?"":"off"}" data-cid="${esc(c.id)}">
+    <button class="thumb" data-upl="${esc(c.id)}" title="Changer la photo">${c.img?`<img src="${esc(c.img)}" alt="">`:"+ photo"}</button>
+    <input data-f="name" value="${esc(c.name)}"><select data-f="brand">${bopts(c.brand)}</select><select data-f="rarity">${ropts(c.rarity)}</select>
+    <input data-f="descr" value="${esc(c.descr)}"><input data-f="atk" type="number" min="0" max="100" value="${c.atk}"><input data-f="def" type="number" min="0" max="100" value="${c.def}">
+    <select data-f="shape">${sopts(c.shape)}</select><label style="display:flex;justify-content:center"><input type="checkbox" data-f="active" ${c.active?"checked":""} style="width:auto"></label>
+  </div>`).join("")}
+  </div></div>
+  <div class="row" style="margin-top:14px"><button class="btn ghost" data-act="addcard">Ajouter une carte</button><button class="btn" data-act="savecat">Enregistrer le catalogue</button></div>
+  <input type="file" id="uplInput" accept="image/*" hidden>`;
+}
+function readAdminForm(){
+  const b=[...document.querySelectorAll("#brandsEd [data-bk]")].map((el,i)=>({id:el.dataset.bk,name:el.querySelector('[data-f="name"]').value.trim()||el.dataset.bk,color:el.querySelector('[data-f="color"]').value,accent:el.querySelector('[data-f="accent"]').value,sort:brands[el.dataset.bk]?.sort??i}));
+  const c=[...document.querySelectorAll("#cardsEd [data-cid]")].map((row,i)=>{const g=f=>row.querySelector(`[data-f="${f}"]`);const old=cardById[row.dataset.cid]||{};
+    const clamp=v=>Math.max(0,Math.min(100,parseInt(v)||0));
+    return {id:row.dataset.cid,name:g("name").value.trim()||"Sans nom",brand:g("brand").value,rarity:g("rarity").value,descr:g("descr").value.trim(),atk:clamp(g("atk").value),def:clamp(g("def").value),shape:g("shape").value,active:g("active").checked,img:old.img||"",sort:i}});
+  return {b,c};
+}
+function applyLocal(f){brands=Object.fromEntries(f.b.map(x=>[x.id,x]));cards=f.c;cardById=Object.fromEntries(cards.map(x=>[x.id,x]))}
+async function saveCatalog(){
+  const f=readAdminForm();
+  const r1=await sb.from("brands").upsert(f.b); if(r1.error) return toast(errMsg(r1.error));
+  const r2=await sb.from("cards").upsert(f.c); if(r2.error) return toast(errMsg(r2.error));
+  adminDirty=false; await loadCatalog(); render(true); toast("Catalogue enregistré.");
+}
+function uploadFor(cid){
+  const inp=$("#uplInput"); inp.value="";
+  inp.onchange=async()=>{const file=inp.files[0];if(!file)return;
+    const ext=(file.name.split(".").pop()||"png").toLowerCase().replace(/[^a-z0-9]/g,"");
+    const path=`${cid}-${Date.now()}.${ext}`;
+    const up=await sb.storage.from("cards").upload(path,file,{upsert:true,contentType:file.type});
+    if(up.error) return toast("Envoi de la photo impossible : "+errMsg(up.error));
+    const url=sb.storage.from("cards").getPublicUrl(path).data.publicUrl;
+    const f=readAdminForm(); const c=f.c.find(x=>x.id===cid); if(c) c.img=url;
+    applyLocal(f); adminDirty=true; render(true); toast("Photo ajoutée. Pense à enregistrer.");};
+  inp.click();
+}
+
+/* ---------- fenêtres ---------- */
+function closeDlg(){const d=$("#dlg");if(d.open)d.close()}
+function openCardDlg(id){
+  const c=cardById[id], n=inv[id]||0, v=RAR[c.rarity].sell;
+  const d=$("#dlg");
+  d.innerHTML=`<div style="position:relative"><button class="close" data-act="close" aria-label="Fermer">×</button><div class="mdl">${cardHTML(c)}
+   <div><h4>${esc(c.name)}</h4><div class="meta" style="color:var(--soft)">${esc(rlabel(c.rarity))} · tu en as ${n}</div>
+   <div class="acts">
+    <div class="box"><label class="field">Vendre au marché (prix en bidons)<input id="sellPrice" type="number" min="1" value="${Math.max(2,v*3)}"></label><button class="btn small" style="margin-top:6px" data-sell="${esc(c.id)}">Mettre en vente</button></div>
+    <div class="box"><button class="btn ghost small" data-act="tradefrom" data-give="${esc(c.id)}" ${players.length>1?"":"disabled"}>Proposer en échange</button></div>
+    <div class="box"><button class="btn ghost small" data-discard="${esc(c.id)}">Défausser (+${v} bidon${v>1?"s":""})</button></div>
+   </div></div></div></div>`;
+  d.showModal();
+}
+async function openTradeDlg(give){
+  const others=players.filter(p=>p.id!==uid).sort((a,b)=>a.pseudo.localeCompare(b.pseudo));
+  if(!others.length) return toast("Personne d'autre n'a encore rejoint le jeu.");
+  const mine=cards.filter(c=>has(c.id));
+  if(!mine.length) return toast("Ouvre d'abord un booster pour avoir des cartes à échanger.");
+  const d=$("#dlg");
+  d.innerHTML=`<div style="position:relative;padding:18px"><button class="close" data-act="close" aria-label="Fermer">×</button><h4 style="margin:0 0 12px;font-stretch:115%;font-weight:900;font-size:20px">Proposer un échange</h4>
+   <div style="display:flex;flex-direction:column;gap:12px">
+   <label class="field">Avec<select id="tTo">${others.map(p=>`<option value="${esc(p.id)}">${esc(p.pseudo||"Un collègue")}</option>`).join("")}</select></label>
+   <label class="field">Tu donnes<select id="tGive">${mine.map(c=>`<option value="${esc(c.id)}" ${c.id===give?"selected":""}>${esc(c.name)} (×${inv[c.id]})</option>`).join("")}</select></label>
+   <label class="field">Tu demandes<select id="tWant"><option value="">Chargement…</option></select></label>
+   <button class="btn" data-act="sendtrade">Envoyer la proposition</button></div></div>`;
+  d.showModal();
+  const fill=async pid=>{
+    const {data}=await sb.from("inventory").select("card,qty").eq("player",pid).gt("qty",0);
+    const theirs=(data||[]).map(x=>cardById[x.card]).filter(Boolean).sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity));
+    $("#tWant").innerHTML=`<option value="">Rien, c'est un cadeau</option>`+theirs.map(c=>`<option value="${esc(c.id)}">${esc(c.name)} (${esc(rlabel(c.rarity))})${has(c.id)?"":" · te manque"}</option>`).join("");
+  };
+  fill(others[0].id);
+  $("#tTo").addEventListener("change",e=>fill(e.target.value));
+}
+function openPseudoDlg(){
+  const d=$("#dlg");
+  d.innerHTML=`<div style="position:relative;padding:18px"><button class="close" data-act="close" aria-label="Fermer">×</button><h4 style="margin:0 0 8px;font-stretch:115%;font-weight:900;font-size:20px">${esc(me.pseudo)}</h4>
+  <p class="sub" style="margin:0 0 14px">Tu restes connecté sur cet appareil. Pour jouer ailleurs, reconnecte-toi avec ton pseudo et ton mot de passe.</p>
+  <button class="btn ghost" data-act="logout">Se déconnecter</button></div>`;
+  d.showModal();
+}
+
+/* ---------- clics ---------- */
+document.addEventListener("click",async e=>{
+  const t=e.target.closest("button"); if(!t) return;
+  const ds=t.dataset;
+  if(ds.tab){tab=ds.tab;render(true);return}
+  if(ds.brand){brandFilter=ds.brand;render();return}
+  if(ds.flip!==undefined){flipped.add(+ds.flip);t.classList.add("on");return}
+  if(ds.card){openCardDlg(ds.card);return}
+  if(ds.sell){const p=parseInt($("#sellPrice").value);closeDlg();await act(()=>rpc("create_listing",{card_id:ds.sell,ask:p}),"Carte mise en vente.");return}
+  if(ds.discard){closeDlg();await act(()=>rpc("discard",{card_id:ds.discard}),v=>`+${v} bidon${v>1?"s":""}`);return}
+  if(ds.buy){t.disabled=true;await act(()=>rpc("buy_listing",{listing_id:+ds.buy}),c=>`${cardById[c]?.name||"Carte"} achetée !`);return}
+  if(ds.cancel){t.disabled=true;await act(()=>rpc("cancel_listing",{listing_id:+ds.cancel}),"Offre retirée, carte récupérée.");return}
+  if(ds.accept){t.disabled=true;await act(()=>rpc("answer_trade",{trade_id:+ds.accept,accept:true}),"Échange conclu !");return}
+  if(ds.decline){t.disabled=true;await act(()=>rpc("answer_trade",{trade_id:+ds.decline,accept:false}),"Proposition refusée.");return}
+  if(ds.tcancel){t.disabled=true;await act(()=>rpc("cancel_trade",{trade_id:+ds.tcancel}),"Proposition annulée, carte récupérée.");return}
+  if(ds.upl){uploadFor(ds.upl);return}
+  switch(ds.act){
+    case "free": t.disabled=true; await openBooster(false); break;
+    case "paid": t.disabled=true; await openBooster(true); break;
+    case "flipall": lastPull&&lastPull.forEach((_,i)=>flipped.add(i)); document.querySelectorAll(".flip").forEach(f=>f.classList.add("on")); break;
+    case "close": closeDlg(); break;
+    case "pseudo": openPseudoDlg(); break;
+    case "logout": closeDlg(); await sb.auth.signOut(); location.reload(); break;
+    case "newtrade": openTradeDlg(null); break;
+    case "tradefrom": closeDlg(); openTradeDlg(ds.give); break;
+    case "sendtrade": {const to=$("#tTo").value,give=$("#tGive").value,want=$("#tWant").value;closeDlg();await act(()=>rpc("propose_trade",{to_id:to,give_card:give,want_card:want}),"Proposition envoyée.");break}
+    case "addcard": {const f=readAdminForm();f.c.push({id:"c"+Date.now().toString(36),name:"Nouveau produit",brand:f.b[0]?.id||"gs27",rarity:"C",descr:"",atk:30,def:30,shape:"flacon",active:true,img:"",sort:f.c.length});applyLocal(f);adminDirty=true;render(true);break}
+    case "savecat": t.disabled=true; await saveCatalog(); t.disabled=false; break;
+  }
+});
+document.addEventListener("input",e=>{if(tab==="admin"&&e.target.closest("#cardsEd,#brandsEd"))adminDirty=true});
+
+/* ---------- connexion ---------- */
+const toEmail=p=>p.trim().toLowerCase()+"@"+LOGIN_DOMAIN;
+function viewLogin(mode,err){
+  loginMode=mode||loginMode;
+  const signup=loginMode==="signup";
+  $("#top").hidden=true;
+  $("#main").innerHTML=`<div class="login">
+    <div class="pack"><div class="t">Wina<br>Masters</div><div class="s">Le jeu de cartes Winalco</div></div>
+    <h2>${signup?"Créer mon compte":"Connexion"}</h2>
+    <p class="sub">${signup?"Choisis un pseudo et un mot de passe. Le code d'invitation t'a été donné avec le lien.":"Entre ton pseudo et ton mot de passe."}</p>
+    <form id="authForm">
+      <label class="field">Pseudo<input id="psIn" autocomplete="username" required minlength="3" maxlength="20" pattern="[A-Za-z0-9_\-]{3,20}"></label>
+      <label class="field">Mot de passe<input id="pwIn" type="password" autocomplete="${signup?"new-password":"current-password"}" required minlength="6"></label>
+      ${signup?`<label class="field">Code d'invitation<input id="invIn" required autocomplete="off"></label>`:""}
+      <div class="err">${esc(err||"")}</div>
+      <button class="btn">${signup?"Créer mon compte":"Me connecter"}</button>
+      <button type="button" class="linkbtn" data-act="${signup?"tologin":"tosignup"}">${signup?"J'ai déjà un compte":"Première fois ? Créer un compte"}</button>
+    </form></div>`;
+  $("#authForm").addEventListener("submit",async e=>{e.preventDefault();
+    const btn=e.target.querySelector(".btn"); btn.disabled=true;
+    const pseudo=$("#psIn").value.trim(), pw=$("#pwIn").value;
+    if(signup){
+      const invite=$("#invIn").value.trim();
+      const {data:msg,error:ce}=await sb.rpc("signup_check",{p_pseudo:pseudo,p_invite:invite});
+      if(ce) return viewLogin("signup",errMsg(ce));
+      if(msg) return viewLogin("signup",msg);
+      const {data,error}=await sb.auth.signUp({email:toEmail(pseudo),password:pw,options:{data:{pseudo,invite}}});
+      if(error) return viewLogin("signup",/already|registered/i.test(error.message)?"Ce pseudo est déjà pris.":errMsg(error));
+      if(!data.session) return viewLogin("login","Compte créé, mais la confirmation par e-mail est encore active dans Supabase : désactive-la (voir le guide).");
+    }else{
+      const {error}=await sb.auth.signInWithPassword({email:toEmail(pseudo),password:pw});
+      if(error) return viewLogin("login","Pseudo ou mot de passe incorrect.");
+    }
+  });
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;
+  if(b.dataset.act==="tosignup")viewLogin("signup");
+  if(b.dataset.act==="tologin")viewLogin("login");});
+
+/* ---------- démarrage ---------- */
+let started=false;
+async function start(session){
+  if(started) return; started=true;
+  uid=session.user.id;
+  $("#main").innerHTML=`<div class="empty">Chargement du jeu…</div>`;
+  try{
+    await rpc("ensure_player",{});
+    cfg=await rpc("game_config",{});
+    await loadCatalog(); await loadGame();
+  }catch(e){ $("#main").innerHTML=`<div class="empty">${esc(errMsg(e))}</div>`; return; }
+  render(true);
+  sb.channel("jeu")
+    .on("postgres_changes",{event:"*",schema:"public",table:"listings"},scheduleReload)
+    .on("postgres_changes",{event:"*",schema:"public",table:"trades"},scheduleReload)
+    .on("postgres_changes",{event:"*",schema:"public",table:"feed"},scheduleReload)
+    .on("postgres_changes",{event:"*",schema:"public",table:"players"},scheduleReload)
+    .subscribe();
+  setInterval(renderWallet,30000);
+  setInterval(scheduleReload,60000);
+}
+(async()=>{
+  if(SUPABASE_URL.includes("XXXXXXXX")){$("#main").innerHTML=`<div class="empty">Renseigne SUPABASE_URL et SUPABASE_ANON_KEY en haut du fichier index.html.</div>`;return}
+  const {data}=await sb.auth.getSession();
+  if(data.session) start(data.session); else viewLogin("login");
+  sb.auth.onAuthStateChange((ev,session)=>{ if(session&&!started) start(session); });
+})();
+</script>
+</body>
+</html>
