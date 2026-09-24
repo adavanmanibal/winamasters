@@ -331,6 +331,9 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 
 /* ===== CTA & pile de cartes ===== */
 .btn.buy{background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(47,107,255,.35)}
+.btn.buy{display:flex;flex-direction:column;align-items:center;gap:3px;line-height:1.15}
+.btn.buy .buy-l1{font-size:16px}
+.btn.buy .buy-l2{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;opacity:.9}
 .btn.buy:disabled{background:var(--line);color:var(--soft);box-shadow:none}
 @media (max-width:560px){.packs{gap:14px;justify-content:center}.bp{width:40vw}.btn.open-cta{font-size:13px;padding:9px 8px}}
 .btn.open-cta{margin-top:14px;width:100%;background:var(--blue);color:#fff;box-shadow:0 4px 14px rgba(47,107,255,.35)}
@@ -709,7 +712,7 @@ function viewBooster(){
       <div class="big"><div class="slots">${slots}</div><div class="n">${t?`${t} disponible${t>1?"s":""}`:"Aucun pour l'instant"}</div></div>
       <div class="next">Prochaine distribution : <span id="nextTxt">${nextText()}</span></div>
       <div class="rule">Les boosters non ouverts ne se cumulent pas : à chaque distribution, tu repars avec ${per} boosters.</div>
-      <button class="btn buy" style="width:100%;margin-top:12px" data-act="paid" ${me.coins<cfg.booster_price?"disabled":""}>Acheter un booster · ${cfg.booster_price} bidons</button>
+      <button class="btn buy" style="width:100%;margin-top:12px" data-act="paid" ${me.coins<cfg.booster_price?"disabled":""}><span class="buy-l1">Acheter un booster</span><span class="buy-l2"><span class="drop" aria-hidden="true"></span>${cfg.booster_price} bidons</span></button>
     </aside>
   </div>${last}${viewFeed()}`;
 }
