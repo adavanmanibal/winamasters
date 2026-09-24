@@ -688,9 +688,10 @@ function render(force){
 function viewFeed(){
   if(!feed.length) return "";
   const line=f=>{const c=cardById[f.card];const n=c?`<b>${esc(c.name)}</b> (${esc(rlabel(c.rarity).toLowerCase())})`:"une carte";
-    if(f.kind==="pull")return`${esc(who(f.player))} a tiré ${n}`;
-    if(f.kind==="sale")return`${esc(who(f.player))} a acheté ${n} à ${esc(who(f.other))} pour ${f.price} bidons`;
-    if(f.kind==="trade")return`${esc(who(f.player))} et ${esc(who(f.other))} ont échangé ${n}`;return""};
+    const me1=f.player===uid, me2=f.other===uid, a=esc(who(f.player)), b=esc(who(f.other));
+    if(f.kind==="pull")return me1?`Tu as tiré ${n}`:`${a} a tiré ${n}`;
+    if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
+    if(f.kind==="trade")return me1?`Tu as échangé ${n} avec ${b}`:me2?`${a} a échangé ${n} avec toi`:`${a} et ${b} ont échangé ${n}`;return""};
   return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}<span class="when">${ago(f.created_at)}</span></li>`).join("")}</ul></section>`;
 }
 function viewBooster(){
