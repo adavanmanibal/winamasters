@@ -366,6 +366,27 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .dots-lbl{font-size:13px;font-weight:600;opacity:.7;text-align:center;margin-top:-6px}
 .done-sub{opacity:.8;font-weight:600;text-align:center;max-width:46ch}
 
+/* ===== Shiny : holographique arc-en-ciel ===== */
+.card.r-S{padding:7px;background:linear-gradient(90deg,#ff5fc1,#ffd45e,#6dffac,#5ec8ff,#a97dff,#ff5fc1);background-size:300% 300%;animation:holo 3.5s linear infinite;box-shadow:0 0 0 1px rgba(255,255,255,.9),0 0 22px rgba(190,130,255,.75),0 0 44px rgba(94,200,255,.45)}
+.card.r-S .inner{color:#1A1030;background:linear-gradient(125deg,#FFC2EA 0%,#FFEBA6 15%,#B8FFD6 30%,#B6E6FF 45%,#D6C2FF 60%,#FFC2EA 75%,#FFEBA6 90%,#B8FFD6 100%);background-size:260% 260%;animation:metal 4s ease-in-out infinite alternate;box-shadow:inset 0 0 0 1px rgba(255,255,255,.95)}
+.card.r-S .inner::before{background:
+  radial-gradient(2px 2px at 12% 20%,#fff,transparent),radial-gradient(2.5px 2.5px at 86% 14%,#fff,transparent),radial-gradient(2px 2px at 90% 68%,#fff,transparent),radial-gradient(2px 2px at 8% 88%,#fff,transparent),radial-gradient(1.5px 1.5px at 52% 95%,#fff,transparent),radial-gradient(2px 2px at 30% 60%,#fff,transparent),
+  repeating-linear-gradient(115deg,rgba(255,255,255,0) 0 10px,rgba(255,255,255,.28) 10px 12px);animation:twinkle 1.6s ease-in-out infinite alternate}
+.card.r-S .rlab{background:linear-gradient(90deg,#ff5fc1,#ffd45e,#6dffac,#5ec8ff,#a97dff);color:#1A1030;box-shadow:0 0 0 1px rgba(255,255,255,.8)}
+.card.r-S .st span{background:rgba(26,16,48,.12);color:#1A1030}
+.card.r-S .nm{text-shadow:0 1px 0 rgba(255,255,255,.8)}
+.card.r-S .ds{opacity:.85}
+.card.r-S .art{background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.14),transparent 70%),linear-gradient(90deg,#4A2C8A,#15407A,#0F5A4A,#6A2A6E,#4A2C8A);background-size:100% 100%,300% 300%;animation:holo 6s linear infinite;box-shadow:inset 0 0 0 2px rgba(255,255,255,.85),0 0 12px rgba(169,125,255,.6)}
+.card.r-S .art::after{display:none}
+.card.r-S::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:55%;z-index:4;pointer-events:none;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.1) 30%,rgba(255,255,255,.85) 50%,rgba(255,255,255,.1) 70%,transparent 100%);mix-blend-mode:overlay;animation:shine 2.2s ease-in-out infinite alternate}
+@keyframes holo{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.card.locked.r-S{animation:none}
+.cback.hint-S,.flip .back.hint-S{animation:rainglow 1.6s linear infinite}
+@keyframes rainglow{0%{box-shadow:0 0 0 3px #ff5fc1,0 0 32px #ff5fc1}25%{box-shadow:0 0 0 3px #ffd45e,0 0 32px #ffd45e}50%{box-shadow:0 0 0 3px #6dffac,0 0 32px #6dffac}75%{box-shadow:0 0 0 3px #5ec8ff,0 0 32px #5ec8ff}100%{box-shadow:0 0 0 3px #ff5fc1,0 0 32px #ff5fc1}}
+.deck .burst.go-S,.bigwrap .burst.go-S{background:conic-gradient(from 0deg,rgba(255,95,193,.7),rgba(255,212,94,.7),rgba(109,255,172,.7),rgba(94,200,255,.7),rgba(169,125,255,.7),rgba(255,95,193,.7));-webkit-mask:radial-gradient(circle,#000 20%,transparent 65%);mask:radial-gradient(circle,#000 20%,transparent 65%);animation:burst 1.6s ease-out}
+.rpill.r-S{background:linear-gradient(90deg,#ff5fc1,#ffd45e,#6dffac,#5ec8ff,#a97dff);color:#1A1030}
+.dots i.r-S.seen{background:conic-gradient(#ff5fc1,#ffd45e,#6dffac,#5ec8ff,#a97dff,#ff5fc1)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -392,7 +413,7 @@ const LOGIN_DOMAIN      = "winamasters.adavan.fr";  // sert juste à fabriquer u
 
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const PACK_SIZE = 5;
-const RORDER = ["C","U","R","E","L"];
+const RORDER = ["C","U","R","E","L","S"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={};
@@ -502,7 +523,7 @@ async function openBooster(paid){
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
-function cardBack(c){return `<div class="cback ${c&&["R","E","L"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
+function cardBack(c){return `<div class="cback ${c&&["R","E","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
 function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
 const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
 function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
@@ -556,7 +577,7 @@ function renderReveal(){
     <div class="dots-lbl" id="dotsLbl">${dotsLabel()}</div>
     <div class="deck" id="deck" style="width:${Math.round(200*s)+30}px;height:${Math.round(296*s)+26}px"><div class="burst" id="burst"></div>
       <div class="deck-in" style="transform:scale(${s})">${backs}
-        <div class="dk top ${st.idx>0?"enter":""}"><button class="flip ${on?"on":""}" data-ov="big" aria-label="Retourner la carte"><div class="fi"><div class="back ${["R","E","L"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div>
+        <div class="dk top ${st.idx>0?"enter":""}"><button class="flip ${on?"on":""}" data-ov="big" aria-label="Retourner la carte"><div class="fi"><div class="back ${["R","E","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div>
       </div></div>
     <button class="btn cta ${on?"":"pulse"}" id="rvCta" data-ov="big">${ctaLabel()}</button>
     <button class="linkbtn light" data-ov="all">Tout révéler d'un coup</button></div>`;
@@ -566,7 +587,7 @@ function flipCurrent(){
   const f=document.querySelector("#ov .dk.top .flip"); if(f) f.classList.add("on");
   st.seen.add(st.idx);
   const bu=document.getElementById("burst");
-  if(bu&&["R","E","L"].includes(c.rarity)){setTimeout(()=>{bu.className="burst go-"+c.rarity},280)}
+  if(bu&&["R","E","L","S"].includes(c.rarity)){setTimeout(()=>{bu.className="burst go-"+c.rarity},280)}
   document.getElementById("rvTitle").innerHTML=revealTitle();
   document.getElementById("dots").innerHTML=dotsHTML();
   document.getElementById("dotsLbl").textContent=dotsLabel();
