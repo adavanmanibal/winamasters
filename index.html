@@ -12,7 +12,7 @@
   --bg:#EDF0F6; --panel:#FFFFFF; --ink:#0B1733; --soft:#58647C; --line:#D5DBE6;
   --navy:#0B1B3A; --navy-2:#16306A; --blue:#2F6BFF; --on-navy:#FFFFFF;
   --btn-bg:#0B1B3A; --btn-ink:#FFFFFF; --danger:#C62828;
-  --r-C:#8E98A8; --r-U:#6FA8C4; --r-R:#2F6BFF; --r-E:#9B5CFF; --r-L:#E3A91F;
+  --r-C:#8E98A8; --r-U:#6FA8C4; --r-R:#2F6BFF; --r-E:#9B5CFF; --r-Q:#12B5A6; --r-L:#E3A91F;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
 }
@@ -369,6 +369,36 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .dots-lbl{font-size:13px;font-weight:600;opacity:.7;text-align:center;margin-top:-6px}
 .done-sub{opacity:.8;font-weight:600;text-align:center;max-width:46ch}
 
+/* ===== Équipe : badge d'entreprise ===== */
+.card.r-Q{--rc:var(--r-Q);padding:6px;background:linear-gradient(160deg,#FFFFFF,#E4EAF2 55%,#C9D3E0);box-shadow:0 0 0 1px rgba(18,181,166,.55),0 6px 22px rgba(18,181,166,.35)}
+.card.r-Q .inner{color:#13203F;background:#FFFFFF;padding:0 7px 7px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(19,32,63,.12)}
+.card.r-Q .inner::before{background:linear-gradient(180deg,var(--b) 0,var(--b) 34px,transparent 34px),repeating-linear-gradient(135deg,transparent 0 10px,rgba(18,181,166,.05) 10px 20px);opacity:1}
+.card.r-Q .slot{position:relative;align-self:center;width:34px;height:7px;margin:6px 0 2px;border-radius:999px;background:rgba(0,0,0,.45);box-shadow:inset 0 1px 2px rgba(0,0,0,.6),0 1px 0 rgba(255,255,255,.35)}
+.card.r-Q .ct{color:#fff}
+.card.r-Q .brand{background:transparent;color:#fff;padding:0;letter-spacing:.04em;text-transform:uppercase}
+.card.r-Q .rlab{background:linear-gradient(90deg,#5EEAD4,#12B5A6);color:#053B36}
+.card.r-Q .art{margin:8px 6px 5px;border-radius:8px;background:radial-gradient(circle at 50% 35%,#fff,transparent 70%),linear-gradient(160deg,var(--a),color-mix(in srgb,var(--a) 55%,var(--b)));box-shadow:0 0 0 3px #fff,0 0 0 4px rgba(19,32,63,.2)}
+.card.r-Q .nm{min-height:0;text-align:center;font-size:14px}
+.card.r-Q .job{position:relative;text-align:center;font-size:8.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--b);margin-top:2px}
+.card.r-Q .ds{text-align:center;-webkit-line-clamp:3;font-size:9.5px;line-height:1.2;margin-top:2px}
+.card.r-Q .st{margin-top:auto;padding-top:4px}
+.card.r-Q .st span{background:rgba(19,32,63,.08);color:#13203F}
+.card.r-Q::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:55%;z-index:4;pointer-events:none;background:linear-gradient(90deg,transparent 0%,rgba(94,234,212,.08) 30%,rgba(255,255,255,.7) 50%,rgba(94,234,212,.08) 70%,transparent 100%);mix-blend-mode:overlay;animation:shine 3.1s ease-in-out infinite alternate}
+.card.locked.r-Q .inner::before{display:block;background:linear-gradient(180deg,#666 0,#666 34px,transparent 34px)}
+.rpill.r-Q{background:linear-gradient(90deg,#5EEAD4,#12B5A6);color:#053B36}
+.dots i.r-Q.seen{background:#5EEAD4}
+.cback.hint-Q,.flip .back.hint-Q{box-shadow:0 0 0 3px #5EEAD4,0 0 22px rgba(18,181,166,.85)}
+.deck .burst.go-Q,.bigwrap .burst.go-Q{background:radial-gradient(circle,rgba(94,234,212,.75),rgba(94,234,212,.15) 45%,transparent 65%);animation:burst 1.2s ease-out}
+.team{margin:0 0 18px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.team h3{margin:0 0 4px;font-size:15px}
+.team p{margin:0 0 10px;color:var(--soft);font-size:13px}
+.team-row{display:flex;gap:8px;flex-wrap:wrap}
+.team-b{display:flex;align-items:center;gap:8px;border:1px solid var(--line);border-radius:10px;padding:6px 10px;font-size:13px;font-weight:700;background:transparent;color:inherit}
+.team-b i{width:10px;height:10px;border-radius:50%}
+.team-b small{font-weight:600;color:var(--soft)}
+.team-b.done{border-color:#12B5A6;background:rgba(18,181,166,.1)}
+.team-b.done small{color:#0E8F83}
+
 /* ===== Shiny : holographique arc-en-ciel ===== */
 .card.r-S{padding:7px;background:linear-gradient(90deg,#ff5fc1,#ffd45e,#6dffac,#5ec8ff,#a97dff,#ff5fc1);background-size:300% 300%;animation:holo 3.5s linear infinite;box-shadow:0 0 0 1px rgba(255,255,255,.9),0 0 22px rgba(190,130,255,.75),0 0 44px rgba(94,200,255,.45)}
 .card.r-S .inner{color:#1A1030;background:linear-gradient(125deg,#FFC2EA 0%,#FFEBA6 15%,#B8FFD6 30%,#B6E6FF 45%,#D6C2FF 60%,#FFC2EA 75%,#FFEBA6 90%,#B8FFD6 100%);background-size:260% 260%;animation:metal 4s ease-in-out infinite alternate;box-shadow:inset 0 0 0 1px rgba(255,255,255,.95)}
@@ -471,11 +501,11 @@ const LOGIN_DOMAIN      = "winamasters.adavan.fr";  // sert juste à fabriquer u
 
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const PACK_SIZE = 5;
-const RORDER = ["C","U","R","E","L","S"];
+const RORDER = ["C","U","R","E","Q","L","S"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={};
-let me=null, inv={}, players=[], listings=[], trades=[], feed=[], board=[];
+let me=null, inv={}, players=[], listings=[], trades=[], feed=[], board=[], teamDone=[];
 let tab="booster", brandFilter="all", collFilter="all", lastPull=null, flipped=new Set(), adminDirty=false, busy=false;
 let loginMode="login";
 
@@ -510,10 +540,10 @@ function cardHTML(c,{count=0,locked=false,tag="div",attrs=""}={}){
   const art=c.img?`<img src="${esc(c.img)}" alt="">`:shapeSVG(c.shape);
 
   return `<${tag} class="card r-${esc(c.rarity)} ${locked?"locked":""}" style="--b:${esc(b.color)};--a:${esc(b.accent)}" ${attrs} aria-label="${esc(locked?"Carte non obtenue":c.name)}, ${esc(rlabel(c.rarity))}">
-    <div class="inner">
+    <div class="inner">${c.rarity==="Q"?`<span class="slot"></span>`:""}
       <div class="ct"><span class="brand">${esc(b.name)}</span><span class="rlab">${esc(rlabel(c.rarity))}</span></div>
       <div class="art">${locked?shapeSVG(c.shape):art}${count>1?`<span class="cnt">×${count}${dupLabel(count)?" · "+dupLabel(count):""}</span>`:""}</div>
-      <div class="nm">${locked?"???":esc(c.name)}</div>
+      <div class="nm">${locked?"???":esc(c.name)}</div>${c.rarity==="Q"&&c.job?`<div class="job">${locked?"":esc(c.job)}</div>`:""}
       <div class="ds">${locked?esc(rlabel(c.rarity)):esc(c.descr)}</div>
       <div class="st"><span>ATK ${locked?"?":c.atk}</span><span>DEF ${locked?"?":c.def}</span></div>
     </div></${tag}>`;
@@ -548,16 +578,18 @@ async function loadCatalog(){
   cards=c.data; cardById=Object.fromEntries(cards.map(x=>[x.id,x]));
 }
 async function loadGame(){
-  const [p,i,pl,l,t,f,lb,bs]=await Promise.all([
+  const [p,i,pl,l,t,f,lb,bs,tb]=await Promise.all([
     sb.from("players").select("*").eq("id",uid).single(),
     sb.from("inventory").select("card,qty").eq("player",uid),
     sb.from("players").select("id,pseudo"),
     sb.from("listings").select("*").eq("status","open").order("created_at",{ascending:false}).limit(300),
     sb.from("trades").select("*").eq("status","pending").order("created_at",{ascending:false}),
-    sb.from("feed").select("*").order("created_at",{ascending:false}).limit(30),
+    sb.from("feed").select("*").order("created_at",{ascending:false}).order("id",{ascending:false}).limit(30),
     sb.from("leaderboard").select("*").order("score",{ascending:false}).limit(200),
-    sb.rpc("booster_state")]);
+    sb.rpc("booster_state"),
+    sb.from("team_bonus").select("brand").eq("player",uid)]);
   if(p.error) throw p.error;
+  teamDone=(tb&&!tb.error&&tb.data||[]).map(x=>x.brand);
   me=p.data; inv=Object.fromEntries((i.data||[]).map(x=>[x.card,x.qty]));
   if(bs&&bs.data) bstate=bs.data;
   players=pl.data||[]; listings=l.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
@@ -610,7 +642,7 @@ function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) ope
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
-function cardBack(c){return `<div class="cback ${c&&["R","E","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
+function cardBack(c){return `<div class="cback ${c&&["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
 function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
 const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
 function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
@@ -668,7 +700,7 @@ function renderReveal(){
   const ov=document.getElementById("ov"); if(!ov||!ovState) return;
   const st=ovState, s=bigScale();
   const dks=st.ids.map((id,i)=>{const c=cardById[id];
-    return `<div class="dk" data-i="${i}"><button class="flip" data-ov="big" aria-label="Retourner la carte" tabindex="-1"><div class="fi"><div class="back ${["R","E","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div>`}).join("");
+    return `<div class="dk" data-i="${i}"><button class="flip" data-ov="big" aria-label="Retourner la carte" tabindex="-1"><div class="fi"><div class="back ${["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div>`}).join("");
   ov.innerHTML=`<div class="rv">
     <div class="rv-title" id="rvTitle"></div>
     <div class="dots" id="dots"></div>
@@ -702,7 +734,7 @@ function flipCurrent(){
   const el=document.querySelector(`#deck .dk[data-i="${st.idx}"] .flip`); if(el) el.classList.add("on");
   st.seen.add(st.idx);
   const bu=document.getElementById("burst");
-  if(bu&&["R","E","L","S"].includes(c.rarity)){ bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity; },260); }
+  if(bu&&["R","E","Q","L","S"].includes(c.rarity)){ bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity; },260); }
   updateHud();
 }
 function nextCard(){
@@ -812,6 +844,7 @@ function viewFeed(){
     if(f.kind==="pull")return me1?`Tu as tiré ${n}`:`${a} a tiré ${n}`;
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
     if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
+    if(f.kind==="team"){const bn=esc(brands[f.note]?.name||f.note||"");return me1?`Tu as complété l'équipe ${bn} ! Prime d'équipe : +${f.price} bidons`:`${a} a complété l'équipe ${bn} (+${f.price} bidons)`}
     if(f.kind==="refuse")return me1?`Tu as refusé de prêter serment. Les Orques t'acclament.`:`${a} a refusé de prêter serment. Honte sur sa lignée.`;
     if(f.kind==="trade")return me1?`Tu as échangé ${n} avec ${b}`:me2?`${a} a échangé ${n} avec toi`:`${a} et ${b} ont échangé ${n}`;return""};
   return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}<span class="when">${ago(f.created_at)}</span></li>`).join("")}</ul></section>`;
@@ -848,15 +881,26 @@ function viewCollection(){
     return `<button class="prog" data-brand="${esc(b.id)}" aria-pressed="${brandFilter===b.id}"><div class="n">${esc(b.name)}</div><small>${o} / ${all.length} cartes</small><div class="bar"><i style="width:${Math.round(o/all.length*100)}%;background:${esc(b.color)}"></i></div></button>`}).join("");
   const inBrand=vis.filter(c=>brandFilter==="all"||c.brand===brandFilter);
   const F={all:["Toutes",inBrand.length],owned:["Obtenues",inBrand.filter(c=>has(c.id)).length],missing:["Manquantes",inBrand.filter(c=>!has(c.id)).length],dups:["Doublons",inBrand.filter(c=>(inv[c.id]||0)>1).length]};
+  if(inBrand.some(c=>c.rarity==="Q")) F.team=["Équipe",inBrand.filter(c=>c.rarity==="Q").length];
+  if(collFilter==="team"&&!F.team) collFilter="all";
   const chips=Object.entries(F).map(([k,[l,n]])=>`<button class="chip" data-coll="${k}" aria-pressed="${collFilter===k}">${l}<span class="k">${n}</span></button>`).join("");
-  const shown=inBrand.filter(c=>collFilter==="all"||(collFilter==="owned"&&has(c.id))||(collFilter==="missing"&&!has(c.id))||(collFilter==="dups"&&(inv[c.id]||0)>1))
+  const shown=inBrand.filter(c=>collFilter==="all"||(collFilter==="owned"&&has(c.id))||(collFilter==="missing"&&!has(c.id))||(collFilter==="dups"&&(inv[c.id]||0)>1)||(collFilter==="team"&&c.rarity==="Q"))
     .sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity));
   const list=shown.map(c=>{const n=inv[c.id]||0;return cardHTML(c,{count:n,locked:!n,tag:n?"button":"div",attrs:n?`data-card="${esc(c.id)}"`:""})}).join("");
   const mine=board.find(b=>b.id===uid);
   return `<h2>Collection</h2><p class="sub">${own} cartes différentes sur ${total}${mine?` · score ${mine.score}`:""}${dups.length?` · ${dups.length} carte${dups.length>1?"s":""} en double (${extra} exemplaire${extra>1?"s":""} en trop, à vendre ou échanger)`:""}. Clique sur une carte pour la vendre, l'échanger ou la défausser.</p>
     <div class="progress"><button class="prog" data-brand="all" aria-pressed="${brandFilter==="all"}"><div class="n">Tout le groupe</div><small>${own} / ${total} cartes</small><div class="bar"><i style="width:${Math.round(own/Math.max(1,total)*100)}%;background:var(--blue)"></i></div></button>${prog}</div>
+    ${teamPanel(vis)}
     <div class="chips">${chips}</div>
     ${list?`<div class="cards">${list}</div>`:`<div class="empty">Aucune carte ici pour l'instant.</div>`}`;
+}
+function teamPanel(vis){
+  const q=vis.filter(c=>c.rarity==="Q"); if(!q.length) return "";
+  const amt=cfg.team_bonus||200;
+  const bl=Object.values(brands).filter(b=>q.some(c=>c.brand===b.id)).map(b=>{
+    const all=q.filter(c=>c.brand===b.id), o=all.filter(c=>has(c.id)).length, done=teamDone.includes(b.id);
+    return `<button class="team-b ${done?"done":""}" data-teamb="${esc(b.id)}"><i style="background:${esc(b.color)}"></i>${esc(b.name)} <small>${done?"prime touchée ✓":`${o} / ${all.length}`}</small></button>`}).join("");
+  return `<section class="team"><h3>Prime d'équipe</h3><p>Réunis toutes les cartes Équipe d'une marque et gagne ${amt} bidons (une fois par marque).</p><div class="team-row">${bl}</div></section>`;
 }
 function viewMarket(){
   const mine=listings.filter(l=>l.seller===uid), others=listings.filter(l=>l.seller!==uid);
@@ -944,7 +988,7 @@ function readAdminForm(){
   const b=[...document.querySelectorAll("#brandsEd [data-bk]")].map((el,i)=>({id:el.dataset.bk,name:el.querySelector('[data-f="name"]').value.trim()||el.dataset.bk,color:el.querySelector('[data-f="color"]').value,accent:el.querySelector('[data-f="accent"]').value,sort:brands[el.dataset.bk]?.sort??i}));
   const c=[...document.querySelectorAll("#cardsEd [data-cid]")].map((row,i)=>{const g=f=>row.querySelector(`[data-f="${f}"]`);const old=cardById[row.dataset.cid]||{};
     const clamp=v=>Math.max(0,Math.min(100,parseInt(v)||0));
-    return {id:row.dataset.cid,name:g("name").value.trim()||"Sans nom",brand:g("brand").value,rarity:g("rarity").value,descr:g("descr").value.trim(),atk:clamp(g("atk").value),def:clamp(g("def").value),shape:g("shape").value,active:g("active").checked,img:old.img||"",sort:i}});
+    return {id:row.dataset.cid,name:g("name").value.trim()||"Sans nom",brand:g("brand").value,rarity:g("rarity").value,descr:g("descr").value.trim(),atk:clamp(g("atk").value),def:clamp(g("def").value),shape:g("shape").value,active:g("active").checked,img:old.img||"",job:old.job||"",sort:i}});
   return {b,c};
 }
 function applyLocal(f){brands=Object.fromEntries(f.b.map(x=>[x.id,x]));cards=f.c;cardById=Object.fromEntries(cards.map(x=>[x.id,x]))}
@@ -1019,6 +1063,7 @@ document.addEventListener("click",async e=>{
   if(ds.tab){tab=ds.tab;render(true);return}
   if(ds.brand){brandFilter=ds.brand;render();return}
   if(ds.coll){collFilter=ds.coll;render();return}
+  if(ds.teamb){brandFilter=ds.teamb;collFilter="team";render();return}
   if(ds.player){showPlayer(ds.player);return}
   if(ds.pfilter){pFilter=ds.pfilter;render();return}
   if(ds.pbrand){pBrand=ds.pbrand;render();return}
@@ -1047,7 +1092,7 @@ document.addEventListener("click",async e=>{
     case "tradewith": openTradeDlg(null,ds.to); break;
     case "tradefrom": closeDlg(); openTradeDlg(ds.give); break;
     case "sendtrade": {const to=$("#tTo").value,give=$("#tGive").value,want=$("#tWant").value;closeDlg();await act(()=>rpc("propose_trade",{to_id:to,give_card:give,want_card:want}),"Proposition envoyée.");break}
-    case "addcard": {const f=readAdminForm();f.c.push({id:"c"+Date.now().toString(36),name:"Nouveau produit",brand:f.b[0]?.id||"gs27",rarity:"C",descr:"",atk:30,def:30,shape:"flacon",active:true,img:"",sort:f.c.length});applyLocal(f);adminDirty=true;render(true);break}
+    case "addcard": {const f=readAdminForm();f.c.push({id:"c"+Date.now().toString(36),name:"Nouveau produit",brand:f.b[0]?.id||"gs27",rarity:"C",descr:"",atk:30,def:30,shape:"flacon",active:true,img:"",job:"",sort:f.c.length});applyLocal(f);adminDirty=true;render(true);break}
     case "savecat": t.disabled=true; await saveCatalog(); t.disabled=false; break;
   }
 });
