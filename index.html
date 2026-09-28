@@ -39,6 +39,11 @@ img{max-width:100%}
 .wallet{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .pill{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.16);color:#fff;font-weight:600;font-size:14px;white-space:nowrap}
 .pill b{font-stretch:110%;font-weight:800}
+.pill-cd .cdl{font-weight:600;opacity:.85}
+.pill-cd b{font-variant-numeric:tabular-nums}
+.brk{display:none}
+@media (max-width:400px){.pill-cd .cdl{display:none}}
+
 button.pill:hover{background:rgba(255,255,255,.18)}
 .drop{width:10px;height:13px;background:#8FB3FF;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;display:inline-block;border:1px solid rgba(0,0,0,.25)}
 .mini-pack{width:11px;height:15px;border-radius:2px;background:#fff;display:inline-block;box-shadow:inset 0 3px 0 rgba(47,107,255,.9)}
@@ -379,10 +384,18 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .team[open] summary{margin-bottom:6px}
 .team-sum{font-size:13px;font-weight:700;color:var(--soft)}
 @media (max-width:700px){
-  .top-in{padding:8px 12px;gap:8px 10px;flex-wrap:wrap}
+  .top-in{padding:8px 12px;gap:8px 8px;flex-wrap:wrap;justify-content:center}
   .pill-bst{display:none}
   .logo{font-size:18px}
-  .wallet{flex-wrap:wrap;gap:6px;justify-content:flex-start;margin-left:0}
+  .wallet{display:contents}
+  .top-in{row-gap:8px}
+  .logo{order:1}
+  .brk{display:block;order:2;flex-basis:100%;height:0}
+  .pill-coins{order:3}
+  .pill-cd{order:4}
+  .pill-me{order:5}
+  .pill-coins .wl{display:none}
+  .pill-me{max-width:130px;overflow:hidden;text-overflow:ellipsis;display:block}
   .pill{padding:5px 10px;font-size:13px}
   main{padding-top:14px}
   main h2{font-size:24px}
@@ -402,7 +415,7 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
   .chips::-webkit-scrollbar{display:none}
   .chips .chip{flex:0 0 auto;white-space:nowrap}
 }
-@media (max-width:400px){ .lname{display:none} }
+
 @media (max-width:700px){ .team-sum .wl{display:none} }
 .dup-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:nowrap;margin:0 0 14px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:700}
 .dup-keep{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:600;cursor:pointer}
@@ -862,13 +875,21 @@ function renderTabs(){
   $("#tabs").style.setProperty("--n",list.length);
   $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}</button>`).join("");
 }
+function cdText(){
+  if(!bstate.next_at) return "";
+  const ms=Math.max(0,Date.parse(bstate.next_at)-Date.now()), sec=Math.floor(ms/1000), h=Math.floor(sec/3600), m=Math.floor(sec%3600/60), s2=sec%60;
+  return h?`${h} h ${String(m).padStart(2,"0")}`:`${m}:${String(s2).padStart(2,"0")}`;
+}
+setInterval(()=>{const e=document.getElementById("cdTxt"); if(e) e.textContent=cdText(); if(bstate.next_at&&Date.now()>=Date.parse(bstate.next_at)&&!window.__cdReload){window.__cdReload=1;setTimeout(()=>{window.__cdReload=0},15000);scheduleReload();}},1000);
 function renderWallet(){
   if(!me){$("#wallet").innerHTML="";return}
   const t=totalPacks(), per=Math.max(bstate.per_slot||cfg.free_per_slot||2,t);
   const packs=Array.from({length:Math.min(per,4)},(_,i)=>`<span class="mini-pack ${i<t?"":"off"}"></span>`).join("");
-  $("#wallet").innerHTML=`<span class="pill"><span class="drop" aria-hidden="true"></span><b>${me.coins}</b><span class="wl"> bidons</span></span>
+  $("#wallet").innerHTML=`<span class="pill pill-coins"><span class="drop" aria-hidden="true"></span><b>${me.coins}</b><span class="wl"> bidons</span></span>
     <button class="pill pill-bst" data-tab="booster" title="Boosters à ouvrir">${packs}<b>${t}</b><span class="wl"> booster${t>1?"s":""}</span></button>
-    <button class="pill" data-act="pseudo" title="Mon compte">${esc(me.pseudo)}</button>`;
+    ${bstate.next_at?`<button class="pill pill-cd" data-tab="booster" title="Prochaine distribution de boosters gratuits"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg><span class="cdl">Boosters dans</span><b id="cdTxt">${cdText()}</b></button>`:""}
+    <span class="brk" aria-hidden="true"></span>
+    <button class="pill pill-me" data-act="pseudo" title="Mon compte">${esc(me.pseudo)}</button>`;
 }
 function render(force){
   $("#top").hidden=false;
