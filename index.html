@@ -396,6 +396,23 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .bp-tag.bought{background:#F2C94C;color:#3A2600}
 .stock .reserve{display:flex;flex-direction:column;gap:2px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13.5px}
 .stock .reserve b{font-weight:900}
+dialog.oath-dlg{max-width:min(600px,94vw);background:linear-gradient(180deg,#F7EBCD,#EAD7A8);color:#3A2410;border:3px solid #8C6A2E;box-shadow:0 0 0 6px #F7EBCD,0 20px 60px rgba(0,0,0,.5)}
+.oath{position:relative;padding:26px 26px 22px;text-align:center;font-family:Georgia,"Times New Roman",serif}
+.oath .close{color:#8C6A2E}
+.oath-seal{width:64px;height:64px;margin:0 auto 6px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#E0463C,#8E1624);color:#FFE3A0;font-size:34px;display:flex;align-items:center;justify-content:center;box-shadow:0 3px 0 #5E0E18,inset 0 0 0 3px rgba(255,255,255,.2)}
+.oath-seal.sm{width:44px;height:44px;font-size:22px;margin:0;flex:none}
+.oath h4{margin:4px 0 6px;font-size:26px;font-weight:700;letter-spacing:.02em;color:#5A3510}
+.oath-intro{margin:0 0 14px;font-style:italic;color:#6E4A22}
+.oath blockquote{margin:0 0 18px;padding:14px 16px;border-top:1px solid #B8955A;border-bottom:1px solid #B8955A;font-size:16px;line-height:1.55;color:#3A2410}
+.oath-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.oath-acts .btn{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:180px;font-family:"Archivo",system-ui,sans-serif}
+.oath-acts .btn span{font-size:12.5px;font-weight:600;opacity:.85}
+.oath-yes{background:#8E1624;color:#FFF4D6}
+.oath-no{background:transparent;color:#5A3510;border:1px solid #8C6A2E}
+.oath-banner{display:flex;align-items:center;gap:14px;width:100%;margin:0 0 18px;padding:12px 16px;border-radius:14px;border:2px solid #C9A13A;background:linear-gradient(90deg,#F7EBCD,#EAD7A8);color:#3A2410;text-align:left;font-family:Georgia,serif;cursor:pointer}
+.oath-banner small{font-family:"Archivo",system-ui,sans-serif;color:#6E4A22}
+.oath-banner .go{margin-left:auto;background:#8E1624;color:#FFF4D6;padding:8px 14px;border-radius:10px;font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:14px;white-space:nowrap}
+@media (max-width:560px){.oath-banner .go{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -473,6 +490,8 @@ function cardHTML(c,{count=0,locked=false,tag="div",attrs=""}={}){
 /* ---------- boosters gratuits ---------- */
 function tokens(){return bstate.available||0}
 function reserve(){return bstate.bought||0}
+function lord(){return bstate.lord||"Adavan"}
+function oathOpen(){return !!bstate.oath_open}
 function totalPacks(){return tokens()+reserve()}
 function hoursText(){const h=cfg.free_hours||[10,15];return h.map(x=>x+"h").join(" et ")}
 function nextText(){
@@ -522,6 +541,28 @@ async function act(fn,okMsg){
 async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
 
 /* ---------- actions ---------- */
+let oathShown=false;
+function oathHTML(){
+  const L=esc(lord()), P=esc(me.pseudo||"voyageur"), n=bstate.oath_amount||100;
+  return `<div class="oath"><button class="close" data-act="close" aria-label="Fermer">×</button>
+    <div class="oath-seal">⚜</div>
+    <h4>Le Serment de Midi</h4>
+    <p class="oath-intro">Le soleil est au zénith sur la Terre du Milieu de Cormery. Le Seigneur ${L} attend ton allégeance.</p>
+    <blockquote>Par le feu du capot de 1968 et l'huile sacrée des moteurs de Spheretech,<br>
+    moi, <b>${P}</b>, je jure fidélité éternelle à <b>${L}</b>, Seigneur des Boosters, Gardien du Catalogue et Maître de la Base de Données.<br>
+    Je ne contesterai point la rareté de ses Shiny, je ne vendrai point mes doublons à vil prix,<br>
+    et chaque jour à midi je clamerai : <i>« Un Booster pour les gouverner tous ! »</i></blockquote>
+    <div class="oath-acts">
+      <button class="btn oath-yes" data-act="oath-yes">Je le jure ! <span>+${n} bidons</span></button>
+      <button class="btn ghost oath-no" data-act="oath-no">Jamais ! <span>0 bidon, et la honte</span></button>
+    </div></div>`;
+}
+function openOath(){ if(!oathOpen()) return; const d=$("#dlg"); d.innerHTML=oathHTML(); d.classList.add("oath-dlg"); d.showModal(); oathShown=true; }
+async function swearOath(accept){
+  closeDlg();
+  await act(()=>rpc("swear_oath",{accept}),v=>accept?`Serment accepté. Le Seigneur ${lord()} te verse ${v} bidons.`:"Tu as choisi la voie des Orques. Pas de bidons aujourd'hui.");
+}
+function maybeOath(){ if(oathOpen()&&!oathShown&&!document.getElementById("ov")&&!$("#dlg").open) openOath(); }
 async function buyBooster(){
   if(busy) return; busy=true;
   try{ await rpc("buy_booster",{}); await loadGame(); render(); toast("Booster ajouté à ta réserve. Ouvre-le quand tu veux !"); }
@@ -715,6 +756,8 @@ function viewFeed(){
     const me1=f.player===uid, me2=f.other===uid, a=esc(who(f.player)), b=esc(who(f.other));
     if(f.kind==="pull")return me1?`Tu as tiré ${n}`:`${a} a tiré ${n}`;
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
+    if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
+    if(f.kind==="refuse")return me1?`Tu as refusé de prêter serment. Les Orques t'acclament.`:`${a} a refusé de prêter serment. Honte sur sa lignée.`;
     if(f.kind==="trade")return me1?`Tu as échangé ${n} avec ${b}`:me2?`${a} a échangé ${n} avec toi`:`${a} et ${b} ont échangé ${n}`;return""};
   return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}<span class="when">${ago(f.created_at)}</span></li>`).join("")}</ul></section>`;
 }
@@ -726,7 +769,8 @@ function viewBooster(){
     ? Array.from({length:t},()=>pack("free","Gratuit")).join("")+Array.from({length:b},()=>pack("openbought","Acheté")).join("")
     : `<div class="bpw"><div class="bp off" aria-hidden="true">${packInner()}</div><div class="bp-label">Plus de booster pour l'instant</div></div>`;
   const last=lastPull?`<h3>Ton dernier booster</h3><div class="lastpull">${lastPull.map(id=>zoomBtn(cardById[id],innerWidth<640?0.55:0.7)).join("")}</div>`:"";
-  return `<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
+  const oath=oathOpen()?`<button class="oath-banner" data-act="oath"><span class="oath-seal sm">⚜</span><span><b>Le Serment de Midi t'attend</b><br><small>Jure fidélité au Seigneur ${esc(lord())} et reçois ${bstate.oath_amount||100} bidons.</small></span><span class="go">Prêter serment</span></button>`:"";
+  return `${oath}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
   <div class="bstage">
     <div class="packs">${packs}</div>
     <aside class="stock">
@@ -840,7 +884,7 @@ function uploadFor(cid){
 }
 
 /* ---------- fenêtres ---------- */
-function closeDlg(){const d=$("#dlg");if(d.open)d.close()}
+function closeDlg(){const d=$("#dlg");if(d.open)d.close();d.classList.remove("oath-dlg")}
 function openCardDlg(id){
   const c=cardById[id], n=inv[id]||0, v=RAR[c.rarity].sell;
   const d=$("#dlg");
@@ -907,6 +951,9 @@ document.addEventListener("click",async e=>{
     case "openbought": openBooster(true); break;
     case "flipall": lastPull&&lastPull.forEach((_,i)=>flipped.add(i)); document.querySelectorAll(".flip").forEach(f=>f.classList.add("on")); break;
     case "close": closeDlg(); break;
+    case "oath": openOath(); break;
+    case "oath-yes": t.disabled=true; await swearOath(true); break;
+    case "oath-no": t.disabled=true; await swearOath(false); break;
     case "pseudo": openPseudoDlg(); break;
     case "logout": closeDlg(); await sb.auth.signOut(); location.reload(); break;
     case "newtrade": openTradeDlg(null); break;
@@ -968,7 +1015,7 @@ async function start(session){
     cfg=await rpc("game_config",{});
     await loadCatalog(); await loadGame();
   }catch(e){ $("#main").innerHTML=`<div class="empty">${esc(errMsg(e))}</div>`; return; }
-  render(true);
+  render(true); setTimeout(maybeOath,600);
   sb.channel("jeu")
     .on("postgres_changes",{event:"*",schema:"public",table:"listings"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"trades"},scheduleReload)
@@ -977,6 +1024,7 @@ async function start(session){
     .subscribe();
   setInterval(()=>{
     if(bstate.next_at&&Date.now()>=Date.parse(bstate.next_at)) scheduleReload();
+    if(bstate.oath_next&&!oathOpen()&&Date.now()>=Date.parse(bstate.oath_next)){ oathShown=false; scheduleReload(); setTimeout(maybeOath,2000); }
     renderWallet(); const n=document.getElementById("nextTxt"); if(n) n.innerHTML=nextText();
   },20000);
   setInterval(scheduleReload,60000);
