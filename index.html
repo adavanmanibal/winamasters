@@ -369,7 +369,41 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .dots-lbl{font-size:13px;font-weight:600;opacity:.7;text-align:center;margin-top:-6px}
 .done-sub{opacity:.8;font-weight:600;text-align:center;max-width:46ch}
 
-.dup-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:700}
+.sub-short{display:none}
+.team summary{display:flex;align-items:center;gap:10px;cursor:pointer;list-style:none}
+.team summary::-webkit-details-marker{display:none}
+.team summary h3{margin:0;white-space:nowrap}
+.dup-bar .btn{white-space:nowrap;flex:0 0 auto}
+.team summary::after{content:"";margin-left:auto;width:8px;height:8px;border-right:2px solid var(--soft);border-bottom:2px solid var(--soft);transform:rotate(45deg);transition:transform .2s}
+.team[open] summary::after{transform:rotate(-135deg)}
+.team[open] summary{margin-bottom:6px}
+.team-sum{font-size:13px;font-weight:700;color:var(--soft)}
+@media (max-width:700px){
+  .top-in{padding:8px 12px;gap:10px;flex-wrap:nowrap}
+  .logo{font-size:18px}
+  .wallet{flex-wrap:nowrap;gap:6px}
+  .pill{padding:5px 10px;font-size:13px}
+  main{padding-top:14px}
+  main h2{font-size:24px}
+  .sub-long{display:none}
+  .sub-short{display:block;margin-bottom:10px}
+  .progress{display:flex;overflow-x:auto;gap:8px;margin:0 -16px 10px;padding:0 16px 2px;scrollbar-width:none}
+  .progress::-webkit-scrollbar{display:none}
+  .progress .prog{flex:0 0 auto;min-width:112px;padding:7px 10px}
+  .progress .prog .n{font-size:13.5px}
+  .progress .prog small{font-size:11.5px}
+  .progress .prog .bar{height:4px;margin-top:4px}
+  .team{padding:10px 12px;margin-bottom:10px}
+  .team h3{font-size:14px}
+  .dup-bar{padding:7px 10px;font-size:12.5px;margin-bottom:10px}
+  .dup-bar .btn{padding:6px 10px;font-size:13px}
+  .chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 12px;padding:0 16px 2px;scrollbar-width:none}
+  .chips::-webkit-scrollbar{display:none}
+  .chips .chip{flex:0 0 auto;white-space:nowrap}
+}
+@media (max-width:400px){ .lname{display:none} }
+@media (max-width:700px){ .team-sum .wl{display:none} }
+.dup-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:nowrap;margin:0 0 14px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:700}
 .dup-keep{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:600;cursor:pointer}
 .dup-keep input{margin-top:3px;width:18px;height:18px;flex:0 0 auto}
 .mk-bar{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
@@ -493,7 +527,7 @@ nav.tabs button{position:relative}
 <body>
 <header class="top" id="top" hidden>
   <div class="top-in">
-    <div class="logo"><span class="mark" aria-hidden="true"><i></i><i></i></span>WinaMasters</div>
+    <div class="logo"><span class="mark" aria-hidden="true"><i></i><i></i></span><span class="lname">WinaMasters</span></div>
     <div class="wallet" id="wallet"></div>
   </div>
   <nav class="tabs" id="tabs" role="tablist"></nav>
@@ -831,8 +865,8 @@ function renderWallet(){
   if(!me){$("#wallet").innerHTML="";return}
   const t=totalPacks(), per=Math.max(bstate.per_slot||cfg.free_per_slot||2,t);
   const packs=Array.from({length:Math.min(per,4)},(_,i)=>`<span class="mini-pack ${i<t?"":"off"}"></span>`).join("");
-  $("#wallet").innerHTML=`<span class="pill"><span class="drop" aria-hidden="true"></span><b>${me.coins}</b> bidons</span>
-    <button class="pill" data-tab="booster" title="Boosters à ouvrir">${packs}<b>${t}</b> booster${t>1?"s":""}</button>
+  $("#wallet").innerHTML=`<span class="pill"><span class="drop" aria-hidden="true"></span><b>${me.coins}</b><span class="wl"> bidons</span></span>
+    <button class="pill" data-tab="booster" title="Boosters à ouvrir">${packs}<b>${t}</b><span class="wl"> booster${t>1?"s":""}</span></button>
     <button class="pill" data-act="pseudo" title="Mon compte">${esc(me.pseudo)}</button>`;
 }
 function render(force){
@@ -900,20 +934,23 @@ function viewCollection(){
     .sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity));
   const list=shown.map(c=>{const n=inv[c.id]||0;return cardHTML(c,{count:n,locked:!n,tag:n?"button":"div",attrs:n?`data-card="${esc(c.id)}"`:""})}).join("");
   const mine=board.find(b=>b.id===uid);
-  return `<h2>Collection</h2><p class="sub">${own} cartes différentes sur ${total}${mine?` · score ${mine.score}`:""}${dups.length?` · ${dups.length} carte${dups.length>1?"s":""} en double (${extra} exemplaire${extra>1?"s":""} en trop, à vendre ou échanger)`:""}. Clique sur une carte pour la vendre, l'échanger ou la défausser.</p>
+  return `<h2>Collection</h2><p class="sub sub-short"><b>${own}</b> / ${total} cartes${mine?` · score <b>${mine.score}</b>`:""}</p><p class="sub sub-long">${own} cartes différentes sur ${total}${mine?` · score ${mine.score}`:""}${dups.length?` · ${dups.length} carte${dups.length>1?"s":""} en double (${extra} exemplaire${extra>1?"s":""} en trop, à vendre ou échanger)`:""}. Clique sur une carte pour la vendre, l'échanger ou la défausser.</p>
     <div class="progress"><button class="prog" data-brand="all" aria-pressed="${brandFilter==="all"}"><div class="n">Tout le groupe</div><small>${own} / ${total} cartes</small><div class="bar"><i style="width:${Math.round(own/Math.max(1,total)*100)}%;background:var(--blue)"></i></div></button>${prog}</div>
     ${teamPanel(vis)}
-    ${dups.length?`<div class="dup-bar"><span>${extra} exemplaire${extra>1?"s":""} en trop dans ta collection</span><button class="btn small" data-act="dupall">Défausser mes doublons</button></div>`:""}
+    ${dups.length?`<div class="dup-bar"><span>${extra} doublon${extra>1?"s":""} en trop</span><button class="btn small" data-act="dupall">Tout défausser</button></div>`:""}
     <div class="chips">${chips}</div>
     ${list?`<div class="cards">${list}</div>`:`<div class="empty">Aucune carte ici pour l'instant.</div>`}`;
 }
+let teamOpen=null;
 function teamPanel(vis){
   const q=vis.filter(c=>c.rarity==="Q"); if(!q.length) return "";
   const amt=cfg.team_bonus||200;
   const bl=Object.values(brands).filter(b=>q.some(c=>c.brand===b.id)).map(b=>{
     const all=q.filter(c=>c.brand===b.id), o=all.filter(c=>has(c.id)).length, done=teamDone.includes(b.id);
     return `<button class="team-b ${done?"done":""}" data-teamb="${esc(b.id)}"><i style="background:${esc(b.color)}"></i>${esc(b.name)} <small>${done?"prime touchée ✓":`${o} / ${all.length}`}</small></button>`}).join("");
-  return `<section class="team"><h3>Prime d'équipe</h3><p>Réunis toutes les cartes Équipe d'une marque et gagne ${amt} bidons (une fois par marque).</p><div class="team-row">${bl}</div></section>`;
+  const nb=Object.values(brands).filter(b=>q.some(c=>c.brand===b.id)).length, nd=teamDone.filter(x=>q.some(c=>c.brand===x)).length;
+  if(teamOpen===null) teamOpen=innerWidth>700;
+  return `<details class="team" id="teamBox" ${teamOpen?"open":""}><summary><h3>Prime d'équipe</h3><span class="team-sum">${nd} / ${nb}<span class="wl"> équipe${nd>1?"s":""} complète${nd>1?"s":""}</span></span></summary><p>Réunis toutes les cartes Équipe d'une marque et gagne ${amt} bidons (une fois par marque).</p><div class="team-row">${bl}</div></details>`;
 }
 let mk={tab:"buy",q:"",brand:"all",rar:"all",missing:false,sort:"recent"};
 function mkItem(l,own){const c=cardById[l.card];if(!c)return"";
@@ -1159,6 +1196,7 @@ document.addEventListener("click",async e=>{
   }
 });
 document.addEventListener("input",e=>{if(e.target.id==="mkq"){mk.q=e.target.value;const L=document.getElementById("mkList");if(L)L.innerHTML=mkListHTML();return}});
+document.addEventListener("toggle",e=>{if(e.target.id==="teamBox") teamOpen=e.target.open},true);
 document.addEventListener("change",e=>{if(e.target.id==="mksort"){mk.sort=e.target.value;const L=document.getElementById("mkList");if(L)L.innerHTML=mkListHTML();}});
 document.addEventListener("input",e=>{if(tab==="admin"&&e.target.closest("#cardsEd,#brandsEd"))adminDirty=true});
 
