@@ -413,6 +413,38 @@ dialog.oath-dlg{max-width:min(600px,94vw);background:linear-gradient(180deg,#F7E
 .oath-banner small{font-family:"Archivo",system-ui,sans-serif;color:#6E4A22}
 .oath-banner .go{margin-left:auto;background:#8E1624;color:#FFF4D6;padding:8px 14px;border-radius:10px;font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:14px;white-space:nowrap}
 @media (max-width:560px){.oath-banner .go{display:none}}
+
+/* pile de cartes (v10) */
+.dk{transition:transform .38s cubic-bezier(.3,.8,.3,1),opacity .3s ease;will-change:transform}
+.dk .flip{width:200px;display:block;cursor:pointer;pointer-events:none}
+.dk.front .flip{pointer-events:auto}
+.dk:not(.front) .back{box-shadow:0 6px 18px rgba(0,0,0,.45)!important;animation:none!important}
+.dk .flip .fi{transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.ov{touch-action:manipulation}
+/* joueurs cliquables */
+.plink{background:none;border:0;padding:0;font:inherit;color:inherit;font-weight:700;text-decoration:underline;text-decoration-color:rgba(47,107,255,.5);text-underline-offset:3px;cursor:pointer}
+.plink:hover{color:var(--blue)}
+.lb td .plink{font-weight:700}
+.back{display:inline-block;margin-bottom:10px;color:var(--soft)}
+.phead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.pcard{position:relative;border:0;padding:0;background:none;cursor:zoom-in;border-radius:12px}
+.pcard .miss{position:absolute;left:8px;bottom:-8px;z-index:6;background:var(--blue);color:#fff;font-size:11px;font-weight:800;padding:3px 8px;border-radius:999px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.chips+.chips{margin-top:-8px}
+/* barre d'onglets */
+nav.tabs .ti{display:none;width:22px;height:22px}
+nav.tabs .ts{display:none}
+nav.tabs button{position:relative}
+@media (max-width:700px){
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;max-width:none;margin:0;display:grid;grid-template-columns:repeat(var(--n,5),minmax(0,1fr));gap:0;padding:6px 2px calc(6px + env(safe-area-inset-bottom,0px));background:var(--navy);border-top:1px solid rgba(255,255,255,.1);box-shadow:0 -6px 20px rgba(0,0,0,.25);overflow:visible}
+  nav.tabs button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;border-bottom:0;border-radius:10px;font-size:10.5px;min-width:0}
+  nav.tabs button[aria-selected="true"]{background:rgba(47,107,255,.22)}
+  nav.tabs .ti{display:block}
+  nav.tabs .tl{display:none}
+  nav.tabs .ts{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:9.5px;letter-spacing:-.2px;font-stretch:85%}
+  nav.tabs .badge{position:absolute;top:2px;right:calc(50% - 22px);margin:0;font-size:10px;padding:0 5px}
+  main{padding-bottom:calc(96px + env(safe-area-inset-bottom,0px))}
+  .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
 </head>
@@ -630,40 +662,53 @@ function ctaLabel(){
   if(!st.seen.has(st.idx)) return "Retourner la carte";
   return st.idx<st.ids.length-1?"Carte suivante":"Voir mes 5 cartes";
 }
+let animLock=0;
+function locked(ms){ const now=Date.now(); if(now<animLock) return true; animLock=now+ms; return false; }
 function renderReveal(){
   const ov=document.getElementById("ov"); if(!ov||!ovState) return;
-  const st=ovState, c=cardById[st.ids[st.idx]], s=bigScale(), on=st.seen.has(st.idx);
-  const rest=st.ids.length-st.idx-1;
-  const backs=Array.from({length:Math.min(rest,4)},(_,k)=>{const d=k+1;return `<div class="dk" style="transform:translate(${d*7}px,${d*6}px) rotate(${(d*2.2).toFixed(1)}deg);z-index:${10-d}">${cardBack(null)}</div>`}).reverse().join("");
+  const st=ovState, s=bigScale();
+  const dks=st.ids.map((id,i)=>{const c=cardById[id];
+    return `<div class="dk" data-i="${i}"><button class="flip" data-ov="big" aria-label="Retourner la carte" tabindex="-1"><div class="fi"><div class="back ${["R","E","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div>`}).join("");
   ov.innerHTML=`<div class="rv">
-    <div class="rv-title" id="rvTitle">${revealTitle()}</div>
-    <div class="dots" id="dots">${dotsHTML()}</div>
-    <div class="dots-lbl" id="dotsLbl">${dotsLabel()}</div>
+    <div class="rv-title" id="rvTitle"></div>
+    <div class="dots" id="dots"></div>
+    <div class="dots-lbl" id="dotsLbl"></div>
     <div class="deck" id="deck" style="width:${Math.round(200*s)+30}px;height:${Math.round(296*s)+26}px"><div class="burst" id="burst"></div>
-      <div class="deck-in" style="transform:scale(${s})">${backs}
-        <div class="dk top ${st.idx>0?"enter":""}"><button class="flip ${on?"on":""}" data-ov="big" aria-label="Retourner la carte"><div class="fi"><div class="back ${["R","E","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div>
-      </div></div>
-    <button class="btn cta ${on?"":"pulse"}" id="rvCta" data-ov="big">${ctaLabel()}</button>
+      <div class="deck-in" style="transform:scale(${s})">${dks}</div></div>
+    <button class="btn cta pulse" id="rvCta" data-ov="big"></button>
     <button class="linkbtn light" data-ov="all">Tout révéler d'un coup</button></div>`;
+  layoutDeck(); updateHud(); animLock=Date.now()+250;
 }
-function flipCurrent(){
-  const st=ovState; const c=cardById[st.ids[st.idx]];
-  const f=document.querySelector("#ov .dk.top .flip"); if(f) f.classList.add("on");
-  st.seen.add(st.idx);
-  const bu=document.getElementById("burst");
-  if(bu&&["R","E","L","S"].includes(c.rarity)){setTimeout(()=>{bu.className="burst go-"+c.rarity},280)}
+function layoutDeck(){
+  const st=ovState; if(!st) return;
+  document.querySelectorAll("#deck .dk").forEach(el=>{
+    const d=+el.dataset.i-st.idx;
+    el.classList.toggle("front",d===0);
+    if(d<0){ el.style.transform="translate(-150%,-20px) rotate(-18deg)"; el.style.opacity="0"; }
+    else { const k=Math.min(d,4); el.style.transform=`translate(${k*7}px,${k*6}px) rotate(${(k*2.2).toFixed(1)}deg)`; el.style.opacity=d>4?"0":"1"; }
+    el.style.zIndex=String(20-d);
+  });
+}
+function updateHud(){
+  const st=ovState; if(!st) return; const on=st.seen.has(st.idx);
   document.getElementById("rvTitle").innerHTML=revealTitle();
   document.getElementById("dots").innerHTML=dotsHTML();
   document.getElementById("dotsLbl").textContent=dotsLabel();
-  const b=document.getElementById("rvCta"); b.textContent=ctaLabel(); b.classList.remove("pulse");
+  const b=document.getElementById("rvCta"); b.textContent=ctaLabel(); b.classList.toggle("pulse",!on);
 }
-let leaving=false;
+function flipCurrent(){
+  const st=ovState; if(!st||st.seen.has(st.idx)||locked(520)) return;
+  const c=cardById[st.ids[st.idx]];
+  const el=document.querySelector(`#deck .dk[data-i="${st.idx}"] .flip`); if(el) el.classList.add("on");
+  st.seen.add(st.idx);
+  const bu=document.getElementById("burst");
+  if(bu&&["R","E","L","S"].includes(c.rarity)){ bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity; },260); }
+  updateHud();
+}
 function nextCard(){
-  const st=ovState; if(leaving) return;
-  if(st.idx>=st.ids.length-1){renderSummary();return}
-  const top=document.querySelector("#ov .dk.top"); leaving=true;
-  if(top){top.classList.remove("enter");top.classList.add("leave")}
-  setTimeout(()=>{leaving=false; if(!ovState) return; st.idx++; renderReveal()},330);
+  const st=ovState; if(!st||locked(380)) return;
+  if(st.idx>=st.ids.length-1){ renderSummary(); return; }
+  st.idx++; layoutDeck(); updateHud();
 }
 let swipeX=null,lastSwipe=0;
 document.addEventListener("pointerdown",e=>{if(ovState&&ovState.phase==="reveal"&&e.target.closest("#deck")) swipeX=e.clientX});
@@ -693,7 +738,7 @@ function ovAction(a,ds){
   if(!ovState&&a!=="close") return;
   if(a==="tear"){tearPack();return}
   if(a==="close"&&ovState&&ovState.phase==="tearing") return;
-  if(a==="big"){ if(Date.now()-lastSwipe<400) return; if(!ovState.seen.has(ovState.idx)) flipCurrent(); else nextCard(); return}
+  if(a==="big"){ if(ovState.phase!=="reveal"||Date.now()-lastSwipe<400) return; if(!ovState.seen.has(ovState.idx)) flipCurrent(); else nextCard(); return}
   if(a==="collection"){closeOverlay(true);tab="collection";collFilter="all";render(true);scrollTo(0,0);return}
   if(a==="all"){renderSummary();return}
   if(a==="close"){closeOverlay();return}
@@ -701,8 +746,8 @@ function ovAction(a,ds){
 }
 document.addEventListener("keydown",e=>{
   if(!ovState) return;
-  if(e.key==="Escape"){closeOverlay();return}
-  if([" ","Enter","ArrowRight"].includes(e.key)){e.preventDefault();
+  if(e.key==="Escape"){ if(ovState.phase!=="tearing") closeOverlay(); return }
+  if([" ","Enter","ArrowRight"].includes(e.key)){e.preventDefault(); if(e.repeat) return;
     if(ovState.phase==="pack") tearPack(); else if(ovState.phase==="reveal") ovAction("big",{});}
 });
 document.addEventListener("pointermove",e=>{
@@ -724,10 +769,19 @@ function openZoom(id){
 
 /* ---------- rendu ---------- */
 const TABS=[["booster","Boosters"],["collection","Collection"],["market","Marché"],["trades","Échanges"],["ranking","Classement"]];
+const TAB_ICONS={
+ booster:'<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 7h12M6 17h12"/>',
+ collection:'<rect x="3" y="5" width="11" height="15" rx="2"/><path d="M9 3h10a2 2 0 0 1 2 2v13"/>',
+ market:'<path d="M4 9l1.5-5h13L20 9"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/>',
+ trades:'<path d="M7 7h13l-3-3M17 17H4l3 3"/>',
+ ranking:'<path d="M8 21V11M16 21V7M12 21V3M4 21h16"/>',
+ admin:'<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M5 5l2 2M17 17l2 2M5 19l2-2M17 7l2-2"/>'};
 function renderTabs(){
   const incoming=trades.filter(t=>t.to_player===uid).length;
   const list=[...TABS]; if(cfg.is_admin) list.push(["admin","Catalogue"]);
-  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${tab===k}" data-tab="${k}">${l}${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}</button>`).join("");
+  const cur=tab==="player"?"ranking":tab;
+  $("#tabs").style.setProperty("--n",list.length);
+  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}</button>`).join("");
 }
 function renderWallet(){
   if(!me){$("#wallet").innerHTML="";return}
@@ -748,12 +802,13 @@ function render(force){
   else if(tab==="market") m.innerHTML=viewMarket();
   else if(tab==="trades") m.innerHTML=viewTrades();
   else if(tab==="ranking") m.innerHTML=viewRanking();
+  else if(tab==="player") m.innerHTML=viewPlayer();
   else if(tab==="admin") m.innerHTML=viewAdmin();
 }
 function viewFeed(){
   if(!feed.length) return "";
   const line=f=>{const c=cardById[f.card];const n=c?`<b>${esc(c.name)}</b> (${esc(rlabel(c.rarity).toLowerCase())})`:"une carte";
-    const me1=f.player===uid, me2=f.other===uid, a=esc(who(f.player)), b=esc(who(f.other));
+    const me1=f.player===uid, me2=f.other===uid, a=plink(f.player), b=plink(f.other);
     if(f.kind==="pull")return me1?`Tu as tiré ${n}`:`${a} a tiré ${n}`;
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
     if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
@@ -806,7 +861,7 @@ function viewCollection(){
 function viewMarket(){
   const mine=listings.filter(l=>l.seller===uid), others=listings.filter(l=>l.seller!==uid);
   const item=(l,own)=>{const c=cardById[l.card];if(!c)return"";
-    return `<div class="item">${zoomBtn(c,0.4)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${rpill(c.rarity)} · ${own?"ton offre":"vendu par "+esc(who(l.seller))} · ${ago(l.created_at)}${!own&&has(c.id)?" · déjà dans ta collection":""}</div></div>
+    return `<div class="item">${zoomBtn(c,0.4)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${rpill(c.rarity)} · ${own?"ton offre":"vendu par "+plink(l.seller)} · ${ago(l.created_at)}${!own&&has(c.id)?" · déjà dans ta collection":""}</div></div>
     <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>`}</div></div>`};
   return `<h2>Marché</h2><p class="sub">Les collègues vendent leurs cartes ici. Le vendeur touche ses bidons dès que la carte est achetée.</p>
     ${others.length?`<div class="list">${others.map(l=>item(l,false)).join("")}</div>`:`<div class="empty">Rien en vente pour l'instant. Mets une de tes cartes en vente depuis ta collection.</div>`}
@@ -819,7 +874,7 @@ function viewTrades(){
     const left=incoming?side("Tu reçois",g):side("Tu donnes",g);
     const right=incoming?side("Tu donnes",w,w&&!has(w.id)?`<div class="twarn">Tu ne l'as plus</div>`:""):side("Tu demandes",w);
     return `<div class="trade">${left}<div class="tarrow">⇄</div>${right}
-      <div class="tinfo"><div class="ttl">${incoming?esc(who(t.from_player))+" te propose un échange":"Proposition envoyée à "+esc(who(t.to_player))}</div>
+      <div class="tinfo"><div class="ttl">${incoming?plink(t.from_player)+" te propose un échange":"Proposition envoyée à "+plink(t.to_player)}</div>
       <div class="meta">${ago(t.created_at)} · clique sur une carte pour l'agrandir</div>
       <div class="row">${incoming?`<button class="btn small" data-accept="${t.id}" ${w&&!has(w.id)?"disabled":""}>Accepter</button><button class="btn ghost small" data-decline="${t.id}">Refuser</button>`:`<button class="btn ghost small" data-tcancel="${t.id}">Annuler</button>`}</div></div></div>`};
   return `<h2>Échanges</h2><p class="sub">Propose une de tes cartes contre une carte d'un collègue, ou offre-la simplement. Ta carte est mise de côté jusqu'à sa réponse.</p>
@@ -827,15 +882,44 @@ function viewTrades(){
     <h3>Reçues</h3>${inc.length?`<div class="list">${inc.map(t=>row(t,true)).join("")}</div>`:`<div class="empty">Aucune proposition en attente.</div>`}
     <h3>Envoyées</h3>${out.length?`<div class="list">${out.map(t=>row(t,false)).join("")}</div>`:`<div class="empty">Tu n'as rien proposé pour l'instant.</div>`}`;
 }
+function plink(id,label){ if(!id) return esc(label||"Un collègue"); return `<button class="plink" data-player="${esc(id)}">${esc(label||who(id))}</button>`; }
 function viewRanking(){
   const total=cards.filter(c=>c.active).length;
-  return `<h2>Classement</h2><p class="sub">Le score compte chaque carte selon sa rareté, avec un petit bonus pour les doubles.</p>
+  return `<h2>Classement</h2><p class="sub">Le score additionne les points de chaque carte différente selon sa rareté. Clique sur un joueur pour voir sa collection.</p>
   <div class="tablewrap"><table class="lb"><thead><tr><th>#</th><th>Joueur</th><th>Score</th><th>Collection</th><th>Boosters</th></tr></thead><tbody>
-  ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}"><td class="rk">${i+1}</td><td>${esc(p.id===uid?(p.pseudo+" (toi)"):p.pseudo)}</td><td><b>${p.score}</b></td><td>${p.uniq} / ${total}</td><td>${p.opened}</td></tr>`).join("")}
+  ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}" ><td class="rk">${i+1}</td><td>${p.id===uid?`<button class="plink" data-tab="collection">${esc(p.pseudo)} (toi)</button>`:plink(p.id,p.pseudo)}</td><td><b>${p.score}</b></td><td>${p.uniq} / ${total}</td><td>${p.opened}</td></tr>`).join("")}
   </tbody></table></div>${viewFeed()}`;
 }
 
-/* ---------- catalogue (admin) ---------- */
+/* ---------- collection d'un autre joueur ---------- */
+let viewPid=null, viewInv=null, pFilter="theirs", pBrand="all";
+async function showPlayer(pid){
+  if(pid===uid){ tab="collection"; render(true); scrollTo(0,0); return; }
+  if($("#dlg").open) closeDlg();
+  tab="player"; viewPid=pid; viewInv=null; pFilter="theirs"; pBrand="all"; render(true); scrollTo(0,0);
+  const {data,error}=await sb.from("inventory").select("card,qty").eq("player",pid).gt("qty",0);
+  if(viewPid!==pid) return;
+  viewInv=error?{}:Object.fromEntries((data||[]).map(x=>[x.card,x.qty]));
+  if(tab==="player") render(true);
+}
+function viewPlayer(){
+  const pl=players.find(p=>p.id===viewPid)||{pseudo:"Joueur"}; const rk=board.findIndex(b=>b.id===viewPid); const b=board[rk];
+  const head=`<button class="linkbtn back" data-tab="ranking">← Retour au classement</button>
+    <div class="phead"><div><h2>${esc(pl.pseudo)}</h2><p class="sub">${rk>=0?`${rk+1}${rk===0?"er":"e"} au classement · score ${b.score} · ${b.uniq} cartes différentes`:""}</p></div>
+    <button class="btn" data-act="tradewith" data-to="${esc(viewPid)}">Proposer un échange</button></div>`;
+  if(!viewInv) return head+`<div class="empty">Chargement de sa collection…</div>`;
+  const vis=visibleCards(); const theirs=c=>(viewInv[c.id]||0)>0;
+  const inBrand=vis.filter(c=>pBrand==="all"||c.brand===pBrand);
+  const F={theirs:["Ses cartes",inBrand.filter(theirs).length],want:["Qui te manquent",inBrand.filter(c=>theirs(c)&&!has(c.id)).length],dups:["Ses doublons",inBrand.filter(c=>(viewInv[c.id]||0)>1).length],all:["Tout le catalogue",inBrand.length]};
+  const brandsChips=[["all","Toutes les marques"],...Object.values(brands).filter(x=>vis.some(c=>c.brand===x.id)).map(x=>[x.id,x.name])]
+    .map(([k,l])=>`<button class="chip" data-pbrand="${esc(k)}" aria-pressed="${pBrand===k}">${esc(l)}</button>`).join("");
+  const chips=Object.entries(F).map(([k,[l,n]])=>`<button class="chip" data-pfilter="${k}" aria-pressed="${pFilter===k}">${l}<span class="k">${n}</span></button>`).join("");
+  const list=inBrand.filter(c=>pFilter==="all"||(pFilter==="theirs"&&theirs(c))||(pFilter==="want"&&theirs(c)&&!has(c.id))||(pFilter==="dups"&&(viewInv[c.id]||0)>1))
+    .sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity))
+    .map(c=>{const n=viewInv[c.id]||0; const miss=n&&!has(c.id);
+      return n?`<button class="pcard" data-zoom="${esc(c.id)}">${cardHTML(c,{count:n})}${miss?`<span class="miss">Te manque</span>`:""}</button>`:cardHTML(c,{locked:true})}).join("");
+  return head+`<div class="chips">${brandsChips}</div><div class="chips">${chips}</div>${list?`<div class="cards">${list}</div>`:`<div class="empty">Rien à afficher ici.</div>`}`;
+}
 function viewAdmin(){
   const bopts=k=>Object.values(brands).map(b=>`<option value="${esc(b.id)}" ${b.id===k?"selected":""}>${esc(b.name)}</option>`).join("");
   const ropts=r=>RORDER.map(x=>`<option value="${x}" ${x===r?"selected":""}>${esc(rlabel(x))}</option>`).join("");
@@ -897,7 +981,7 @@ function openCardDlg(id){
    </div></div></div></div>`;
   d.showModal();
 }
-async function openTradeDlg(give){
+async function openTradeDlg(give,toId){
   const others=players.filter(p=>p.id!==uid).sort((a,b)=>a.pseudo.localeCompare(b.pseudo));
   if(!others.length) return toast("Personne d'autre n'a encore rejoint le jeu.");
   const mine=cards.filter(c=>has(c.id));
@@ -905,7 +989,7 @@ async function openTradeDlg(give){
   const d=$("#dlg");
   d.innerHTML=`<div style="position:relative;padding:18px"><button class="close" data-act="close" aria-label="Fermer">×</button><h4 style="margin:0 0 12px;font-stretch:115%;font-weight:900;font-size:20px">Proposer un échange</h4>
    <div style="display:flex;flex-direction:column;gap:12px">
-   <label class="field">Avec<select id="tTo">${others.map(p=>`<option value="${esc(p.id)}">${esc(p.pseudo||"Un collègue")}</option>`).join("")}</select></label>
+   <label class="field">Avec<select id="tTo">${others.map(p=>`<option value="${esc(p.id)}" ${p.id===toId?"selected":""}>${esc(p.pseudo||"Un collègue")}</option>`).join("")}</select></label>
    <label class="field">Tu donnes<select id="tGive">${mine.map(c=>`<option value="${esc(c.id)}" ${c.id===give?"selected":""}>${esc(c.name)} (×${inv[c.id]})</option>`).join("")}</select></label>
    <label class="field">Tu demandes<select id="tWant"><option value="">Chargement…</option></select></label>
    <button class="btn" data-act="sendtrade">Envoyer la proposition</button></div></div>`;
@@ -915,7 +999,7 @@ async function openTradeDlg(give){
     const theirs=(data||[]).map(x=>cardById[x.card]).filter(Boolean).sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity));
     $("#tWant").innerHTML=`<option value="">Rien, c'est un cadeau</option>`+theirs.map(c=>`<option value="${esc(c.id)}">${esc(c.name)} (${esc(rlabel(c.rarity))})${has(c.id)?"":" · te manque"}</option>`).join("");
   };
-  fill(others[0].id);
+  fill(toId&&others.some(p=>p.id===toId)?toId:others[0].id);
   $("#tTo").addEventListener("change",e=>fill(e.target.value));
 }
 function openPseudoDlg(){
@@ -935,6 +1019,9 @@ document.addEventListener("click",async e=>{
   if(ds.tab){tab=ds.tab;render(true);return}
   if(ds.brand){brandFilter=ds.brand;render();return}
   if(ds.coll){collFilter=ds.coll;render();return}
+  if(ds.player){showPlayer(ds.player);return}
+  if(ds.pfilter){pFilter=ds.pfilter;render();return}
+  if(ds.pbrand){pBrand=ds.pbrand;render();return}
   if(ds.flip!==undefined){flipped.add(+ds.flip);t.classList.add("on");return}
   if(ds.card){openCardDlg(ds.card);return}
   if(ds.sell){const p=parseInt($("#sellPrice").value);closeDlg();await act(()=>rpc("create_listing",{card_id:ds.sell,ask:p}),"Carte mise en vente.");return}
@@ -957,6 +1044,7 @@ document.addEventListener("click",async e=>{
     case "pseudo": openPseudoDlg(); break;
     case "logout": closeDlg(); await sb.auth.signOut(); location.reload(); break;
     case "newtrade": openTradeDlg(null); break;
+    case "tradewith": openTradeDlg(null,ds.to); break;
     case "tradefrom": closeDlg(); openTradeDlg(ds.give); break;
     case "sendtrade": {const to=$("#tTo").value,give=$("#tGive").value,want=$("#tWant").value;closeDlg();await act(()=>rpc("propose_trade",{to_id:to,give_card:give,want_card:want}),"Proposition envoyée.");break}
     case "addcard": {const f=readAdminForm();f.c.push({id:"c"+Date.now().toString(36),name:"Nouveau produit",brand:f.b[0]?.id||"gs27",rarity:"C",descr:"",atk:30,def:30,shape:"flacon",active:true,img:"",sort:f.c.length});applyLocal(f);adminDirty=true;render(true);break}
