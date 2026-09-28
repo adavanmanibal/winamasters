@@ -369,6 +369,15 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .dots-lbl{font-size:13px;font-weight:600;opacity:.7;text-align:center;margin-top:-6px}
 .done-sub{opacity:.8;font-weight:600;text-align:center;max-width:46ch}
 
+.mk-bar{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
+.mk-bar input{flex:1 1 240px;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:15px}
+.mk-bar select{flex:0 0 auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:14px;font-weight:700}
+.chips.mk-f{margin-bottom:10px;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.chips.mk-f::-webkit-scrollbar{display:none}
+.chips.mk-f .chip{flex:0 0 auto;white-space:nowrap}
+.mk-bar .mk-miss{flex:0 0 auto;border-radius:10px}
+.mk-count{font-size:13px;color:var(--soft);font-weight:700;margin:4px 0 8px}
+.meta .want{color:#0E8F83}
 /* ===== Équipe : badge d'entreprise ===== */
 .card.r-Q{--rc:var(--r-Q);padding:6px;background:linear-gradient(160deg,#FFFFFF,#E4EAF2 55%,#C9D3E0);box-shadow:0 0 0 1px rgba(18,181,166,.55),0 6px 22px rgba(18,181,166,.35)}
 .card.r-Q .inner{color:#13203F;background:#FFFFFF;padding:0 7px 7px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(19,32,63,.12)}
@@ -902,14 +911,45 @@ function teamPanel(vis){
     return `<button class="team-b ${done?"done":""}" data-teamb="${esc(b.id)}"><i style="background:${esc(b.color)}"></i>${esc(b.name)} <small>${done?"prime touchée ✓":`${o} / ${all.length}`}</small></button>`}).join("");
   return `<section class="team"><h3>Prime d'équipe</h3><p>Réunis toutes les cartes Équipe d'une marque et gagne ${amt} bidons (une fois par marque).</p><div class="team-row">${bl}</div></section>`;
 }
+let mk={tab:"buy",q:"",brand:"all",rar:"all",missing:false,sort:"recent"};
+function mkItem(l,own){const c=cardById[l.card];if(!c)return"";
+  return `<div class="item">${zoomBtn(c,0.4)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${rpill(c.rarity)} · ${esc(brands[c.brand]?.name||"")} · ${own?"ton offre":"vendu par "+plink(l.seller)} · ${ago(l.created_at)}${!own?(has(c.id)?" · déjà dans ta collection":` · <b class="want">te manque</b>`):""}</div></div>
+  <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>`}</div></div>`}
+function mkFiltered(){
+  const own=mk.tab==="mine"; const norm=x=>(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
+  const q=norm(mk.q.trim());
+  let r=listings.filter(l=>(l.seller===uid)===own).filter(l=>{const c=cardById[l.card];if(!c)return false;
+    if(mk.brand!=="all"&&c.brand!==mk.brand)return false;
+    if(mk.rar!=="all"&&c.rarity!==mk.rar)return false;
+    if(!own&&mk.missing&&has(c.id))return false;
+    if(q&&!norm(c.name+" "+(brands[c.brand]?.name||"")+" "+pname(l.seller)).includes(q))return false;
+    return true});
+  const R=l=>RORDER.indexOf(cardById[l.card].rarity);
+  const cmp={recent:(a,b)=>new Date(b.created_at)-new Date(a.created_at),cheap:(a,b)=>a.price-b.price,dear:(a,b)=>b.price-a.price,rare:(a,b)=>R(b)-R(a)||a.price-b.price,name:(a,b)=>cardById[a.card].name.localeCompare(cardById[b.card].name,"fr")}[mk.sort];
+  return r.sort(cmp);
+}
+function mkListHTML(){const r=mkFiltered(), own=mk.tab==="mine";
+  const txt=`<div class="mk-count">${r.length} offre${r.length>1?"s":""}</div>`;
+  if(!r.length) return txt+`<div class="empty">${listings.some(l=>(l.seller===uid)===own)?"Aucune offre ne correspond à ces filtres.":own?"Tu n'as rien en vente. Mets une carte en vente depuis ta collection.":"Rien en vente pour l'instant. Mets une de tes cartes en vente depuis ta collection."}</div>`;
+  return txt+`<div class="list">${r.map(l=>mkItem(l,own)).join("")}</div>`}
+function pname(id){return (players.find(p=>p.id===id)||{}).pseudo||""}
 function viewMarket(){
-  const mine=listings.filter(l=>l.seller===uid), others=listings.filter(l=>l.seller!==uid);
-  const item=(l,own)=>{const c=cardById[l.card];if(!c)return"";
-    return `<div class="item">${zoomBtn(c,0.4)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${rpill(c.rarity)} · ${own?"ton offre":"vendu par "+plink(l.seller)} · ${ago(l.created_at)}${!own&&has(c.id)?" · déjà dans ta collection":""}</div></div>
-    <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>`}</div></div>`};
+  const others=listings.filter(l=>l.seller!==uid).length, mine=listings.filter(l=>l.seller===uid).length;
+  const pool=listings.filter(l=>(l.seller===uid)===(mk.tab==="mine")).map(l=>cardById[l.card]).filter(Boolean);
+  const bl=Object.values(brands).filter(b=>pool.some(c=>c.brand===b.id));
+  const rl=RORDER.filter(r=>pool.some(c=>c.rarity===r));
+  if(mk.brand!=="all"&&!bl.some(b=>b.id===mk.brand)) mk.brand="all";
+  if(mk.rar!=="all"&&!rl.includes(mk.rar)) mk.rar="all";
+  const chip=(k,v,l,n)=>`<button class="chip" data-mk="${k}" data-v="${esc(v)}" aria-pressed="${String(mk[k])===String(v)}">${l}${n!==undefined?`<span class="k">${n}</span>`:""}</button>`;
   return `<h2>Marché</h2><p class="sub">Les collègues vendent leurs cartes ici. Le vendeur touche ses bidons dès que la carte est achetée.</p>
-    ${others.length?`<div class="list">${others.map(l=>item(l,false)).join("")}</div>`:`<div class="empty">Rien en vente pour l'instant. Mets une de tes cartes en vente depuis ta collection.</div>`}
-    ${mine.length?`<h3>Tes offres</h3><div class="list">${mine.map(l=>item(l,true)).join("")}</div>`:""}`;
+    <div class="chips">${chip("tab","buy","À acheter",others)}${chip("tab","mine","Mes offres",mine)}</div>
+    <div class="mk-bar">
+      <input id="mkq" type="search" placeholder="Chercher une carte, une marque, un vendeur…" value="${esc(mk.q)}" autocomplete="off">
+      <select id="mksort" aria-label="Trier">${[["recent","Plus récentes"],["cheap","Prix croissant"],["dear","Prix décroissant"],["rare","Plus rares d'abord"],["name","Nom (A → Z)"]].map(([v,l])=>`<option value="${v}" ${mk.sort===v?"selected":""}>${l}</option>`).join("")}</select>${mk.tab==="buy"?`<button class="chip mk-miss" data-mk="missing" data-v="${!mk.missing}" aria-pressed="${mk.missing}">${mk.missing?"✓ ":""}Qui me manquent</button>`:""}
+    </div>
+    <div class="chips mk-f">${chip("brand","all","Toutes marques")}${bl.map(b=>chip("brand",b.id,esc(b.name))).join("")}</div>
+    <div class="chips mk-f">${chip("rar","all","Toutes raretés")}${rl.map(r=>chip("rar",r,esc(rlabel(r)))).join("")}</div>
+    <div id="mkList">${mkListHTML()}</div>`;
 }
 function viewTrades(){
   const inc=trades.filter(t=>t.to_player===uid), out=trades.filter(t=>t.from_player===uid);
@@ -1063,6 +1103,7 @@ document.addEventListener("click",async e=>{
   if(ds.tab){tab=ds.tab;render(true);return}
   if(ds.brand){brandFilter=ds.brand;render();return}
   if(ds.coll){collFilter=ds.coll;render();return}
+  if(ds.mk){const v=ds.v; mk[ds.mk]=ds.mk==="missing"?v==="true":v; if(ds.mk==="tab"){mk.brand="all";mk.rar="all";} render(); return}
   if(ds.teamb){brandFilter=ds.teamb;collFilter="team";render();return}
   if(ds.player){showPlayer(ds.player);return}
   if(ds.pfilter){pFilter=ds.pfilter;render();return}
@@ -1096,6 +1137,8 @@ document.addEventListener("click",async e=>{
     case "savecat": t.disabled=true; await saveCatalog(); t.disabled=false; break;
   }
 });
+document.addEventListener("input",e=>{if(e.target.id==="mkq"){mk.q=e.target.value;const L=document.getElementById("mkList");if(L)L.innerHTML=mkListHTML();return}});
+document.addEventListener("change",e=>{if(e.target.id==="mksort"){mk.sort=e.target.value;const L=document.getElementById("mkList");if(L)L.innerHTML=mkListHTML();}});
 document.addEventListener("input",e=>{if(tab==="admin"&&e.target.closest("#cardsEd,#brandsEd"))adminDirty=true});
 
 /* ---------- connexion ---------- */
