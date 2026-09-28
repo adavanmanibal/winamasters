@@ -369,6 +369,9 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .dots-lbl{font-size:13px;font-weight:600;opacity:.7;text-align:center;margin-top:-6px}
 .done-sub{opacity:.8;font-weight:600;text-align:center;max-width:46ch}
 
+.dup-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:0 0 14px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:12px;font-size:14px;font-weight:700}
+.dup-keep{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:600;cursor:pointer}
+.dup-keep input{margin-top:3px;width:18px;height:18px;flex:0 0 auto}
 .mk-bar{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}
 .mk-bar input{flex:1 1 240px;min-width:0;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:15px}
 .mk-bar select{flex:0 0 auto;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--panel);font-size:14px;font-weight:700}
@@ -900,6 +903,7 @@ function viewCollection(){
   return `<h2>Collection</h2><p class="sub">${own} cartes différentes sur ${total}${mine?` · score ${mine.score}`:""}${dups.length?` · ${dups.length} carte${dups.length>1?"s":""} en double (${extra} exemplaire${extra>1?"s":""} en trop, à vendre ou échanger)`:""}. Clique sur une carte pour la vendre, l'échanger ou la défausser.</p>
     <div class="progress"><button class="prog" data-brand="all" aria-pressed="${brandFilter==="all"}"><div class="n">Tout le groupe</div><small>${own} / ${total} cartes</small><div class="bar"><i style="width:${Math.round(own/Math.max(1,total)*100)}%;background:var(--blue)"></i></div></button>${prog}</div>
     ${teamPanel(vis)}
+    ${dups.length?`<div class="dup-bar"><span>${extra} exemplaire${extra>1?"s":""} en trop dans ta collection</span><button class="btn small" data-act="dupall">Défausser mes doublons</button></div>`:""}
     <div class="chips">${chips}</div>
     ${list?`<div class="cards">${list}</div>`:`<div class="empty">Aucune carte ici pour l'instant.</div>`}`;
 }
@@ -1086,6 +1090,21 @@ async function openTradeDlg(give,toId){
   fill(toId&&others.some(p=>p.id===toId)?toId:others[0].id);
   $("#tTo").addEventListener("change",e=>fill(e.target.value));
 }
+function dupStats(keepRare){let n=0,v=0;
+  for(const [id,q] of Object.entries(inv)){const c=cardById[id]; if(!c||q<2) continue; if(keepRare&&["L","Q","S"].includes(c.rarity)) continue; n+=q-1; v+=(q-1)*((RAR[c.rarity]||{}).sell||0);} return {n,v}}
+function openDupDlg(){
+  const d=$("#dlg");
+  const draw=()=>{const k=$("#dupKeep").checked, st=dupStats(k);
+    $("#dupTxt").innerHTML=st.n?`Tu gardes 1 exemplaire de chaque carte et tu défausses <b>${st.n} carte${st.n>1?"s":""}</b> pour <b>+${st.v} bidons</b>.`:`Aucun doublon à défausser avec ce réglage.`;
+    $("#dupGo").disabled=!st.n;};
+  d.innerHTML=`<div style="position:relative;padding:18px;max-width:420px"><button class="close" data-act="close" aria-label="Fermer">×</button>
+  <h4 style="margin:0 0 8px;font-stretch:115%;font-weight:900;font-size:20px">Défausser mes doublons</h4>
+  <p id="dupTxt" class="sub" style="margin:0 0 12px"></p>
+  <label class="dup-keep"><input type="checkbox" id="dupKeep" checked> Garder les doublons Légendaire, Équipe et Shiny (pour les vendre ou les échanger)</label>
+  <p class="sub" style="margin:10px 0 14px;font-size:13px">Les cartes en vente au marché ou proposées en échange ne sont pas touchées.</p>
+  <div class="row"><button class="btn" id="dupGo" data-act="dupgo">Défausser</button><button class="btn ghost" data-act="close">Annuler</button></div></div>`;
+  d.showModal(); draw(); $("#dupKeep").addEventListener("change",draw);
+}
 function openPseudoDlg(){
   const d=$("#dlg");
   d.innerHTML=`<div style="position:relative;padding:18px"><button class="close" data-act="close" aria-label="Fermer">×</button><h4 style="margin:0 0 8px;font-stretch:115%;font-weight:900;font-size:20px">${esc(me.pseudo)}</h4>
@@ -1128,6 +1147,8 @@ document.addEventListener("click",async e=>{
     case "oath-yes": t.disabled=true; await swearOath(true); break;
     case "oath-no": t.disabled=true; await swearOath(false); break;
     case "pseudo": openPseudoDlg(); break;
+    case "dupall": openDupDlg(); break;
+    case "dupgo": {const k=$("#dupKeep").checked; t.disabled=true; closeDlg(); await act(()=>rpc("discard_duplicates",{keep_rare:k}),r=>r&&r.cards?`${r.cards} doublon${r.cards>1?"s":""} défaussé${r.cards>1?"s":""} : +${r.coins} bidons`:"Aucun doublon défaussé."); break}
     case "logout": closeDlg(); await sb.auth.signOut(); location.reload(); break;
     case "newtrade": openTradeDlg(null); break;
     case "tradewith": openTradeDlg(null,ds.to); break;
