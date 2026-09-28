@@ -379,15 +379,16 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .team[open] summary{margin-bottom:6px}
 .team-sum{font-size:13px;font-weight:700;color:var(--soft)}
 @media (max-width:700px){
-  .top-in{padding:8px 12px;gap:10px;flex-wrap:nowrap}
+  .top-in{padding:8px 12px;gap:8px 10px;flex-wrap:wrap}
+  .pill-bst{display:none}
   .logo{font-size:18px}
-  .wallet{flex-wrap:nowrap;gap:6px}
+  .wallet{flex-wrap:wrap;gap:6px;justify-content:flex-end}
   .pill{padding:5px 10px;font-size:13px}
   main{padding-top:14px}
   main h2{font-size:24px}
   .sub-long{display:none}
   .sub-short{display:block;margin-bottom:10px}
-  .progress{display:flex;overflow-x:auto;gap:8px;margin:0 -16px 10px;padding:0 16px 2px;scrollbar-width:none}
+  .progress{display:flex;overflow-x:auto;gap:8px;margin:0 -16px 8px;padding:4px 16px 6px;scrollbar-width:none}
   .progress::-webkit-scrollbar{display:none}
   .progress .prog{flex:0 0 auto;min-width:112px;padding:7px 10px}
   .progress .prog .n{font-size:13.5px}
@@ -397,7 +398,7 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
   .team h3{font-size:14px}
   .dup-bar{padding:7px 10px;font-size:12.5px;margin-bottom:10px}
   .dup-bar .btn{padding:6px 10px;font-size:13px}
-  .chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 12px;padding:0 16px 2px;scrollbar-width:none}
+  .chips{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px 10px;padding:3px 16px 4px;scrollbar-width:none}
   .chips::-webkit-scrollbar{display:none}
   .chips .chip{flex:0 0 auto;white-space:nowrap}
 }
@@ -866,7 +867,7 @@ function renderWallet(){
   const t=totalPacks(), per=Math.max(bstate.per_slot||cfg.free_per_slot||2,t);
   const packs=Array.from({length:Math.min(per,4)},(_,i)=>`<span class="mini-pack ${i<t?"":"off"}"></span>`).join("");
   $("#wallet").innerHTML=`<span class="pill"><span class="drop" aria-hidden="true"></span><b>${me.coins}</b><span class="wl"> bidons</span></span>
-    <button class="pill" data-tab="booster" title="Boosters à ouvrir">${packs}<b>${t}</b><span class="wl"> booster${t>1?"s":""}</span></button>
+    <button class="pill pill-bst" data-tab="booster" title="Boosters à ouvrir">${packs}<b>${t}</b><span class="wl"> booster${t>1?"s":""}</span></button>
     <button class="pill" data-act="pseudo" title="Mon compte">${esc(me.pseudo)}</button>`;
 }
 function render(force){
