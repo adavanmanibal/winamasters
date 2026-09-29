@@ -431,6 +431,54 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .mk-count{font-size:13px;color:var(--soft);font-weight:700;margin:4px 0 8px}
 .meta .want{color:#0E8F83}
 /* ===== Quiz / Arène ===== */
+.of-mine{grid-column:1/-1;font-size:13px;color:var(--soft);margin-top:-2px}
+.of-list{grid-column:1/-1;display:flex;flex-direction:column;gap:6px;border-top:1px dashed var(--line);padding-top:8px}
+.of-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:14px}
+.of-a{margin-left:auto;display:flex;gap:6px}
+.item .act{display:flex;flex-direction:column;align-items:flex-end;gap:6px}
+.chip .badge{background:var(--danger);color:#fff;border-radius:999px;font-size:11px;padding:1px 6px;margin-left:4px}
+/* ===== constructeur d'échange ===== */
+dialog.tb-dlg{max-width:min(920px,96vw);height:min(860px,92vh)}
+.tb{display:flex;flex-direction:column;height:100%;padding:16px;gap:10px;box-sizing:border-box}
+.tb-head{display:flex;align-items:center;justify-content:space-between}.tb-head h4{margin:0;font-stretch:115%;font-weight:900;font-size:20px}
+.tb-head .close{position:static}
+.tb-to{margin:0}
+.tb-trays{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch}
+.tb-tray{background:var(--bg);border:1px solid var(--line);border-radius:12px;padding:8px;min-height:64px}
+.tb-lbl{font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--soft);margin-bottom:6px}
+.tb-arrow{align-self:center;font-size:22px;font-weight:900;color:var(--soft)}
+.tb-sel{display:flex;flex-wrap:wrap;gap:6px}
+.tb-empty{font-size:13px;color:var(--soft)}
+.tb-chip{display:flex;align-items:center;gap:6px;padding:3px 8px 3px 3px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:12.5px;font-weight:700;max-width:100%}
+.tb-chip .tb-cn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px}
+.tb-chip .tb-x{color:var(--soft);font-weight:900}
+.tb-thumb{width:28px;height:28px;border-radius:50%;overflow:hidden;background:var(--b);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.tb-thumb img,.tb-thumb svg{width:100%;height:100%;object-fit:contain}
+.tb-tabs{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.tb-tabs input{flex:1 1 140px;min-width:0;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:14px}
+.tb-grid{flex:1;min-height:0;overflow:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px;align-content:start;padding:2px}
+.tb-tile{display:flex;flex-direction:column;gap:5px;padding:6px;border-radius:12px;border:2px solid var(--line);background:var(--bg);text-align:left;cursor:pointer;position:relative}
+.tb-tile.on{border-color:#2F6BFF;background:rgba(47,107,255,.08)}
+.tb-tile[disabled]{opacity:.55;cursor:default}
+.tb-tile.r-L{border-color:#E3A91F}.tb-tile.r-S{border-color:#a97dff}.tb-tile.r-Q{border-color:#12B5A6}.tb-tile.r-E{border-color:#9FB0D6}
+.tb-tile.on.r-L,.tb-tile.on.r-S,.tb-tile.on.r-Q,.tb-tile.on.r-E{box-shadow:0 0 0 3px #2F6BFF}
+.tb-art{position:relative;aspect-ratio:5/4;border-radius:8px;background:radial-gradient(circle at 50% 40%,rgba(255,255,255,.3),transparent 70%),var(--b);display:flex;align-items:center;justify-content:center;overflow:hidden}
+.tb-art img{width:100%;height:100%;object-fit:contain}.tb-art svg{height:78%;width:auto}
+.tb-n{position:absolute;top:4px;right:4px;background:#2F6BFF;color:#fff;font-weight:900;font-size:12px;border-radius:999px;padding:1px 7px;box-shadow:0 2px 6px rgba(0,0,0,.3)}
+.tb-name{font-size:12px;font-weight:800;line-height:1.15;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.3em}
+.tb-meta{display:flex;gap:4px;align-items:center;flex-wrap:wrap}.tb-meta .rpill{font-size:8.5px;padding:1px 6px}
+.tb-tag{font-size:10.5px;font-weight:800;color:var(--soft)}.tb-tag.miss{color:#0E8F83}
+.tb-foot{display:flex;align-items:center;gap:12px;border-top:1px solid var(--line);padding-top:10px}
+.tb-note{flex:1;margin:0;font-size:13px;color:var(--soft)}.tb-note.bad{color:var(--danger);font-weight:700}
+.tmulti{display:grid;grid-template-columns:repeat(2,auto);gap:4px;justify-content:center}
+.tside.multi{width:auto}
+@media (max-width:700px){
+  dialog.tb-dlg{max-width:100vw;width:100vw;height:100dvh;max-height:100dvh;margin:0;border-radius:0}
+  .tb{padding:12px}
+  .tb-trays{grid-template-columns:1fr;gap:6px}.tb-arrow{display:none}
+  .tb-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
+  .tb-foot{flex-direction:column;align-items:stretch}.tb-foot .btn{width:100%}
+}
 .dls{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
 .dl{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .dl-stake{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;font-weight:900;font-size:14px;padding:5px 10px;border-radius:999px;background:rgba(47,107,255,.12)}
@@ -528,6 +576,20 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .ov-x{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));right:16px;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-size:26px;line-height:1;display:flex;align-items:center;justify-content:center;z-index:5}
 .ov-x:hover{background:rgba(255,255,255,.18)}
 .bp-tag{position:absolute;top:10%;left:-6px;z-index:6;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:4px;background:#FFFFFF;color:#0B1B3A;box-shadow:0 3px 8px rgba(0,0,0,.35)}
+.bpf.gold{color:#3A2600;background:
+   linear-gradient(115deg,transparent 0,transparent calc(var(--mx,30%) - 20%),rgba(255,255,255,.55) var(--mx,30%),transparent calc(var(--mx,30%) + 20%)),
+   repeating-linear-gradient(97deg,rgba(255,255,255,.08) 0 2px,transparent 2px 11px),
+   radial-gradient(120% 60% at 20% 8%,rgba(255,250,210,.8),transparent 60%),
+   linear-gradient(165deg,#F7DB7A 0%,#D9A62A 35%,#A87818 70%,#6E4A0B 100%)}
+.bpf.gold .crimp{background:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 2px,rgba(90,55,0,.3) 2px 4px),linear-gradient(180deg,#FFF3C4,#B8861A)}
+.bpf.gold .ttl{text-shadow:0 1px 0 rgba(255,245,200,.8)}
+.bpf.gold .holo{background:radial-gradient(circle at 35% 30%,#FFFBE6,#F2C94C 60%,#B8861A);box-shadow:0 0 0 3px rgba(255,255,255,.7),0 0 24px rgba(255,220,120,.9)}
+.bpf.gold .count{background:#3A2600;color:#F7DB7A}
+.bpf.gold .tear{border-top-color:rgba(58,38,0,.55)}
+.bp-tag.gold{background:#3A2600;color:#F7DB7A}
+.btn.open-cta.gold{background:linear-gradient(90deg,#F7DB7A,#D9A62A);color:#3A2600}
+.gold-prog{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 16px;font-size:14px}
+.gold-prog .pips{display:flex;gap:5px}.gold-prog .pips i{width:14px;height:14px;border-radius:50%;background:var(--line)}.gold-prog .pips i.on{background:linear-gradient(135deg,#F7DB7A,#D9A62A);box-shadow:0 0 6px rgba(227,169,31,.7)}
 .bp-tag.bought{background:#F2C94C;color:#3A2600}
 .stock .reserve{display:flex;flex-direction:column;gap:2px;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:13.5px}
 .stock .reserve b{font-weight:900}
@@ -610,7 +672,7 @@ const RORDER = ["C","U","R","E","Q","L","S"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={};
-let me=null, inv={}, players=[], listings=[], trades=[], feed=[], board=[], teamDone=[];
+let me=null, inv={}, players=[], listings=[], trades=[], feed=[], board=[], teamDone=[], offers=[];
 let tab="booster", brandFilter="all", collFilter="all", lastPull=null, flipped=new Set(), adminDirty=false, busy=false;
 let loginMode="login";
 
@@ -659,7 +721,8 @@ function tokens(){return bstate.available||0}
 function reserve(){return bstate.bought||0}
 function lord(){return bstate.lord||"Adavan"}
 function oathOpen(){return !!bstate.oath_open}
-function totalPacks(){return tokens()+reserve()}
+function goldN(){return (me&&me.gold)||0}
+function totalPacks(){return tokens()+reserve()+goldN()}
 function hoursText(){const h=cfg.free_hours||[10,15];return h.map(x=>x+"h").join(" et ")}
 function nextText(){
   if(!bstate.next_at) return "";
@@ -683,7 +746,7 @@ async function loadCatalog(){
   cards=c.data; cardById=Object.fromEntries(cards.map(x=>[x.id,x]));
 }
 async function loadGame(){
-  const [p,i,pl,l,t,f,lb,bs,tb,qs]=await Promise.all([
+  const [p,i,pl,l,t,f,lb,bs,tb,qs,of]=await Promise.all([
     sb.from("players").select("*").eq("id",uid).single(),
     sb.from("inventory").select("card,qty").eq("player",uid),
     sb.from("players").select("id,pseudo"),
@@ -693,10 +756,12 @@ async function loadGame(){
     sb.from("leaderboard").select("*").order("score",{ascending:false}).limit(200),
     sb.rpc("booster_state"),
     sb.from("team_bonus").select("brand").eq("player",uid),
-    sb.rpc("duel_list")]);
+    sb.rpc("duel_list"),
+    sb.from("offers").select("*").eq("status","pending").order("created_at",{ascending:false})]);
   if(p.error) throw p.error;
   teamDone=(tb&&!tb.error&&tb.data||[]).map(x=>x.brand);
   arenaOn=!!(qs&&!qs.error); duels=arenaOn?(qs.data||[]):[];
+  offersOn=!!(of&&!of.error); offers=offersOn?(of.data||[]):[];
   me=p.data; inv=Object.fromEntries((i.data||[]).map(x=>[x.card,x.qty]));
   if(bs&&bs.data) bstate=bs.data;
   players=pl.data||[]; listings=l.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
@@ -763,6 +828,7 @@ function viewArena(){
   if(aBoard===null) loadArenaBoard();
   const board=aBoard&&aBoard.length?`<section class="feed"><h3>Classement de l'Arène</h3><ol class="qz-board">${aBoard.map((r,i)=>`<li class="${r.id===uid?"me":""}"><span class="n">${i+1}</span>${plink(r.id)}<span class="v">${r.wins} V · ${r.losses} D · ${r.net>=0?"+":""}${r.net} bidons</span></li>`).join("")}</ol></section>`:"";
   return `<h2>Arène</h2><p class="sub">Défie un collègue sur 5 questions produits. Vous jouez chacun quand vous voulez, les mêmes questions ; le meilleur score remporte la mise (égalité : le plus rapide).</p>
+    <div class="gold-prog"><span class="pips">${Array.from({length:cfg.gold_every||3},(_,i)=>`<i class="${i<(me.duel_streak||0)?"on":""}"></i>`).join("")}</span><span>${me.duel_streak||0} / ${cfg.gold_every||3} victoires avant ton prochain <b>booster OR</b> (1 Légendaire garantie, parfois remplacée par une Shiny, et plus de cartes Équipe)</span></div>
     <div class="row"><button class="btn cta" data-act="newduel">⚔ Défier un joueur</button></div>
     ${todo.length?`<h3>À toi de jouer</h3><div class="dls">${todo.map(duelRow).join("")}</div>`:""}
     ${wait.length?`<h3>En attente de l'adversaire</h3><div class="dls">${wait.map(duelRow).join("")}</div>`:""}
@@ -794,6 +860,18 @@ async function quizAnswer(choice){
 async function quizNext(){
   if(qres&&qres.finished){ qcur=null; qres=null; aBoard=null; try{ await loadGame(); }catch(_){} render(); scrollTo(0,0); return; }
   const id=qcur.duel; qcur=null; duelPlay(id);
+}
+function openOfferDlg(lid){
+  const l=listings.find(x=>x.id===lid); if(!l) return; const c=cardById[l.card]; const myOf=offers.find(o=>o.listing===lid&&o.buyer===uid);
+  const def=myOf?myOf.price:Math.max(1,Math.round(l.price*0.8)), avail=me.coins+(myOf?myOf.price:0);
+  const d=$("#dlg");
+  d.innerHTML=`<div style="position:relative;padding:18px;max-width:420px"><button class="close" data-act="close" aria-label="Fermer">×</button>
+  <h4 style="margin:0 0 6px;font-stretch:115%;font-weight:900;font-size:20px">Faire une offre</h4>
+  <p class="sub" style="margin:0 0 12px">${esc(c?.name||"")} · vendu par ${esc(who(l.seller))} pour <b>${l.price} bidons</b>. Propose un autre prix : tes bidons sont bloqués jusqu'à la réponse du vendeur, et rendus s'il refuse.</p>
+  <label class="fl">Ton prix (bidons)<input id="ofPrice" type="number" min="1" max="${l.price-1}" value="${Math.min(def,l.price-1)}"></label>
+  <p class="sub" style="margin:0 0 14px;font-size:13px">Entre 1 et ${l.price-1} bidons · tu as ${avail} bidons disponibles.</p>
+  <div class="row"><button class="btn" data-act="offergo" data-lid="${lid}">Envoyer l'offre</button><button class="btn ghost" data-act="close">Annuler</button></div></div>`;
+  d.showModal(); setTimeout(()=>{const i=$("#ofPrice"); if(i){i.focus(); i.select();}},50);
 }
 function openDuelDlg(){
   const others=players.filter(p=>p.id!==uid).sort((a,b)=>a.pseudo.localeCompare(b.pseudo,"fr"));
@@ -849,10 +927,10 @@ async function buyBooster(){
 }
 function openBooster(paid){
   if(document.getElementById("ov")) return;
-  if(paid?reserve()<1:tokens()<1){ toast(paid?"Tu n'as pas de booster acheté en réserve.":"Plus de booster gratuit pour l'instant."); return; }
+  if(paid==="gold"?goldN()<1:paid?reserve()<1:tokens()<1){ toast(paid==="gold"?"Tu n'as pas de booster OR.":paid?"Tu n'as pas de booster acheté en réserve.":"Plus de booster gratuit pour l'instant."); return; }
   showOpening(paid);
 }
-function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) openBooster(true); }
+function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) openBooster(true); else if(goldN()>0) openBooster("gold"); }
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
@@ -860,9 +938,9 @@ function cardBack(c){return `<div class="cback ${c&&["R","E","Q","L","S"].includ
 function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
 const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
 function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
-function packInner(){
+function packInner(gold){
   const bl=Object.values(brands).filter(b=>b.id!=="winalco").map(b=>`<i style="--c:${esc(b.color)}">${esc(b.name)}</i>`).join("");
-  return `<div class="bp-in"><div class="bpf"><span class="crimp t"></span><span class="tear"></span><div class="body"><div class="holo">W</div><div class="ttl">WINAMASTERS</div><div class="ed">Édition 2026</div><div class="brands">${bl}</div><div class="count">5 CARTES</div></div><div class="foot">1 carte rare minimum</div><span class="crimp b"></span></div></div>`;
+  return `<div class="bp-in"><div class="bpf ${gold?"gold":""}"><span class="crimp t"></span><span class="tear"></span><div class="body"><div class="holo">W</div><div class="ttl">${gold?"BOOSTER OR":"WINAMASTERS"}</div><div class="ed">${gold?"Récompense de l'Arène":"Édition 2026"}</div><div class="brands">${bl}</div><div class="count">5 CARTES</div></div><div class="foot">${gold?"1 légendaire garantie":"1 carte rare minimum"}</div><span class="crimp b"></span></div></div>`;
 }
 (function(){const n=24,t=[],b=[];for(let i=0;i<=n;i++){const x=(i/n*100).toFixed(2);t.push(`${x}% ${i%2?1.5:0}%`);b.push(`${(100-i/n*100).toFixed(2)}% ${i%2?98.5:100}%`)}document.documentElement.style.setProperty("--zz",`polygon(${t.join(",")},${b.join(",")})`)})();
 function showOpening(paid){
@@ -870,7 +948,7 @@ function showOpening(paid){
   const ov=document.createElement("div"); ov.className="ov"; ov.id="ov";
   ov.innerHTML=`<button class="ov-x" data-ov="close" aria-label="Fermer">×</button>
     <div class="big-hint">Déchire ton booster !</div>
-    <button class="op idle" id="op" data-ov="tear" aria-label="Déchirer le booster"><div class="peek"></div><div class="layer p-body">${packInner()}</div><div class="layer p-top">${packInner()}</div></button>
+    <button class="op idle" id="op" data-ov="tear" aria-label="Déchirer le booster"><div class="peek"></div><div class="layer p-body">${packInner(paid==="gold")}</div><div class="layer p-top">${packInner(paid==="gold")}</div></button>
     <button class="btn cta pulse" id="tearBtn" data-ov="tear">Déchirer le booster</button>
     <button class="linkbtn light" id="laterBtn" data-ov="close">Garder pour plus tard</button>`;
   document.body.appendChild(ov); document.body.style.overflow="hidden";
@@ -884,7 +962,7 @@ async function tearPack(){
   op.classList.add("shake");
   const wait=new Promise(r=>setTimeout(r,450));
   let ids;
-  try{ ids=await rpc("open_booster",{paid:st.paid}); }
+  try{ ids=st.paid==="gold"?await rpc("open_gold",{}):await rpc("open_booster",{paid:st.paid}); }
   catch(e){ closeOverlay(); toast(errMsg(e)); return; }
   await wait; if(ovState!==st) return;
   st.ids=ids; lastPull=ids;
@@ -1028,7 +1106,7 @@ function renderTabs(){
   const list=[...TABS]; if(cfg.is_admin) list.push(["admin","Catalogue"]);
   const cur=tab==="player"?"ranking":tab;
   $("#tabs").style.setProperty("--n",list.length);
-  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}${k==="arena"&&arenaTodo()?`<span class="badge">${arenaTodo()}</span>`:""}</button>`).join("");
+  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}${k==="arena"&&arenaTodo()?`<span class="badge">${arenaTodo()}</span>`:""}${k==="market"&&offersIn().length?`<span class="badge">${offersIn().length}</span>`:""}</button>`).join("");
 }
 function cdText(){
   if(!bstate.next_at) return "";
@@ -1065,7 +1143,8 @@ function viewFeed(){
   if(!feed.length) return "";
   const line=f=>{const c=cardById[f.card];const n=c?`<b>${esc(c.name)}</b> (${esc(rlabel(c.rarity).toLowerCase())})`:"une carte";
     const me1=f.player===uid, me2=f.other===uid, a=plink(f.player), b=plink(f.other);
-    if(f.kind==="pull")return me1?`Tu as tiré ${n}`:`${a} a tiré ${n}`;
+    if(f.kind==="pull"){const g=f.note==="gold"?" dans un booster OR":"";return me1?`Tu as tiré ${n}${g}`:`${a} a tiré ${n}${g}`;}
+    if(f.kind==="gold")return me1?`Tu as gagné un booster OR grâce à tes ${esc(f.note||"3")} victoires à l'Arène !`:`${a} a gagné un booster OR grâce à ${esc(f.note||"3")} victoires à l'Arène`;
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
     if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
     if(f.kind==="fine"){const mo=f.note?` pour ${esc(f.note)}`:"", L=esc(lord()), n=f.price;
@@ -1077,15 +1156,16 @@ function viewFeed(){
     if(f.kind==="duel_tie")return me1||me2?`Égalité parfaite à l'Arène entre ${a} et ${b} : mises remboursées`:`${a} et ${b} ont fait match nul à l'Arène`;
     if(f.kind==="team"){const bn=esc(brands[f.note]?.name||f.note||"");return me1?`Tu as complété l'équipe ${bn} ! Prime d'équipe : +${f.price} bidons`:`${a} a complété l'équipe ${bn} (+${f.price} bidons)`}
     if(f.kind==="refuse")return me1?`Tu as refusé de prêter serment. Les Orques t'acclament.`:`${a} a refusé de prêter serment. Honte sur sa lignée.`;
-    if(f.kind==="trade")return me1?`Tu as échangé ${n} avec ${b}`:me2?`${a} a échangé ${n} avec toi`:`${a} et ${b} ont échangé ${n}`;return""};
+    if(f.kind==="trade"){const x=+f.note||0, n2=x?`${n} et ${x} autre${x>1?"s":""} carte${x>1?"s":""}`:n;return me1?`Tu as échangé ${n2} avec ${b}`:me2?`${a} a échangé ${n2} avec toi`:`${a} et ${b} ont échangé ${n2}`;}return""};
   return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}<span class="when">${ago(f.created_at)}</span></li>`).join("")}</ul></section>`;
 }
 function viewBooster(){
   const t=tokens(), b=reserve(), per=bstate.per_slot||cfg.free_per_slot||2;
   const slots=Array.from({length:per},(_,i)=>`<span class="slot ${i<t?"":"off"}"></span>`).join("");
-  const pack=(act,tag)=>`<div class="bpw"><button class="bp" data-act="${act}" aria-label="Ouvrir ce booster">${packInner()}<span class="bp-tag ${act==="openbought"?"bought":""}">${tag}</span></button><button class="btn open-cta" data-act="${act}">Ouvrir ce booster</button></div>`;
-  const packs=(t+b)>0
-    ? Array.from({length:t},()=>pack("free","Gratuit")).join("")+Array.from({length:b},()=>pack("openbought","Acheté")).join("")
+  const g=goldN();
+  const pack=(act,tag)=>`<div class="bpw"><button class="bp" data-act="${act}" aria-label="Ouvrir ce booster">${packInner(act==="opengold")}<span class="bp-tag ${act==="openbought"?"bought":act==="opengold"?"gold":""}">${tag}</span></button><button class="btn open-cta ${act==="opengold"?"gold":""}" data-act="${act}">Ouvrir ce booster</button></div>`;
+  const packs=(t+b+g)>0
+    ? Array.from({length:g},()=>pack("opengold","Or")).join("")+Array.from({length:t},()=>pack("free","Gratuit")).join("")+Array.from({length:b},()=>pack("openbought","Acheté")).join("")
     : `<div class="bpw"><div class="bp off" aria-hidden="true">${packInner()}</div><div class="bp-label">Plus de booster pour l'instant</div></div>`;
   const last=lastPull?`<h3>Ton dernier booster</h3><div class="lastpull">${lastPull.map(id=>zoomBtn(cardById[id],innerWidth<640?0.55:0.7)).join("")}</div>`:"";
   const oath=oathOpen()?`<button class="oath-banner" data-act="oath"><span class="oath-seal sm">⚜</span><span><b>Le Serment de Midi t'attend</b><br><small>Jure fidélité au Seigneur ${esc(lord())} et reçois ${bstate.oath_amount||100} bidons.</small></span><span class="go">Prêter serment</span></button>`:"";
@@ -1100,6 +1180,7 @@ function viewBooster(){
       <div class="next">Prochaine distribution : <span id="nextTxt">${nextText()}</span></div>
       <div class="rule">Les boosters gratuits non ouverts ne se cumulent pas : à chaque distribution, tu repars avec ${per} boosters.</div>
       <div class="reserve"><span class="lbl">Réserve</span><span>${b?`<b>${b}</b> booster${b>1?"s":""} acheté${b>1?"s":""}, sans limite de temps`:"Aucun booster acheté"}</span></div>
+      <div class="reserve"><span class="lbl">Booster OR</span><span>${g?`<b>${g}</b> à ouvrir · `:""}${me.duel_streak||0} / ${cfg.gold_every||3} victoires à l'Arène avant le prochain</span></div>
       <button class="btn buy" style="width:100%;margin-top:12px" data-act="paid" ${me.coins<cfg.booster_price?"disabled":""}><span class="buy-l1">Acheter un booster</span><span class="buy-l2"><span class="drop" aria-hidden="true"></span>${cfg.booster_price} bidons</span></button>
     </aside>
   </div>${last}${viewFeed()}`;
@@ -1140,9 +1221,14 @@ function teamPanel(vis){
   return `<details class="team" id="teamBox" ${teamOpen?"open":""}><summary><h3>Prime d'équipe</h3><span class="team-sum">${nd} / ${nb}<span class="wl"> équipe${nd>1?"s":""} complète${nd>1?"s":""}</span></span></summary><p>Réunis toutes les cartes Équipe d'une marque et gagne ${amt} bidons (une fois par marque).</p><div class="team-row">${bl}</div></details>`;
 }
 let mk={tab:"buy",q:"",brand:"all",rar:"all",missing:false,sort:"recent"};
+let offersOn=false;
+function offersIn(){const mine=new Set(listings.filter(l=>l.seller===uid).map(l=>l.id));return offers.filter(o=>mine.has(o.listing))}
 function mkItem(l,own){const c=cardById[l.card];if(!c)return"";
+  const myOf=offers.find(o=>o.listing===l.id&&o.buyer===uid), inOf=own?offers.filter(o=>o.listing===l.id):[];
+  const ofTxt=!own&&offersOn?(myOf?`<div class="of-mine">Ton offre : <b>${myOf.price} bidons</b> <button class="linkbtn" data-ofcancel="${myOf.id}">Annuler</button></div>`:""):"";
+  const ofList=inOf.length?`<div class="of-list">${inOf.map(o=>`<div class="of-row">${plink(o.buyer)} te propose <b>${o.price} bidons</b><span class="of-a"><button class="btn small" data-ofok="${o.id}">Accepter</button><button class="btn ghost small" data-ofno="${o.id}">Refuser</button></span></div>`).join("")}</div>`:"";
   return `<div class="item">${zoomBtn(c,0.4)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${rpill(c.rarity)} · ${esc(brands[c.brand]?.name||"")} · ${own?"ton offre":"vendu par "+plink(l.seller)} · ${ago(l.created_at)}${!own?(has(c.id)?" · déjà dans ta collection":` · <b class="want">te manque</b>`):""}</div></div>
-  <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>`}</div></div>`}
+  <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>${offersOn?`<button class="btn ghost small" data-offer="${l.id}">${myOf?"Changer mon offre":"Faire une offre"}</button>`:""}`}</div>${ofTxt}${ofList}</div>`}
 function mkFiltered(){
   const own=mk.tab==="mine"; const norm=x=>(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
   const q=norm(mk.q.trim());
@@ -1170,7 +1256,7 @@ function viewMarket(){
   if(mk.rar!=="all"&&!rl.includes(mk.rar)) mk.rar="all";
   const chip=(k,v,l,n)=>`<button class="chip" data-mk="${k}" data-v="${esc(v)}" aria-pressed="${String(mk[k])===String(v)}">${l}${n!==undefined?`<span class="k">${n}</span>`:""}</button>`;
   return `<h2>Marché</h2><p class="sub">Les collègues vendent leurs cartes ici. Le vendeur touche ses bidons dès que la carte est achetée.</p>
-    <div class="chips">${chip("tab","buy","À acheter",others)}${chip("tab","mine","Mes offres",mine)}</div>
+    <div class="chips">${chip("tab","buy","À acheter",others)}${chip("tab","mine",`Mes ventes${offersIn().length?` <span class="badge">${offersIn().length}</span>`:""}`,mine)}</div>
     <div class="mk-bar">
       <input id="mkq" type="search" placeholder="Chercher une carte, une marque, un vendeur…" value="${esc(mk.q)}" autocomplete="off">
       <select id="mksort" aria-label="Trier">${[["recent","Plus récentes"],["cheap","Prix croissant"],["dear","Prix décroissant"],["rare","Plus rares d'abord"],["name","Nom (A → Z)"]].map(([v,l])=>`<option value="${v}" ${mk.sort===v?"selected":""}>${l}</option>`).join("")}</select>${mk.tab==="buy"?`<button class="chip mk-miss" data-mk="missing" data-v="${!mk.missing}" aria-pressed="${mk.missing}">${mk.missing?"✓ ":""}Qui me manquent</button>`:""}
@@ -1181,15 +1267,18 @@ function viewMarket(){
 }
 function viewTrades(){
   const inc=trades.filter(t=>t.to_player===uid), out=trades.filter(t=>t.from_player===uid);
-  const side=(label,c,note)=>`<div class="tside"><div class="tlabel">${label}</div>${c?zoomBtn(c,0.42):`<div class="tgift">Rien<small>c'est un cadeau</small></div>`}${c?`<div class="tname">${esc(c.name)}</div>${rpill(c.rarity)}`:""}${note||""}</div>`;
-  const row=(t,incoming)=>{const g=cardById[t.give],w=t.want?cardById[t.want]:null;
-    const left=incoming?side("Tu reçois",g):side("Tu donnes",g);
-    const right=incoming?side("Tu donnes",w,w&&!has(w.id)?`<div class="twarn">Tu ne l'as plus</div>`:""):side("Tu demandes",w);
+  const side=(label,ids,note)=>{const cs=ids.map(id=>cardById[id]).filter(Boolean);
+    const body=!cs.length?`<div class="tgift">Rien<small>c'est un cadeau</small></div>`:cs.length===1?`${zoomBtn(cs[0],0.42)}<div class="tname">${esc(cs[0].name)}</div>${rpill(cs[0].rarity)}`:`<div class="tmulti">${cs.map(c=>zoomBtn(c,0.26)).join("")}</div><div class="tname">${cs.length} cartes</div>`;
+    return `<div class="tside ${cs.length>1?"multi":""}"><div class="tlabel">${label}</div>${body}${note||""}</div>`};
+  const row=(t,incoming)=>{const G=t.gives||[t.give], W=t.wants||(t.want?[t.want]:[]);
+    const cnt={}; W.forEach(id=>cnt[id]=(cnt[id]||0)+1); const lack=Object.keys(cnt).some(id=>(inv[id]||0)<cnt[id]); const w=lack;
+    const left=incoming?side("Tu reçois",G):side("Tu donnes",G);
+    const right=incoming?side("Tu donnes",W,lack?`<div class="twarn">Tu n'as plus toutes ces cartes</div>`:""):side("Tu demandes",W);
     return `<div class="trade">${left}<div class="tarrow">⇄</div>${right}
       <div class="tinfo"><div class="ttl">${incoming?plink(t.from_player)+" te propose un échange":"Proposition envoyée à "+plink(t.to_player)}</div>
       <div class="meta">${ago(t.created_at)} · clique sur une carte pour l'agrandir</div>
-      <div class="row">${incoming?`<button class="btn small" data-accept="${t.id}" ${w&&!has(w.id)?"disabled":""}>Accepter</button><button class="btn ghost small" data-decline="${t.id}">Refuser</button>`:`<button class="btn ghost small" data-tcancel="${t.id}">Annuler</button>`}</div></div></div>`};
-  return `<h2>Échanges</h2><p class="sub">Propose une de tes cartes contre une carte d'un collègue, ou offre-la simplement. Ta carte est mise de côté jusqu'à sa réponse.</p>
+      <div class="row">${incoming?`<button class="btn small" data-accept="${t.id}" ${w?"disabled":""}>Accepter</button><button class="btn ghost small" data-decline="${t.id}">Refuser</button>`:`<button class="btn ghost small" data-tcancel="${t.id}">Annuler</button>`}</div></div></div>`};
+  return `<h2>Échanges</h2><p class="sub">Propose une ou plusieurs de tes cartes contre une ou plusieurs cartes d'un collègue, ou offre tes doublons. Tes cartes sont mises de côté jusqu'à sa réponse.</p>
     <div class="row"><button class="btn" data-act="newtrade">Proposer un échange</button></div>
     <h3>Reçues</h3>${inc.length?`<div class="list">${inc.map(t=>row(t,true)).join("")}</div>`:`<div class="empty">Aucune proposition en attente.</div>`}
     <h3>Envoyées</h3>${out.length?`<div class="list">${out.map(t=>row(t,false)).join("")}</div>`:`<div class="empty">Tu n'as rien proposé pour l'instant.</div>`}`;
@@ -1280,7 +1369,8 @@ function uploadFor(cid){
 }
 
 /* ---------- fenêtres ---------- */
-function closeDlg(){const d=$("#dlg");if(d.open)d.close();d.classList.remove("oath-dlg")}
+document.getElementById("dlg").addEventListener("close",()=>{const d=document.getElementById("dlg");d.classList.remove("tb-dlg");tb=null;});
+function closeDlg(){const d=$("#dlg");if(d.open)d.close();d.classList.remove("oath-dlg","tb-dlg");tb=null}
 function openCardDlg(id){
   const c=cardById[id], n=inv[id]||0, v=RAR[c.rarity].sell;
   const d=$("#dlg");
@@ -1293,30 +1383,65 @@ function openCardDlg(id){
    </div></div></div></div>`;
   d.showModal();
 }
+let tb=null;
+const TB_MAX=6;
 async function openTradeDlg(give,toId){
-  const others=players.filter(p=>p.id!==uid).sort((a,b)=>a.pseudo.localeCompare(b.pseudo));
+  const others=players.filter(p=>p.id!==uid).sort((a,b)=>a.pseudo.localeCompare(b.pseudo,"fr"));
   if(!others.length) return toast("Personne d'autre n'a encore rejoint le jeu.");
-  const mine=cards.filter(c=>has(c.id));
-  if(!mine.length) return toast("Ouvre d'abord un booster pour avoir des cartes à échanger.");
-  const d=$("#dlg");
-  d.innerHTML=`<div style="position:relative;padding:18px"><button class="close" data-act="close" aria-label="Fermer">×</button><h4 style="margin:0 0 12px;font-stretch:115%;font-weight:900;font-size:20px">Proposer un échange</h4>
-   <div style="display:flex;flex-direction:column;gap:12px">
-   <label class="field">Avec<select id="tTo">${others.map(p=>`<option value="${esc(p.id)}" ${p.id===toId?"selected":""}>${esc(p.pseudo||"Un collègue")}</option>`).join("")}</select></label>
-   <label class="field">Tu donnes<select id="tGive">${mine.map(c=>`<option value="${esc(c.id)}" ${c.id===give?"selected":""}>${esc(c.name)} (×${inv[c.id]})</option>`).join("")}</select></label>
-   <label class="field">Tu demandes<select id="tWant"><option value="">Chargement…</option></select></label>
-   <p id="tNote" class="twarn" style="margin:0" hidden>Tu ne peux offrir que tes doublons. Pour cette carte, demande une carte en échange.</p>
-   <button class="btn" id="tSend" data-act="sendtrade">Envoyer la proposition</button></div></div>`;
+  if(!cards.some(c=>has(c.id))) return toast("Ouvre d'abord un booster pour avoir des cartes à échanger.");
+  tb={to:toId&&others.some(p=>p.id===toId)?toId:others[0].id, gives:{}, wants:{}, side:"mine", q:"", theirs:null};
+  if(give&&has(give)) tb.gives[give]=1;
+  const d=$("#dlg"); d.classList.add("tb-dlg");
+  d.innerHTML=`<div class="tb"><div class="tb-head"><h4>Proposer un échange</h4><button class="close" data-act="close" aria-label="Fermer">×</button></div>
+    <label class="fl tb-to">Avec<select id="tbTo">${others.map(p=>`<option value="${esc(p.id)}" ${p.id===tb.to?"selected":""}>${esc(p.pseudo||"Un collègue")}</option>`).join("")}</select></label>
+    <div class="tb-trays"><div class="tb-tray"><div class="tb-lbl">Tu donnes</div><div class="tb-sel" id="tbGive"></div></div><div class="tb-arrow">⇄</div><div class="tb-tray"><div class="tb-lbl">Tu demandes</div><div class="tb-sel" id="tbWant"></div></div></div>
+    <div class="tb-tabs"><button class="chip" data-tbside="mine" id="tbSideMine">Mes cartes</button><button class="chip" data-tbside="theirs" id="tbSideTheirs">Ses cartes</button><input id="tbQ" type="search" placeholder="Chercher…" autocomplete="off"></div>
+    <div class="tb-grid" id="tbGrid"></div>
+    <div class="tb-foot"><p id="tbNote" class="tb-note"></p><button class="btn" id="tbSend" data-act="tbsend">Envoyer la proposition</button></div></div>`;
   d.showModal();
-  const fill=async pid=>{
-    const {data}=await sb.from("inventory").select("card,qty").eq("player",pid).gt("qty",0);
-    const theirs=(data||[]).map(x=>cardById[x.card]).filter(Boolean).sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity));
-    $("#tWant").innerHTML=`<option value="">Rien, c'est un cadeau</option>`+theirs.map(c=>`<option value="${esc(c.id)}">${esc(c.name)} (${esc(rlabel(c.rarity))})${has(c.id)?"":" · te manque"}</option>`).join("");
-    chk();
-  };
-  const chk=()=>{const bad=!$("#tWant").value&&(inv[$("#tGive").value]||0)<2; $("#tNote").hidden=!bad; $("#tSend").disabled=bad;};
-  $("#tGive").addEventListener("change",chk); $("#tWant").addEventListener("change",chk);
-  fill(toId&&others.some(p=>p.id===toId)?toId:others[0].id);
-  $("#tTo").addEventListener("change",e=>fill(e.target.value));
+  $("#tbTo").addEventListener("change",e=>{tb.to=e.target.value; tb.wants={}; tb.theirs=null; tbLoad();});
+  $("#tbQ").addEventListener("input",e=>{tb.q=e.target.value; tbGrid();});
+  tbLoad();
+}
+async function tbLoad(){
+  tbRender();
+  const to=tb.to; const {data}=await sb.from("inventory").select("card,qty").eq("player",to).gt("qty",0);
+  if(!tb||tb.to!==to) return; tb.theirs=Object.fromEntries((data||[]).map(x=>[x.card,x.qty])); tbRender();
+}
+function tbArt(c){return c.img?`<img src="${esc(c.img)}" alt="" loading="lazy">`:shapeSVG(c.shape)}
+function tbSum(o){return Object.values(o).reduce((a,b)=>a+b,0)}
+function tbTray(o,key){
+  const ids=Object.keys(o); if(!ids.length) return `<span class="tb-empty">${key==="gives"?"Touche tes cartes ci-dessous":"Rien (c'est un cadeau)"}</span>`;
+  return ids.map(id=>{const c=cardById[id];return `<button class="tb-chip r-${esc(c.rarity)}" data-tbrm="${key}:${esc(id)}" title="Retirer"><span class="tb-thumb" style="--b:${esc(brands[c.brand]?.color||"#333")};--a:${esc(brands[c.brand]?.accent||"#ddd")}">${tbArt(c)}</span><span class="tb-cn">${esc(c.name)}</span>${o[id]>1?`<b>×${o[id]}</b>`:""}<span class="tb-x">×</span></button>`}).join("");
+}
+function tbGrid(){
+  const g=$("#tbGrid"); if(!g) return;
+  const mine=tb.side==="mine", src=mine?inv:tb.theirs;
+  if(!src){g.innerHTML=`<div class="empty">Chargement de sa collection…</div>`;return}
+  const norm=x=>(x||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase(), q=norm(tb.q.trim());
+  const list=Object.keys(src).filter(id=>src[id]>0&&cardById[id]).map(id=>cardById[id])
+    .filter(c=>!q||norm(c.name+" "+(brands[c.brand]?.name||"")+" "+rlabel(c.rarity)).includes(q))
+    .sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity)||a.name.localeCompare(b.name,"fr"));
+  const sel=mine?tb.gives:tb.wants;
+  g.innerHTML=list.length?list.map(c=>{const n=sel[c.id]||0, q2=src[c.id], full=n>=q2;
+    const tag=mine?(q2>1?`<span class="tb-tag">×${q2}</span>`:""):(!has(c.id)?`<span class="tb-tag miss">te manque</span>`:q2>1?`<span class="tb-tag">×${q2}</span>`:"");
+    return `<button class="tb-tile r-${esc(c.rarity)} ${n?"on":""}" data-tbadd="${esc(c.id)}" ${full?"disabled":""}><span class="tb-art" style="--b:${esc(brands[c.brand]?.color||"#333")};--a:${esc(brands[c.brand]?.accent||"#ddd")}">${tbArt(c)}${n?`<span class="tb-n">${n}</span>`:""}</span><span class="tb-name">${esc(c.name)}</span><span class="tb-meta">${rpill(c.rarity)}${tag}</span></button>`}).join("")
+    :`<div class="empty">${tb.q?"Aucune carte ne correspond.":mine?"Tu n'as pas de carte.":"Sa collection est vide."}</div>`;
+}
+function tbCheck(){
+  const ng=tbSum(tb.gives), nw=tbSum(tb.wants); let msg="", ok=true;
+  if(!ng){msg="Choisis au moins une carte à donner.";ok=false}
+  else if(ng>TB_MAX||nw>TB_MAX){msg=`Maximum ${TB_MAX} cartes de chaque côté.`;ok=false}
+  else if(!nw&&Object.keys(tb.gives).some(id=>(inv[id]||0)-tb.gives[id]<1)){msg="Sans contrepartie, tu ne peux offrir que tes doublons. Demande au moins une carte, ou garde un exemplaire.";ok=false}
+  else msg=nw?`Tu donnes ${ng} carte${ng>1?"s":""} contre ${nw} carte${nw>1?"s":""}. Tes cartes sont mises de côté jusqu'à sa réponse.`:`Cadeau de ${ng} carte${ng>1?"s":""}.`;
+  $("#tbNote").textContent=msg; $("#tbNote").classList.toggle("bad",!ok); $("#tbSend").disabled=!ok;
+}
+function tbRender(){
+  if(!tb||!$("#tbGrid")) return;
+  $("#tbGive").innerHTML=tbTray(tb.gives,"gives"); $("#tbWant").innerHTML=tbTray(tb.wants,"wants");
+  const nm=esc(who(tb.to)); $("#tbSideTheirs").textContent=`Cartes de ${who(tb.to)}`;
+  $("#tbSideMine").setAttribute("aria-pressed",tb.side==="mine"); $("#tbSideTheirs").setAttribute("aria-pressed",tb.side!=="mine");
+  tbGrid(); tbCheck();
 }
 function dupStats(keepRare){let n=0,v=0;
   for(const [id,q] of Object.entries(inv)){const c=cardById[id]; if(!c||q<2) continue; if(keepRare&&["L","Q","S"].includes(c.rarity)) continue; n+=q-1; v+=(q-1)*((RAR[c.rarity]||{}).sell||0);} return {n,v}}
@@ -1352,6 +1477,9 @@ document.addEventListener("click",async e=>{
   if(ds.coll){collFilter=ds.coll;render();return}
   if(ds.mk){const v=ds.v; mk[ds.mk]=ds.mk==="missing"?v==="true":v; if(ds.mk==="tab"){mk.brand="all";mk.rar="all";} render(); return}
   if(ds.qa!==undefined){quizAnswer(+ds.qa);return}
+  if(ds.tbside&&tb){tb.side=ds.tbside;tbRender();return}
+  if(ds.tbadd&&tb){const o=tb.side==="mine"?tb.gives:tb.wants, src=tb.side==="mine"?inv:tb.theirs; if(tbSum(o)>=TB_MAX){toast(`Maximum ${TB_MAX} cartes de chaque côté.`);return} if((o[ds.tbadd]||0)<(src[ds.tbadd]||0)) o[ds.tbadd]=(o[ds.tbadd]||0)+1; tbRender(); return}
+  if(ds.tbrm&&tb){const [k,id]=ds.tbrm.split(":"); const o=tb[k]; if(o[id]>1) o[id]--; else delete o[id]; tbRender(); return}
   if(ds.dstake!==undefined){const i=$("#dStake"); if(i) i.value=ds.dstake; return}
   if(ds.duel){duelPlay(+ds.duel);return}
   if(ds.daccept){t.disabled=true; try{ await rpc("duel_accept",{did:+ds.daccept}); await loadGame(); duelPlay(+ds.daccept); }catch(e){ t.disabled=false; toast(errMsg(e)); } return}
@@ -1365,6 +1493,10 @@ document.addEventListener("click",async e=>{
   if(ds.card){openCardDlg(ds.card);return}
   if(ds.sell){const p=parseInt($("#sellPrice").value);closeDlg();await act(()=>rpc("create_listing",{card_id:ds.sell,ask:p}),"Carte mise en vente.");return}
   if(ds.discard){closeDlg();await act(()=>rpc("discard",{card_id:ds.discard}),v=>`+${v} bidon${v>1?"s":""}`);return}
+  if(ds.offer){openOfferDlg(+ds.offer);return}
+  if(ds.ofcancel){await act(()=>rpc("cancel_offer",{offer_id:+ds.ofcancel}),"Offre annulée, tes bidons te sont rendus.");return}
+  if(ds.ofok){t.disabled=true;await act(()=>rpc("answer_offer",{offer_id:+ds.ofok,accept:true}),"Vendu !");return}
+  if(ds.ofno){t.disabled=true;await act(()=>rpc("answer_offer",{offer_id:+ds.ofno,accept:false}),"Offre refusée, l'acheteur est remboursé.");return}
   if(ds.buy){t.disabled=true;await act(()=>rpc("buy_listing",{listing_id:+ds.buy}),c=>`${cardById[c]?.name||"Carte"} achetée !`);return}
   if(ds.cancel){t.disabled=true;await act(()=>rpc("cancel_listing",{listing_id:+ds.cancel}),"Offre retirée, carte récupérée.");return}
   if(ds.accept){t.disabled=true;await act(()=>rpc("answer_trade",{trade_id:+ds.accept,accept:true}),"Échange conclu !");return}
@@ -1375,6 +1507,7 @@ document.addEventListener("click",async e=>{
     case "free": openBooster(false); break;
     case "paid": t.disabled=true; await buyBooster(); break;
     case "openbought": openBooster(true); break;
+    case "opengold": openBooster("gold"); break;
     case "flipall": lastPull&&lastPull.forEach((_,i)=>flipped.add(i)); document.querySelectorAll(".flip").forEach(f=>f.classList.add("on")); break;
     case "close": closeDlg(); break;
     case "oath": openOath(); break;
@@ -1384,6 +1517,7 @@ document.addEventListener("click",async e=>{
     case "dupall": openDupDlg(); break;
     case "qnext": quizNext(); break;
     case "newduel": openDuelDlg(); break;
+    case "offergo": {const v=Math.floor(+$("#ofPrice").value||0); if(v<1){toast("Prix invalide.");break} closeDlg(); await act(()=>rpc("make_offer",{listing_id:+ds.lid,amount:v}),"Offre envoyée au vendeur."); break}
     case "duelgo": {const o=$("#dOpp").value, st=Math.max(0,Math.floor(+$("#dStake").value||0)); if(!o) break; if(st>+($("#dStake").max||0)){toast(`Mise maximum : ${$("#dStake").max} bidons`);break}
       t.disabled=true; try{ const id=await rpc("duel_create",{opp:o,stake:st}); closeDlg(); await loadGame(); duelPlay(id); }catch(e){ t.disabled=false; toast(errMsg(e)); } break}
     case "dupgo": {const k=$("#dupKeep").checked; t.disabled=true; closeDlg(); await act(()=>rpc("discard_duplicates",{keep_rare:k}),r=>r&&r.cards?`${r.cards} doublon${r.cards>1?"s":""} défaussé${r.cards>1?"s":""} : +${r.coins} bidons`:"Aucun doublon défaussé."); break}
@@ -1391,7 +1525,7 @@ document.addEventListener("click",async e=>{
     case "newtrade": openTradeDlg(null); break;
     case "tradewith": openTradeDlg(null,ds.to); break;
     case "tradefrom": closeDlg(); openTradeDlg(ds.give); break;
-    case "sendtrade": {const to=$("#tTo").value,give=$("#tGive").value,want=$("#tWant").value;closeDlg();await act(()=>rpc("propose_trade",{to_id:to,give_card:give,want_card:want}),"Proposition envoyée.");break}
+    case "tbsend": {if(!tb) break; const ex=o=>Object.entries(o).flatMap(([id,n])=>Array(n).fill(id)); const to=tb.to,g=ex(tb.gives),w=ex(tb.wants); closeDlg(); await act(()=>rpc("propose_trade_multi",{to_id:to,give_cards:g,want_cards:w}),"Proposition envoyée."); break}
     case "addcard": {const f=readAdminForm();f.c.push({id:"c"+Date.now().toString(36),name:"Nouveau produit",brand:f.b[0]?.id||"gs27",rarity:"C",descr:"",atk:30,def:30,shape:"flacon",active:true,img:"",job:"",sort:f.c.length});applyLocal(f);adminDirty=true;render(true);break}
     case "savecat": t.disabled=true; await saveCatalog(); t.disabled=false; break;
   }
@@ -1455,6 +1589,7 @@ async function start(session){
   sb.channel("jeu")
     .on("postgres_changes",{event:"*",schema:"public",table:"listings"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"trades"},scheduleReload)
+    .on("postgres_changes",{event:"*",schema:"public",table:"offers"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"feed"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"players"},scheduleReload)
     .subscribe();
