@@ -429,6 +429,50 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .mk-bar .mk-miss{flex:0 0 auto;border-radius:10px}
 .mk-count{font-size:13px;color:var(--soft);font-weight:700;margin:4px 0 8px}
 .meta .want{color:#0E8F83}
+/* ===== Quiz / Arène ===== */
+.dls{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.dl{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.dl-stake{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;font-weight:900;font-size:14px;padding:5px 10px;border-radius:999px;background:rgba(47,107,255,.12)}
+.dl-stake.free{background:var(--line);font-size:12px;font-weight:800}
+.dl-t{flex:1;font-size:14px;line-height:1.4}
+.dl-a{display:flex;gap:6px;flex:0 0 auto}
+.dl-res{font-weight:900}.dl-res.win{color:#0E8F83}.dl-res.lose{color:#E03131}.dl-res.tie{color:var(--soft)}
+.qz-endline{margin:0 0 12px;font-size:16px;text-align:center}
+.fl{display:flex;flex-direction:column;gap:4px;font-size:13px;font-weight:700;margin-bottom:10px}
+.fl select,.fl input{padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);font-size:15px}
+@media (max-width:560px){.dl{flex-wrap:wrap}.dl-a{width:100%;justify-content:flex-end}}
+
+.quiz-banner{display:flex;align-items:center;gap:14px;width:100%;margin:0 0 18px;padding:12px 16px;border-radius:14px;border:2px solid #2F6BFF;background:linear-gradient(90deg,#E8F0FF,#D6E4FF);color:#0B1B3A;text-align:left;cursor:pointer}
+.quiz-banner small{color:#3a4a6a}
+.quiz-banner .go{margin-left:auto;background:#2F6BFF;color:#fff;padding:8px 14px;border-radius:10px;font-weight:800;font-size:14px;white-space:nowrap}
+.qz-ico{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:#2F6BFF;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:24px;font-stretch:120%}
+.qz-ico.big{width:72px;height:72px;font-size:40px;margin:0 auto 6px}
+@media (max-width:560px){.quiz-banner .go{display:none}}
+.qz-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;max-width:640px;margin:0 auto 18px}
+.qz-intro{text-align:center}.qz-intro h3{margin:4px 0 10px;font-size:22px}
+.qz-intro ul{text-align:left;margin:0 auto 18px;padding-left:20px;max-width:440px;line-height:1.6;font-size:15px}
+.qz-top{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:13px;font-weight:800}
+.qz-brand{color:#fff;padding:3px 10px;border-radius:999px;font-size:12px;letter-spacing:.03em}
+.qz-step{color:var(--soft)}.qz-score{margin-left:auto;color:#12B5A6}
+.qz-time{height:8px;border-radius:999px;background:var(--line);overflow:hidden;margin-bottom:14px}
+.qz-time i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#2F6BFF,#5EEAD4);border-radius:999px;transition:width .1s linear}
+.qz-time i.low{background:linear-gradient(90deg,#E03131,#FF8A5B)}
+.qz-q{font-size:19px;font-weight:800;line-height:1.3;margin-bottom:14px}
+.qz-opts{display:grid;gap:10px}
+.qz-opt{display:flex;align-items:center;gap:12px;text-align:left;padding:12px 14px;border-radius:12px;border:2px solid var(--line);background:var(--bg);font-size:15px;font-weight:600;cursor:pointer;transition:border-color .15s,background .15s}
+.qz-opt:not([disabled]):hover{border-color:#2F6BFF}
+.qz-l{flex:0 0 auto;width:28px;height:28px;border-radius:50%;background:var(--line);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px}
+.qz-opt.good{border-color:#12B5A6;background:rgba(18,181,166,.14)}.qz-opt.good .qz-l{background:#12B5A6;color:#fff}
+.qz-opt.bad{border-color:#E03131;background:rgba(224,49,49,.12)}.qz-opt.bad .qz-l{background:#E03131;color:#fff}
+.qz-opt[disabled]{cursor:default}
+.qz-fb{margin:14px 0 12px;padding:12px 14px;border-radius:12px;font-size:14.5px;line-height:1.45}
+.qz-fb.ok{background:rgba(18,181,166,.12);border:1px solid rgba(18,181,166,.5)}.qz-fb.ko{background:rgba(224,49,49,.08);border:1px solid rgba(224,49,49,.35)}
+.qz-end{text-align:center}.qz-big{font-size:56px;font-weight:900;font-stretch:120%;line-height:1}
+.qz-gain{display:inline-block;margin-top:8px;padding:8px 16px;border-radius:999px;background:rgba(47,107,255,.14);font-weight:900;font-size:18px}
+.qz-board{margin:0;padding:0;list-style:none}
+.qz-board li{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--line);font-size:14px}
+.qz-board li:last-child{border-bottom:0}.qz-board li.me{font-weight:800}
+.qz-board .n{width:22px;color:var(--soft);font-weight:800}.qz-board .v{margin-left:auto;color:var(--soft);font-size:13px}
 /* ===== Équipe : badge d'entreprise ===== */
 .card.r-Q{--rc:var(--r-Q);padding:6px;background:linear-gradient(160deg,#FFFFFF,#E4EAF2 55%,#C9D3E0);box-shadow:0 0 0 1px rgba(18,181,166,.55),0 6px 22px rgba(18,181,166,.35)}
 .card.r-Q .inner{color:#13203F;background:#FFFFFF;padding:0 7px 7px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(19,32,63,.12)}
@@ -638,7 +682,7 @@ async function loadCatalog(){
   cards=c.data; cardById=Object.fromEntries(cards.map(x=>[x.id,x]));
 }
 async function loadGame(){
-  const [p,i,pl,l,t,f,lb,bs,tb]=await Promise.all([
+  const [p,i,pl,l,t,f,lb,bs,tb,qs]=await Promise.all([
     sb.from("players").select("*").eq("id",uid).single(),
     sb.from("inventory").select("card,qty").eq("player",uid),
     sb.from("players").select("id,pseudo"),
@@ -647,9 +691,11 @@ async function loadGame(){
     sb.from("feed").select("*").order("created_at",{ascending:false}).order("id",{ascending:false}).limit(30),
     sb.from("leaderboard").select("*").order("score",{ascending:false}).limit(200),
     sb.rpc("booster_state"),
-    sb.from("team_bonus").select("brand").eq("player",uid)]);
+    sb.from("team_bonus").select("brand").eq("player",uid),
+    sb.rpc("duel_list")]);
   if(p.error) throw p.error;
   teamDone=(tb&&!tb.error&&tb.data||[]).map(x=>x.brand);
+  arenaOn=!!(qs&&!qs.error); duels=arenaOn?(qs.data||[]):[];
   me=p.data; inv=Object.fromEntries((i.data||[]).map(x=>[x.card,x.qty]));
   if(bs&&bs.data) bstate=bs.data;
   players=pl.data||[]; listings=l.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
@@ -663,6 +709,113 @@ async function act(fn,okMsg){
   finally{busy=false}
 }
 async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
+
+
+/* ---------- arène (duels de quiz) ---------- */
+let arenaOn=false, duels=[], qcur=null, qres=null, qDeadline=0, aBoard=null, qBusy=false, qTimer=null;
+const QB={gs27:"GS27",restom:"Restom",spheretech:"Spheretech",abnet:"Abnet",winalco:"Groupe Winalco"};
+function arenaTodo(){return duels.filter(d=>(!d.mine&&(d.status==="waiting"||d.status==="playing_o"))||(d.mine&&d.status==="playing_c")).length}
+function opp(d){return d.mine?d.opponent:d.challenger}
+function hLeft(t){const ms=Date.parse(t)-Date.now(); if(ms<=0) return "expiré"; const h=Math.floor(ms/3600000); return h>=1?`${h} h`:`${Math.max(1,Math.ceil(ms/60000))} min`}
+function duelRow(d){
+  const o=plink(opp(d)), st=d.stake?`<span class="dl-stake"><span class="drop"></span>${d.stake}</span>`:`<span class="dl-stake free">amical</span>`;
+  let txt="",acts="";
+  if(d.status==="playing_c"&&d.mine){txt=`Tu as commencé ce défi contre ${o} (${d.my_idx}/${d.total})`;acts=`<button class="btn small" data-duel="${d.id}">Continuer</button>`}
+  else if(d.status==="waiting"&&d.mine){txt=`Tu as fait <b>${d.c_correct}/${d.total}</b>. En attente de ${o} · expire dans ${hLeft(d.expires_at)}`;acts=`<button class="btn ghost small" data-dcancel="${d.id}">Annuler</button>`}
+  else if(d.status==="waiting"){txt=`${o} te défie ! Son score est caché jusqu'à la fin · expire dans ${hLeft(d.expires_at)}`;acts=`<button class="btn small" data-daccept="${d.id}" ${me.coins<d.stake?"disabled":""}>Accepter</button><button class="btn ghost small" data-ddecline="${d.id}">Refuser</button>`}
+  else if(d.status==="playing_o"&&!d.mine){txt=`Duel en cours contre ${o} (${d.my_idx}/${d.total})`;acts=`<button class="btn small" data-duel="${d.id}">Continuer</button>`}
+  else if(d.status==="playing_o"){txt=`Tu as fait <b>${d.c_correct}/${d.total}</b>. ${o} est en train de jouer…`}
+  else if(d.status==="done"){const my=d.mine?d.c_correct:d.o_correct, th=d.mine?d.o_correct:d.c_correct;
+    const r=d.winner===uid?`<span class="dl-res win">Victoire ${my}-${th}</span>`:d.winner?`<span class="dl-res lose">Défaite ${my}-${th}</span>`:`<span class="dl-res tie">Égalité ${my}-${th}</span>`;
+    txt=`${r} contre ${o}${d.winner===uid&&d.stake?` · +${d.stake*2} bidons`:""}${d.winner===uid||!d.winner?"":th===my?" (plus lent)":""}`}
+  else {txt=`Défi ${d.status==="declined"?(d.mine?`refusé par ${o}`:`refusé`):d.status==="cancelled"?"annulé":"expiré"} · mise remboursée`}
+  return `<div class="dl">${st}<div class="dl-t">${txt}</div><div class="dl-a">${acts}</div></div>`;
+}
+function viewArena(){
+  if(!arenaOn) return `<h2>Arène</h2><div class="empty">L'Arène n'est pas encore installée (lance maj-14-arene.sql dans Supabase).</div>`;
+  let play="";
+  if(qcur){
+    const d=duels.find(x=>x.id===qcur.duel)||{};
+    const b=brands[qcur.brand]||{name:QB[qcur.brand]||qcur.brand,color:"#23201C"};
+    const opts=qcur.options.map((o,i)=>{let c="";if(qres){if(i===qres.answer)c="good";else if(i===qres.choice)c="bad";}
+      return `<button class="qz-opt ${c}" data-qa="${i}" ${qres?"disabled":""}><span class="qz-l">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`}).join("");
+    let fb="";
+    if(qres){
+      let endTxt="";
+      if(qres.finished){
+        if(qres.status==="waiting") endTxt=`<div class="qz-endline">Tu as fait <b>${qres.correct}/${qres.total}</b>. Ton adversaire a 48 h pour relever le défi.</div>`;
+        else if(qres.status==="done") endTxt=`<div class="qz-endline">${qres.winner===uid?`🏆 <b>Victoire ${qres.o_correct}-${qres.c_correct}</b>${qres.stake?` · +${qres.stake*2} bidons`:""}`:qres.winner?`<b>Défaite ${qres.o_correct}-${qres.c_correct}</b>${qres.o_correct===qres.c_correct?" (ton adversaire a été plus rapide)":""}`:`<b>Égalité parfaite</b> · mises remboursées`}</div>`;
+      }
+      fb=`<div class="qz-fb ${qres.ok?"ok":"ko"}"><b>${qres.ok?"Bonne réponse !":qres.late?"Temps écoulé…":"Raté…"}</b> ${esc(qres.explanation||"")}</div>${endTxt}
+      <button class="btn cta" data-act="qnext">${qres.finished?"Retour à l'Arène":"Question suivante"}</button>`;
+    }
+    play=`<div class="qz-card">
+      <div class="qz-top"><span class="qz-brand" style="background:${esc(b.color)}">${esc(b.name||"")}</span><span class="qz-step">Question ${qcur.idx+1} / ${qcur.total}</span><span class="qz-score">vs ${esc(who(opp(d)))}</span></div>
+      ${qres?"":`<div class="qz-time"><i id="qzBar"></i></div>`}
+      <div class="qz-q">${esc(qcur.question).replace(/ ([?!:;»])/g,"&nbsp;$1")}</div>
+      <div class="qz-opts">${opts}</div>${fb}</div>`;
+    return `<h2>Arène</h2>${play}`;
+  }
+  const todo=duels.filter(d=>(!d.mine&&(d.status==="waiting"||d.status==="playing_o"))||(d.mine&&d.status==="playing_c"));
+  const wait=duels.filter(d=>d.mine&&(d.status==="waiting"||d.status==="playing_o"));
+  const past=duels.filter(d=>!["waiting","playing_c","playing_o"].includes(d.status));
+  if(aBoard===null) loadArenaBoard();
+  const board=aBoard&&aBoard.length?`<section class="feed"><h3>Classement de l'Arène</h3><ol class="qz-board">${aBoard.map((r,i)=>`<li class="${r.id===uid?"me":""}"><span class="n">${i+1}</span>${plink(r.id)}<span class="v">${r.wins} V · ${r.losses} D · ${r.net>=0?"+":""}${r.net} bidons</span></li>`).join("")}</ol></section>`:"";
+  return `<h2>Arène</h2><p class="sub">Défie un collègue sur 5 questions produits. Vous jouez chacun quand vous voulez, les mêmes questions ; le meilleur score remporte la mise (égalité : le plus rapide).</p>
+    <div class="row"><button class="btn cta" data-act="newduel">⚔ Défier un joueur</button></div>
+    ${todo.length?`<h3>À toi de jouer</h3><div class="dls">${todo.map(duelRow).join("")}</div>`:""}
+    ${wait.length?`<h3>En attente de l'adversaire</h3><div class="dls">${wait.map(duelRow).join("")}</div>`:""}
+    ${past.length?`<h3>Derniers duels</h3><div class="dls">${past.slice(0,12).map(duelRow).join("")}</div>`:(!todo.length&&!wait.length?`<div class="empty">Aucun duel pour l'instant. Lance le premier !</div>`:"")}
+    ${board}`;
+}
+async function loadArenaBoard(){ if(aBoard!==null) return; aBoard=[]; try{ aBoard=await rpc("arena_board",{})||[]; if(tab==="arena"&&!qcur) render(); }catch(e){ aBoard=[]; } }
+function quizTick(){
+  clearInterval(qTimer);
+  if(!qcur||qres) return;
+  const step=()=>{const bar=document.getElementById("qzBar"); const left=qDeadline-Date.now(); const pct=Math.max(0,left/(qcur.seconds*1000)*100);
+    if(bar){bar.style.width=pct+"%"; bar.classList.toggle("low",left<5000);}
+    if(left<=0){clearInterval(qTimer); quizAnswer(null);} };
+  step(); qTimer=setInterval(step,100);
+}
+async function duelPlay(id){
+  if(qBusy) return; qBusy=true;
+  try{ qcur=await rpc("duel_question",{did:id}); qres=null; qDeadline=Date.now()+qcur.remaining*1000; tab="arena"; }
+  catch(e){ toast(errMsg(e)); qcur=null; try{ await loadGame(); }catch(_){} }
+  finally{ qBusy=false; render(); scrollTo(0,0); }
+}
+async function quizAnswer(choice){
+  if(qBusy||!qcur||qres) return; qBusy=true; clearInterval(qTimer);
+  try{ const r=await rpc("duel_answer",{did:qcur.duel,choice}); qres={...r,choice};
+    if(r.status==="done"){ const d=duels.find(x=>x.id===qcur.duel); if(d){ qres.c_correct=r.c_correct; qres.o_correct=r.o_correct; } } }
+  catch(e){ toast(errMsg(e)); }
+  finally{ qBusy=false; render(); }
+}
+async function quizNext(){
+  if(qres&&qres.finished){ qcur=null; qres=null; aBoard=null; try{ await loadGame(); }catch(_){} render(); scrollTo(0,0); return; }
+  const id=qcur.duel; qcur=null; duelPlay(id);
+}
+function openDuelDlg(){
+  const others=players.filter(p=>p.id!==uid).sort((a,b)=>a.pseudo.localeCompare(b.pseudo,"fr"));
+  const d=$("#dlg");
+  d.innerHTML=`<div style="position:relative;padding:18px;max-width:440px"><button class="close" data-act="close" aria-label="Fermer">×</button>
+  <h4 style="margin:0 0 6px;font-stretch:115%;font-weight:900;font-size:20px">Défier un joueur</h4>
+  <p class="sub" style="margin:0 0 14px">Tu joues tes 5 questions tout de suite (20 s chacune). Ton adversaire aura 48 h pour accepter et jouer les mêmes.</p>
+  <label class="fl">Adversaire<select id="dOpp"><option value="">Choisis un collègue…</option>${others.map(p=>`<option value="${esc(p.id)}">${esc(p.pseudo)}</option>`).join("")}</select></label>
+  <label class="fl">Mise (bidons)<input id="dStake" type="number" min="0" step="10" value="0" disabled></label>
+  <div id="dChips" class="chips" style="margin:6px 0 4px"></div>
+  <p id="dMax" class="sub" style="margin:0 0 14px;font-size:13px">Choisis d'abord un adversaire.</p>
+  <div class="row"><button class="btn" id="dGo" data-act="duelgo" disabled>Lancer le défi</button><button class="btn ghost" data-act="close">Annuler</button></div></div>`;
+  d.showModal();
+  const sel=$("#dOpp"), inp=$("#dStake");
+  sel.addEventListener("change",async()=>{
+    $("#dGo").disabled=true; inp.disabled=true; $("#dChips").innerHTML=""; if(!sel.value){$("#dMax").textContent="Choisis d'abord un adversaire.";return}
+    try{ const mx=await rpc("duel_max",{opp:sel.value}); inp.max=mx; inp.disabled=false; if(+inp.value>mx) inp.value=mx;
+      $("#dMax").innerHTML=`Mise maximum : <b>${mx} bidons</b> (le plus petit solde des deux). 0 = duel amical.`;
+      $("#dChips").innerHTML=[0,20,50,100,200].filter(v=>v<=mx).concat(mx>0&&![20,50,100,200].includes(mx)?[mx]:[]).map(v=>`<button class="chip" data-dstake="${v}">${v?v+" bidons":"Amical"}${v===mx&&v>0?" (max)":""}</button>`).join("");
+      $("#dGo").disabled=false;
+    }catch(e){ $("#dMax").textContent=errMsg(e); }
+  });
+}
 
 /* ---------- actions ---------- */
 let oathShown=false;
@@ -860,9 +1013,10 @@ function openZoom(id){
 }
 
 /* ---------- rendu ---------- */
-const TABS=[["booster","Boosters"],["collection","Collection"],["market","Marché"],["trades","Échanges"],["ranking","Classement"]];
+const TABS=[["booster","Boosters"],["arena","Arène"],["collection","Collection"],["market","Marché"],["trades","Échanges"],["ranking","Classement"]];
 const TAB_ICONS={
  booster:'<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 7h12M6 17h12"/>',
+ arena:'<path d="M4 4l9 9M4 4v4M4 4h4"/><path d="M20 4l-9 9M20 4v4M20 4h-4"/><path d="M8 16l-3 3M16 16l3 3M6.5 13.5l4 4M17.5 13.5l-4 4"/>',
  collection:'<rect x="3" y="5" width="11" height="15" rx="2"/><path d="M9 3h10a2 2 0 0 1 2 2v13"/>',
  market:'<path d="M4 9l1.5-5h13L20 9"/><path d="M4 9h16v11H4z"/><path d="M9 20v-6h6v6"/>',
  trades:'<path d="M7 7h13l-3-3M17 17H4l3 3"/>',
@@ -873,7 +1027,7 @@ function renderTabs(){
   const list=[...TABS]; if(cfg.is_admin) list.push(["admin","Catalogue"]);
   const cur=tab==="player"?"ranking":tab;
   $("#tabs").style.setProperty("--n",list.length);
-  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}</button>`).join("");
+  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}${k==="arena"&&arenaTodo()?`<span class="badge">${arenaTodo()}</span>`:""}</button>`).join("");
 }
 function cdText(){
   if(!bstate.next_at) return "";
@@ -902,6 +1056,7 @@ function render(force){
   else if(tab==="market") m.innerHTML=viewMarket();
   else if(tab==="trades") m.innerHTML=viewTrades();
   else if(tab==="ranking") m.innerHTML=viewRanking();
+  else if(tab==="arena") {m.innerHTML=viewArena(); quizTick();}
   else if(tab==="player") m.innerHTML=viewPlayer();
   else if(tab==="admin") m.innerHTML=viewAdmin();
 }
@@ -912,6 +1067,9 @@ function viewFeed(){
     if(f.kind==="pull")return me1?`Tu as tiré ${n}`:`${a} a tiré ${n}`;
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
     if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
+    if(f.kind==="duel_open")return me1?`Tu as défié ${b} à l'Arène (mise : ${f.price} bidons)`:me2?`${a} te défie à l'Arène (mise : ${f.price} bidons)`:`${a} a défié ${b} à l'Arène`;
+    if(f.kind==="duel_win")return me1?`Tu as battu ${b} ${esc(f.note||"")} à l'Arène (+${f.price} bidons)`:me2?`${a} t'a battu ${esc(f.note||"")} à l'Arène`:`${a} a battu ${b} ${esc(f.note||"")} à l'Arène`;
+    if(f.kind==="duel_tie")return me1||me2?`Égalité parfaite à l'Arène entre ${a} et ${b} : mises remboursées`:`${a} et ${b} ont fait match nul à l'Arène`;
     if(f.kind==="team"){const bn=esc(brands[f.note]?.name||f.note||"");return me1?`Tu as complété l'équipe ${bn} ! Prime d'équipe : +${f.price} bidons`:`${a} a complété l'équipe ${bn} (+${f.price} bidons)`}
     if(f.kind==="refuse")return me1?`Tu as refusé de prêter serment. Les Orques t'acclament.`:`${a} a refusé de prêter serment. Honte sur sa lignée.`;
     if(f.kind==="trade")return me1?`Tu as échangé ${n} avec ${b}`:me2?`${a} a échangé ${n} avec toi`:`${a} et ${b} ont échangé ${n}`;return""};
@@ -926,7 +1084,9 @@ function viewBooster(){
     : `<div class="bpw"><div class="bp off" aria-hidden="true">${packInner()}</div><div class="bp-label">Plus de booster pour l'instant</div></div>`;
   const last=lastPull?`<h3>Ton dernier booster</h3><div class="lastpull">${lastPull.map(id=>zoomBtn(cardById[id],innerWidth<640?0.55:0.7)).join("")}</div>`:"";
   const oath=oathOpen()?`<button class="oath-banner" data-act="oath"><span class="oath-seal sm">⚜</span><span><b>Le Serment de Midi t'attend</b><br><small>Jure fidélité au Seigneur ${esc(lord())} et reçois ${bstate.oath_amount||100} bidons.</small></span><span class="go">Prêter serment</span></button>`:"";
-  return `${oath}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
+  const inv2=duels.filter(d=>!d.mine&&d.status==="waiting");
+  const qb=inv2.length?`<button class="quiz-banner" data-tab="arena"><span class="qz-ico">⚔</span><span><b>${inv2.length>1?`${inv2.length} défis t'attendent`:`${esc(who(inv2[0].challenger))} te défie`} à l'Arène</b><br><small>${inv2.length>1?"Accepte-les ou refuse-les avant qu'ils expirent":`Mise : ${inv2[0].stake} bidons · 5 questions sur les produits du groupe`}</small></span><span class="go">Voir</span></button>`:"";
+  return `${oath}${qb}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
   <div class="bstage">
     <div class="packs">${packs}</div>
     <aside class="stock">
@@ -1182,6 +1342,12 @@ document.addEventListener("click",async e=>{
   if(ds.brand){brandFilter=ds.brand;render();return}
   if(ds.coll){collFilter=ds.coll;render();return}
   if(ds.mk){const v=ds.v; mk[ds.mk]=ds.mk==="missing"?v==="true":v; if(ds.mk==="tab"){mk.brand="all";mk.rar="all";} render(); return}
+  if(ds.qa!==undefined){quizAnswer(+ds.qa);return}
+  if(ds.dstake!==undefined){const i=$("#dStake"); if(i) i.value=ds.dstake; return}
+  if(ds.duel){duelPlay(+ds.duel);return}
+  if(ds.daccept){t.disabled=true; try{ await rpc("duel_accept",{did:+ds.daccept}); await loadGame(); duelPlay(+ds.daccept); }catch(e){ t.disabled=false; toast(errMsg(e)); } return}
+  if(ds.ddecline){await act(()=>rpc("duel_decline",{did:+ds.ddecline}),"Défi refusé, la mise est rendue à ton collègue.");return}
+  if(ds.dcancel){await act(()=>rpc("duel_decline",{did:+ds.dcancel}),"Défi annulé, ta mise t'est rendue.");return}
   if(ds.teamb){brandFilter=ds.teamb;collFilter="team";render();return}
   if(ds.player){showPlayer(ds.player);return}
   if(ds.pfilter){pFilter=ds.pfilter;render();return}
@@ -1207,6 +1373,10 @@ document.addEventListener("click",async e=>{
     case "oath-no": t.disabled=true; await swearOath(false); break;
     case "pseudo": openPseudoDlg(); break;
     case "dupall": openDupDlg(); break;
+    case "qnext": quizNext(); break;
+    case "newduel": openDuelDlg(); break;
+    case "duelgo": {const o=$("#dOpp").value, st=Math.max(0,Math.floor(+$("#dStake").value||0)); if(!o) break; if(st>+($("#dStake").max||0)){toast(`Mise maximum : ${$("#dStake").max} bidons`);break}
+      t.disabled=true; try{ const id=await rpc("duel_create",{opp:o,stake:st}); closeDlg(); await loadGame(); duelPlay(id); }catch(e){ t.disabled=false; toast(errMsg(e)); } break}
     case "dupgo": {const k=$("#dupKeep").checked; t.disabled=true; closeDlg(); await act(()=>rpc("discard_duplicates",{keep_rare:k}),r=>r&&r.cards?`${r.cards} doublon${r.cards>1?"s":""} défaussé${r.cards>1?"s":""} : +${r.coins} bidons`:"Aucun doublon défaussé."); break}
     case "logout": closeDlg(); await sb.auth.signOut(); location.reload(); break;
     case "newtrade": openTradeDlg(null); break;
