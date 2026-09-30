@@ -327,6 +327,11 @@ dialog::backdrop{background:rgba(6,13,31,.6)}
 .tside{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;width:120px;justify-self:center;align-self:start}
 .tlabel{font-size:11px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:var(--soft)}
 .tname{font-weight:800;font-size:13px;line-height:1.15}
+.ann{padding:22px 20px 18px;text-align:center}
+.ann-kicker{display:inline-block;font-size:11px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;background:var(--danger);color:#fff;padding:3px 10px;border-radius:999px;margin-bottom:10px}
+.ann h4{margin:0 0 12px;font-stretch:115%;font-weight:900;font-size:22px;line-height:1.2}
+.ann-body{text-align:left;font-size:15px;line-height:1.5;margin-bottom:16px}.ann-body p{margin:0 0 10px}
+.news-line{font-weight:600}.news-line b{color:var(--danger)}
 .fine-line{color:var(--danger);font-weight:700}
 .twarn{font-size:11.5px;font-weight:700;color:var(--danger)}
 .tarrow{font-size:24px;color:var(--soft);font-weight:900}
@@ -918,6 +923,15 @@ async function swearOath(accept){
   closeDlg();
   await act(()=>rpc("swear_oath",{accept}),v=>accept?`Serment accepté. Le Seigneur ${lord()} te verse ${v} bidons.`:"Tu as choisi la voie des Orques. Pas de bidons aujourd'hui.");
 }
+let annShown=false;
+async function maybeAnn(){
+  if(annShown||document.getElementById("ov")||$("#dlg").open) return;
+  let a=null; try{ a=await rpc("announcement_next",{}); }catch(e){ return; }
+  if(!a||!a.id) return; annShown=true;
+  const d=$("#dlg");
+  d.innerHTML=`<div class="ann"><div class="ann-kicker">Annonce officielle</div><h4>${esc(a.title)}</h4><div class="ann-body"><p>${esc(a.body).replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>")}</p></div><button class="btn cta" data-annok="${a.id}">Compris</button></div>`;
+  d.showModal();
+}
 function maybeOath(){ if(oathOpen()&&!oathShown&&!document.getElementById("ov")&&!$("#dlg").open) openOath(); }
 async function buyBooster(){
   if(busy) return; busy=true;
@@ -1147,6 +1161,7 @@ function viewFeed(){
     if(f.kind==="gold")return me1?`Tu as gagné un booster OR grâce à tes ${esc(f.note||"3")} victoires à l'Arène !`:`${a} a gagné un booster OR grâce à ${esc(f.note||"3")} victoires à l'Arène`;
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
     if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
+    if(f.kind==="news")return `<span class="news-line"><b>Annonce</b> · ${esc(f.note||"")}</span>`;
     if(f.kind==="fine"){const mo=f.note?` pour ${esc(f.note)}`:"", L=esc(lord()), n=f.price;
       const T=me1?[`Tu as écopé de ${n} bidons d'amende${mo}. Le Seigneur ${L} a tranché.`,`Le tribunal de Cormery te condamne à ${n} bidons d'amende${mo}. Pas de sursis.`,`Tu t'es fait pincer${mo} : ${n} bidons confisqués. La honte sur ta lignée.`,`Tu règles une amende de ${n} bidons${mo}. Les Orques ricanent.`]
         :[`${a} a été verbalisé par la Brigade Winalco : ${n} bidons d'amende${mo}. Le Seigneur ${L} a tranché.`,`Le tribunal de Cormery condamne ${a} à ${n} bidons d'amende${mo}. Pas de sursis.`,`${a} s'est fait pincer${mo} : ${n} bidons confisqués. La honte sur sa lignée.`,`${a} règle une amende de ${n} bidons${mo}. Les Orques ricanent.`];
@@ -1493,6 +1508,7 @@ document.addEventListener("click",async e=>{
   if(ds.card){openCardDlg(ds.card);return}
   if(ds.sell){const p=parseInt($("#sellPrice").value);closeDlg();await act(()=>rpc("create_listing",{card_id:ds.sell,ask:p}),"Carte mise en vente.");return}
   if(ds.discard){closeDlg();await act(()=>rpc("discard",{card_id:ds.discard}),v=>`+${v} bidon${v>1?"s":""}`);return}
+  if(ds.annok){closeDlg(); try{ await rpc("announcement_ack",{ann_id:+ds.annok}); }catch(e){} annShown=false; setTimeout(async()=>{ await maybeAnn(); if(!$("#dlg").open) maybeOath(); },300); return}
   if(ds.offer){openOfferDlg(+ds.offer);return}
   if(ds.ofcancel){await act(()=>rpc("cancel_offer",{offer_id:+ds.ofcancel}),"Offre annulée, tes bidons te sont rendus.");return}
   if(ds.ofok){t.disabled=true;await act(()=>rpc("answer_offer",{offer_id:+ds.ofok,accept:true}),"Vendu !");return}
@@ -1585,7 +1601,7 @@ async function start(session){
     cfg=await rpc("game_config",{});
     await loadCatalog(); await loadGame();
   }catch(e){ $("#main").innerHTML=`<div class="empty">${esc(errMsg(e))}</div>`; return; }
-  render(true); setTimeout(maybeOath,600);
+  render(true); setTimeout(async()=>{ await maybeAnn(); if(!$("#dlg").open) maybeOath(); },600);
   sb.channel("jeu")
     .on("postgres_changes",{event:"*",schema:"public",table:"listings"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"trades"},scheduleReload)
