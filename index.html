@@ -1172,7 +1172,7 @@ function viewFeed(){
     if(f.kind==="team"){const bn=esc(brands[f.note]?.name||f.note||"");return me1?`Tu as complété l'équipe ${bn} ! Prime d'équipe : +${f.price} bidons`:`${a} a complété l'équipe ${bn} (+${f.price} bidons)`}
     if(f.kind==="refuse")return me1?`Tu as refusé de prêter serment. Les Orques t'acclament.`:`${a} a refusé de prêter serment. Honte sur sa lignée.`;
     if(f.kind==="trade"){const x=+f.note||0, n2=x?`${n} et ${x} autre${x>1?"s":""} carte${x>1?"s":""}`:n;return me1?`Tu as échangé ${n2} avec ${b}`:me2?`${a} a échangé ${n2} avec toi`:`${a} et ${b} ont échangé ${n2}`;}return""};
-  return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}<span class="when">${ago(f.created_at)}</span></li>`).join("")}</ul></section>`;
+  return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}${cfg.is_admin?`<span class="when">${ago(f.created_at)}</span>`:""}</li>`).join("")}</ul></section>`;
 }
 function viewBooster(){
   const t=tokens(), b=reserve(), per=bstate.per_slot||cfg.free_per_slot||2;
