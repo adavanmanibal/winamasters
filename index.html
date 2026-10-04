@@ -484,6 +484,26 @@ dialog.tb-dlg{max-width:min(920px,96vw);height:min(860px,92vh)}
   .tb-grid{grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:8px}
   .tb-foot{flex-direction:column;align-items:stretch}.tb-foot .btn{width:100%}
 }
+.item.au{grid-template-columns:86px 1fr auto;align-items:start}
+.item.au.lead{border-color:#12B5A6;box-shadow:0 0 0 1px #12B5A6}
+.item.au.ended{opacity:.75}
+.au-main{min-width:0}
+.au-state{margin:6px 0 4px;font-size:13.5px;display:flex;gap:6px;flex-wrap:wrap}
+.au-hand{font-weight:800;padding:2px 9px;border-radius:999px;background:rgba(47,107,255,.12)}
+.au-hand.me{background:rgba(18,181,166,.16);color:#0E8F83}.au-hand.none{background:var(--line);color:var(--soft)}
+.au-out{font-weight:800;color:var(--danger)}
+.au-done{font-weight:700;color:var(--soft)}
+.au-hist{font-size:13px;color:var(--soft)}.au-hist summary{cursor:pointer;font-weight:700}
+.au-hist ol{margin:6px 0 0;padding:0;list-style:none}.au-hist li{display:flex;gap:8px;align-items:center;padding:2px 0}
+.au-hist li b{margin-left:auto;color:var(--ink)}.au-hist li span{font-size:12px}.au-hist li.top b{color:#0E8F83}
+.au-price{text-align:right}.au-price small{display:block;font-size:11px;color:var(--soft);font-weight:700}
+.au-time{font-weight:900;font-variant-numeric:tabular-nums;font-size:15px;text-align:right}
+.au-time::before{content:"⏱ ";font-weight:400}
+.au-time.hot{color:var(--danger)}
+.au-bid{display:flex;gap:6px}.au-bid input{width:84px;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font-weight:800}
+.au-note{font-size:11.5px;color:var(--soft);text-align:right;max-width:180px}.au-note.ok{color:#0E8F83;font-weight:700}
+.au-dur{display:flex;gap:6px;margin-top:6px}
+@media (max-width:560px){.item.au{grid-template-columns:64px 1fr}.item.au .act{grid-column:1/-1;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between}.au-note{text-align:left;max-width:none;width:100%}}
 .dls{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
 .dl{display:flex;align-items:center;gap:12px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
 .dl-stake{flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;font-weight:900;font-size:14px;padding:5px 10px;border-radius:999px;background:rgba(47,107,255,.12)}
@@ -611,6 +631,14 @@ dialog.oath-dlg{max-width:min(600px,94vw);background:linear-gradient(180deg,#F7E
 .oath-acts .btn span{font-size:12.5px;font-weight:600;opacity:.85}
 .oath-yes{background:#8E1624;color:#FFF4D6}
 .oath-no{background:transparent;color:#5A3510;border:1px solid #8C6A2E}
+.oath-mini{display:flex;align-items:center;gap:10px;margin:0 0 14px;padding:6px 8px 6px 10px;border-radius:999px;border:1px solid #C9A13A;background:linear-gradient(90deg,#F7EBCD,#EAD7A8);color:#3A2410;font-size:13.5px}
+.oath-mini .om-seal{flex:none;width:26px;height:26px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#E0463C,#8E1624);color:#FFE3A0;display:flex;align-items:center;justify-content:center;font-size:14px}
+.oath-mini .om-t{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-family:Georgia,serif}
+.oath-mini .om-t small{color:#6E4A22}
+.oath-mini button{flex:none;border:0;border-radius:999px;padding:6px 12px;font-weight:800;font-size:13px;cursor:pointer}
+.oath-mini .om-yes{background:#8E1624;color:#FFF4D6}
+.oath-mini .om-no{background:transparent;color:#6E4A22;padding:6px 8px;text-decoration:underline}
+@media (max-width:560px){.oath-mini .om-t small,.oath-mini .om-l{display:none}}
 .oath-banner{display:flex;align-items:center;gap:14px;width:100%;margin:0 0 18px;padding:12px 16px;border-radius:14px;border:2px solid #C9A13A;background:linear-gradient(90deg,#F7EBCD,#EAD7A8);color:#3A2410;text-align:left;font-family:Georgia,serif;cursor:pointer}
 .oath-banner small{font-family:"Archivo",system-ui,sans-serif;color:#6E4A22}
 .oath-banner .go{margin-left:auto;background:#8E1624;color:#FFF4D6;padding:8px 14px;border-radius:10px;font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:14px;white-space:nowrap}
@@ -677,7 +705,7 @@ const RORDER = ["C","U","R","E","Q","L","S"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={};
-let me=null, inv={}, players=[], listings=[], trades=[], feed=[], board=[], teamDone=[], offers=[];
+let me=null, inv={}, players=[], listings=[], auctions=[], aucOn=false, trades=[], feed=[], board=[], teamDone=[], offers=[];
 let tab="booster", brandFilter="all", collFilter="all", lastPull=null, flipped=new Set(), adminDirty=false, busy=false;
 let loginMode="login";
 
@@ -751,25 +779,24 @@ async function loadCatalog(){
   cards=c.data; cardById=Object.fromEntries(cards.map(x=>[x.id,x]));
 }
 async function loadGame(){
-  const [p,i,pl,l,t,f,lb,bs,tb,qs,of]=await Promise.all([
+  const [p,i,pl,l,t,f,lb,bs,tb,qs]=await Promise.all([
     sb.from("players").select("*").eq("id",uid).single(),
     sb.from("inventory").select("card,qty").eq("player",uid),
     sb.from("players").select("id,pseudo"),
-    sb.from("listings").select("*").eq("status","open").order("created_at",{ascending:false}).limit(300),
+    sb.rpc("auction_list"),
     sb.from("trades").select("*").eq("status","pending").order("created_at",{ascending:false}),
     sb.from("feed").select("*").order("created_at",{ascending:false}).order("id",{ascending:false}).limit(30),
     sb.from("leaderboard").select("*").order("score",{ascending:false}).limit(200),
     sb.rpc("booster_state"),
     sb.from("team_bonus").select("brand").eq("player",uid),
-    sb.rpc("duel_list"),
-    sb.from("offers").select("*").eq("status","pending").order("created_at",{ascending:false})]);
+    sb.rpc("duel_list")]);
   if(p.error) throw p.error;
   teamDone=(tb&&!tb.error&&tb.data||[]).map(x=>x.brand);
   arenaOn=!!(qs&&!qs.error); duels=arenaOn?(qs.data||[]):[];
-  offersOn=!!(of&&!of.error); offers=offersOn?(of.data||[]):[];
+  aucOn=!!(l&&!l.error); const now0=Date.now(); auctions=(aucOn?(l.data||[]):[]).map(a=>({...a,localEnd:now0+(a.left_sec||0)*1000}));
   me=p.data; inv=Object.fromEntries((i.data||[]).map(x=>[x.card,x.qty]));
   if(bs&&bs.data) bstate=bs.data;
-  players=pl.data||[]; listings=l.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
+  players=pl.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
 }
 let reloadTimer=null;
 function scheduleReload(){clearTimeout(reloadTimer);reloadTimer=setTimeout(async()=>{try{await loadGame();render()}catch(e){}},500)}
@@ -920,7 +947,7 @@ function oathHTML(){
 }
 function openOath(){ if(!oathOpen()) return; const d=$("#dlg"); d.innerHTML=oathHTML(); d.classList.add("oath-dlg"); d.showModal(); oathShown=true; }
 async function swearOath(accept){
-  closeDlg();
+  if($("#dlg").open) closeDlg();
   await act(()=>rpc("swear_oath",{accept}),v=>accept?`Serment accepté. Le Seigneur ${lord()} te verse ${v} bidons.`:"Tu as choisi la voie des Orques. Pas de bidons aujourd'hui.");
 }
 let annShown=false;
@@ -932,7 +959,7 @@ async function maybeAnn(){
   d.innerHTML=`<div class="ann"><div class="ann-kicker">Annonce officielle</div><h4>${esc(a.title)}</h4><div class="ann-body"><p>${esc(a.body).replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>")}</p></div><button class="btn cta" data-annok="${a.id}">Compris</button></div>`;
   d.showModal();
 }
-function maybeOath(){ if(oathOpen()&&!oathShown&&!document.getElementById("ov")&&!$("#dlg").open) openOath(); }
+function maybeOath(){ /* plus de fenêtre automatique : le serment se fait depuis le petit bandeau */ }
 async function buyBooster(){
   if(busy) return; busy=true;
   try{ await rpc("buy_booster",{}); await loadGame(); render(); toast("Booster ajouté à ta réserve. Ouvre-le quand tu veux !"); }
@@ -1120,7 +1147,7 @@ function renderTabs(){
   const list=[...TABS]; if(cfg.is_admin) list.push(["admin","Catalogue"]);
   const cur=tab==="player"?"ranking":tab;
   $("#tabs").style.setProperty("--n",list.length);
-  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}${k==="arena"&&arenaTodo()?`<span class="badge">${arenaTodo()}</span>`:""}${k==="market"&&offersIn().length?`<span class="badge">${offersIn().length}</span>`:""}</button>`).join("");
+  $("#tabs").innerHTML=list.map(([k,l])=>`<button role="tab" aria-selected="${cur===k}" data-tab="${k}"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${TAB_ICONS[k]||""}</svg><span class="tl">${l}</span><span class="ts">${k==="admin"?"Admin":l}</span>${k==="trades"&&incoming?`<span class="badge">${incoming}</span>`:""}${k==="arena"&&arenaTodo()?`<span class="badge">${arenaTodo()}</span>`:""}${k==="market"&&aucOutbid().length?`<span class="badge">${aucOutbid().length}</span>`:""}</button>`).join("");
 }
 function cdText(){
   if(!bstate.next_at) return "";
@@ -1144,9 +1171,10 @@ function render(force){
   if(!me) return;
   if(tab==="admin"&&adminDirty&&!force&&document.querySelector("#cardsEd")) return;
   const m=$("#main");
+  const ae=document.activeElement, keep=ae&&ae.id&&/^(bid-|mkq)/.test(ae.id)?{id:ae.id,v:ae.value,s:ae.selectionStart}:null;
+  if(tab==="market"){m.innerHTML=viewMarket(); if(keep){const e=document.getElementById(keep.id); if(e){e.value=keep.v; e.focus(); try{e.setSelectionRange(keep.s,keep.s)}catch(_){}}} return;}
   if(tab==="booster") m.innerHTML=viewBooster();
   else if(tab==="collection") m.innerHTML=viewCollection();
-  else if(tab==="market") m.innerHTML=viewMarket();
   else if(tab==="trades") m.innerHTML=viewTrades();
   else if(tab==="ranking") m.innerHTML=viewRanking();
   else if(tab==="arena") {m.innerHTML=viewArena(); quizTick();}
@@ -1161,6 +1189,7 @@ function viewFeed(){
     if(f.kind==="gold")return me1?`Tu as gagné un booster OR grâce à tes ${esc(f.note||"3")} victoires à l'Arène !`:`${a} a gagné un booster OR grâce à ${esc(f.note||"3")} victoires à l'Arène`;
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
     if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
+    if(f.kind==="auction")return me1?`Tu as remporté ${n} aux enchères pour ${f.price} bidons (vendue par ${b})`:me2?`${a} a remporté ta carte ${n} aux enchères pour ${f.price} bidons`:`${a} a remporté ${n} aux enchères pour ${f.price} bidons`;
     if(f.kind==="news")return `<span class="news-line"><b>Annonce</b> · ${esc(f.note||"")}</span>`;
     if(f.kind==="fine"){const mo=f.note?` pour ${esc(f.note)}`:"", L=esc(lord()), n=f.price;
       const T=me1?[`Tu as écopé de ${n} bidons d'amende${mo}. Le Seigneur ${L} a tranché.`,`Le tribunal de Cormery te condamne à ${n} bidons d'amende${mo}. Pas de sursis.`,`Tu t'es fait pincer${mo} : ${n} bidons confisqués. La honte sur ta lignée.`,`Tu règles une amende de ${n} bidons${mo}. Les Orques ricanent.`]
@@ -1183,7 +1212,7 @@ function viewBooster(){
     ? Array.from({length:g},()=>pack("opengold","Or")).join("")+Array.from({length:t},()=>pack("free","Gratuit")).join("")+Array.from({length:b},()=>pack("openbought","Acheté")).join("")
     : `<div class="bpw"><div class="bp off" aria-hidden="true">${packInner()}</div><div class="bp-label">Plus de booster pour l'instant</div></div>`;
   const last=lastPull?`<h3>Ton dernier booster</h3><div class="lastpull">${lastPull.map(id=>zoomBtn(cardById[id],innerWidth<640?0.55:0.7)).join("")}</div>`:"";
-  const oath=oathOpen()?`<button class="oath-banner" data-act="oath"><span class="oath-seal sm">⚜</span><span><b>Le Serment de Midi t'attend</b><br><small>Jure fidélité au Seigneur ${esc(lord())} et reçois ${bstate.oath_amount||100} bidons.</small></span><span class="go">Prêter serment</span></button>`:"";
+  const oath=oathOpen()?`<div class="oath-mini"><span class="om-seal">⚜</span><span class="om-t"><b>Serment<span class="om-l"> de Midi</span></b><small> · jure fidélité au Seigneur ${esc(lord())}</small></span><button class="om-yes" data-act="oath-yes">Je le jure <b>+${bstate.oath_amount||100}</b></button><button class="om-no" data-act="oath-no" title="Refuser le serment">Refuser</button></div>`:"";
   const inv2=duels.filter(d=>!d.mine&&d.status==="waiting");
   const qb=inv2.length?`<button class="quiz-banner" data-tab="arena"><span class="qz-ico">⚔</span><span><b>${inv2.length>1?`${inv2.length} défis t'attendent`:`${esc(who(inv2[0].challenger))} te défie`} à l'Arène</b><br><small>${inv2.length>1?"Accepte-les ou refuse-les avant qu'ils expirent":`Mise : ${inv2[0].stake} bidons · 5 questions sur les produits du groupe`}</small></span><span class="go">Voir</span></button>`:"";
   return `${oath}${qb}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
@@ -1235,51 +1264,68 @@ function teamPanel(vis){
   if(teamOpen===null) teamOpen=innerWidth>700;
   return `<details class="team" id="teamBox" ${teamOpen?"open":""}><summary><h3>Prime d'équipe</h3><span class="team-sum">${nd} / ${nb}<span class="wl"> équipe${nd>1?"s":""} complète${nd>1?"s":""}</span></span></summary><p>Réunis toutes les cartes Équipe d'une marque et gagne ${amt} bidons (une fois par marque).</p><div class="team-row">${bl}</div></details>`;
 }
-let mk={tab:"buy",q:"",brand:"all",rar:"all",missing:false,sort:"recent"};
-let offersOn=false;
-function offersIn(){const mine=new Set(listings.filter(l=>l.seller===uid).map(l=>l.id));return offers.filter(o=>mine.has(o.listing))}
-function mkItem(l,own){const c=cardById[l.card];if(!c)return"";
-  const myOf=offers.find(o=>o.listing===l.id&&o.buyer===uid), inOf=own?offers.filter(o=>o.listing===l.id):[];
-  const ofTxt=!own&&offersOn?(myOf?`<div class="of-mine">Ton offre : <b>${myOf.price} bidons</b> <button class="linkbtn" data-ofcancel="${myOf.id}">Annuler</button></div>`:""):"";
-  const ofList=inOf.length?`<div class="of-list">${inOf.map(o=>`<div class="of-row">${plink(o.buyer)} te propose <b>${o.price} bidons</b><span class="of-a"><button class="btn small" data-ofok="${o.id}">Accepter</button><button class="btn ghost small" data-ofno="${o.id}">Refuser</button></span></div>`).join("")}</div>`:"";
-  return `<div class="item">${zoomBtn(c,0.4)}<div><div class="ttl">${esc(c.name)}</div><div class="meta">${rpill(c.rarity)} · ${esc(brands[c.brand]?.name||"")} · ${own?"ton offre":"vendu par "+plink(l.seller)} · ${ago(l.created_at)}${!own?(has(c.id)?" · déjà dans ta collection":` · <b class="want">te manque</b>`):""}</div></div>
-  <div class="act"><div class="price"><span class="drop"></span>${l.price}</div>${own?`<button class="btn ghost small" data-cancel="${l.id}">Retirer</button>`:`<button class="btn small" data-buy="${l.id}" ${me.coins<l.price?"disabled":""}>Acheter</button>${offersOn?`<button class="btn ghost small" data-offer="${l.id}">${myOf?"Changer mon offre":"Faire une offre"}</button>`:""}`}</div>${ofTxt}${ofList}</div>`}
+let mk={tab:"buy",q:"",brand:"all",rar:"all",missing:false,sort:"ending"};
+function aucOpen(a){return a.status==="open"&&a.localEnd>Date.now()}
+function aucOutbid(){return auctions.filter(a=>aucOpen(a)&&a.i_bid&&a.top_bidder!==uid)}
+function aucMin(a){return a.top_bid==null?a.start_price:a.top_bid+Math.max(1,Math.ceil(a.top_bid*(cfg.auction_step_pct||5)/100))}
+function aucLeft(ms){if(ms<=0)return "terminée";const s=Math.floor(ms/1000),h=Math.floor(s/3600),m=Math.floor(s%3600/60),x=s%60;return h?`${h} h ${String(m).padStart(2,"0")}`:m>=10?`${m} min`:`${m}:${String(x).padStart(2,"0")}`}
+function aucItem(a){const c=cardById[a.card];if(!c)return"";
+  const open=aucOpen(a), mine=a.seller===uid, top=a.top_bidder===uid, left=a.localEnd-Date.now();
+  const price=a.top_bid??a.start_price, mn=aucMin(a);
+  let state="";
+  if(open){
+    state=a.top_bidder?`<span class="au-hand ${top?"me":""}">${top?"Tu as la main":`Main : ${esc(who(a.top_bidder))}`}</span>`:`<span class="au-hand none">Aucune mise</span>`;
+    if(!top&&a.i_bid) state+=` <span class="au-out">Tu as été surenchéri</span>`;
+  } else {
+    state=a.status==="sold"?`<span class="au-done">${a.top_bidder===uid?"Tu l'as remportée":`Vendue à ${esc(who(a.top_bidder))}`} pour ${a.top_bid} bidons</span>`:a.status==="cancelled"?`<span class="au-done">Annulée</span>`:`<span class="au-done">Invendue, carte rendue au vendeur</span>`;
+  }
+  const hist=a.bids&&a.bids.length?`<details class="au-hist"><summary>${a.nb_bids} mise${a.nb_bids>1?"s":""}</summary><ol>${a.bids.map((b,i)=>`<li class="${i===0?"top":""}">${plink(b.bidder)}<b>${b.amount}</b><span>${ago(b.at)}</span></li>`).join("")}</ol></details>`:`<div class="au-hist none">Pas encore de mise</div>`;
+  let act="";
+  if(open&&mine) act=a.nb_bids?`<div class="au-note">Ta carte est en jeu</div>`:`<button class="btn ghost small" data-aucancel="${a.id}">Annuler</button>`;
+  else if(open&&!top) act=`<div class="au-bid"><input id="bid-${a.id}" type="number" min="${mn}" value="${mn}" inputmode="numeric" aria-label="Ta mise"><button class="btn small" data-bid="${a.id}" ${me.coins<mn?"disabled":""}>Miser</button></div><div class="au-note">min. ${mn} · tes bidons sont bloqués tant que tu as la main</div>`;
+  else if(open&&top) act=`<div class="au-note ok">Tes ${a.top_bid} bidons sont bloqués</div>`;
+  return `<div class="item au ${open?"":"ended"} ${top&&open?"lead":""}">${zoomBtn(c,0.4)}<div class="au-main"><div class="ttl">${esc(c.name)}</div>
+    <div class="meta">${rpill(c.rarity)} · ${esc(brands[c.brand]?.name||"")} · ${mine?"ta vente":"vendue par "+plink(a.seller)}${!mine?(has(c.id)?" · déjà dans ta collection":` · <b class="want">te manque</b>`):""}</div>
+    <div class="au-state">${state}</div>${hist}</div>
+    <div class="act"><div class="au-price"><small>${a.top_bid==null?"Mise de départ":open?"Meilleure mise":"Prix final"}</small><div class="price"><span class="drop"></span>${price}</div></div>
+    ${open?`<div class="au-time ${left<60000?"hot":""}" data-end="${a.localEnd}">${aucLeft(left)}</div>`:""}${act}</div></div>`}
 function mkFiltered(){
-  const own=mk.tab==="mine"; const norm=x=>(x||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
-  const q=norm(mk.q.trim());
-  let r=listings.filter(l=>(l.seller===uid)===own).filter(l=>{const c=cardById[l.card];if(!c)return false;
+  const norm=x=>(x||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase(), q=norm(mk.q.trim());
+  let r=auctions.filter(a=>mk.tab==="buy"?(aucOpen(a)&&a.seller!==uid):mk.tab==="mine"?a.seller===uid:(a.i_bid&&a.seller!==uid)).filter(a=>{const c=cardById[a.card];if(!c)return false;
     if(mk.brand!=="all"&&c.brand!==mk.brand)return false;
     if(mk.rar!=="all"&&c.rarity!==mk.rar)return false;
-    if(!own&&mk.missing&&has(c.id))return false;
-    if(q&&!norm(c.name+" "+(brands[c.brand]?.name||"")+" "+pname(l.seller)).includes(q))return false;
+    if(mk.tab==="buy"&&mk.missing&&has(c.id))return false;
+    if(q&&!norm(c.name+" "+(brands[c.brand]?.name||"")+" "+pname(a.seller)).includes(q))return false;
     return true});
-  const R=l=>RORDER.indexOf(cardById[l.card].rarity);
-  const cmp={recent:(a,b)=>new Date(b.created_at)-new Date(a.created_at),cheap:(a,b)=>a.price-b.price,dear:(a,b)=>b.price-a.price,rare:(a,b)=>R(b)-R(a)||a.price-b.price,name:(a,b)=>cardById[a.card].name.localeCompare(cardById[b.card].name,"fr")}[mk.sort];
+  const R=a=>RORDER.indexOf(cardById[a.card].rarity), P=a=>a.top_bid??a.start_price, O=a=>aucOpen(a)?0:1;
+  const cmp={ending:(a,b)=>O(a)-O(b)||a.localEnd-b.localEnd,recent:(a,b)=>new Date(b.created_at)-new Date(a.created_at),cheap:(a,b)=>P(a)-P(b),dear:(a,b)=>P(b)-P(a),rare:(a,b)=>R(b)-R(a)||P(a)-P(b),name:(a,b)=>cardById[a.card].name.localeCompare(cardById[b.card].name,"fr")}[mk.sort]||((a,b)=>a.localEnd-b.localEnd);
   return r.sort(cmp);
 }
-function mkListHTML(){const r=mkFiltered(), own=mk.tab==="mine";
-  const txt=`<div class="mk-count">${r.length} offre${r.length>1?"s":""}</div>`;
-  if(!r.length) return txt+`<div class="empty">${listings.some(l=>(l.seller===uid)===own)?"Aucune offre ne correspond à ces filtres.":own?"Tu n'as rien en vente. Mets une carte en vente depuis ta collection.":"Rien en vente pour l'instant. Mets une de tes cartes en vente depuis ta collection."}</div>`;
-  return txt+`<div class="list">${r.map(l=>mkItem(l,own)).join("")}</div>`}
+function mkListHTML(){const r=mkFiltered();
+  const txt=`<div class="mk-count">${r.length} enchère${r.length>1?"s":""}</div>`;
+  if(!r.length) return txt+`<div class="empty">${mk.tab==="buy"?"Aucune enchère en cours. Mets une carte aux enchères depuis ta collection.":mk.tab==="mine"?"Tu n'as rien mis aux enchères. Touche une carte de ta collection pour la vendre.":"Tu n'as misé sur aucune enchère."}</div>`;
+  return txt+`<div class="list">${r.map(aucItem).join("")}</div>`}
 function pname(id){return (players.find(p=>p.id===id)||{}).pseudo||""}
 function viewMarket(){
-  const others=listings.filter(l=>l.seller!==uid).length, mine=listings.filter(l=>l.seller===uid).length;
-  const pool=listings.filter(l=>(l.seller===uid)===(mk.tab==="mine")).map(l=>cardById[l.card]).filter(Boolean);
+  if(!aucOn) return `<h2>Marché</h2><div class="empty">Les enchères ne sont pas encore installées (lance maj-21-encheres.sql dans Supabase).</div>`;
+  const nBuy=auctions.filter(a=>aucOpen(a)&&a.seller!==uid).length, nMine=auctions.filter(a=>a.seller===uid&&aucOpen(a)).length, nBid=auctions.filter(a=>aucOpen(a)&&a.i_bid&&a.seller!==uid).length, nOut=aucOutbid().length;
+  const pool=auctions.filter(a=>mk.tab==="buy"?(aucOpen(a)&&a.seller!==uid):mk.tab==="mine"?a.seller===uid:(a.i_bid&&a.seller!==uid)).map(a=>cardById[a.card]).filter(Boolean);
   const bl=Object.values(brands).filter(b=>pool.some(c=>c.brand===b.id));
   const rl=RORDER.filter(r=>pool.some(c=>c.rarity===r));
   if(mk.brand!=="all"&&!bl.some(b=>b.id===mk.brand)) mk.brand="all";
   if(mk.rar!=="all"&&!rl.includes(mk.rar)) mk.rar="all";
   const chip=(k,v,l,n)=>`<button class="chip" data-mk="${k}" data-v="${esc(v)}" aria-pressed="${String(mk[k])===String(v)}">${l}${n!==undefined?`<span class="k">${n}</span>`:""}</button>`;
-  return `<h2>Marché</h2><p class="sub">Les collègues vendent leurs cartes ici. Le vendeur touche ses bidons dès que la carte est achetée.</p>
-    <div class="chips">${chip("tab","buy","À acheter",others)}${chip("tab","mine",`Mes ventes${offersIn().length?` <span class="badge">${offersIn().length}</span>`:""}`,mine)}</div>
+  return `<h2>Marché aux enchères</h2><p class="sub">Le meilleur enchérisseur à la fin du compte à rebours remporte la carte. Une mise dans les 20 dernières secondes ajoute 1 minute.</p>
+    <div class="chips">${chip("tab","buy","En cours",nBuy)}${chip("tab","bids",`Mes mises${nOut?` <span class="badge">${nOut}</span>`:""}`,nBid)}${chip("tab","mine","Mes ventes",nMine)}</div>
     <div class="mk-bar">
       <input id="mkq" type="search" placeholder="Chercher une carte, une marque, un vendeur…" value="${esc(mk.q)}" autocomplete="off">
-      <select id="mksort" aria-label="Trier">${[["recent","Plus récentes"],["cheap","Prix croissant"],["dear","Prix décroissant"],["rare","Plus rares d'abord"],["name","Nom (A → Z)"]].map(([v,l])=>`<option value="${v}" ${mk.sort===v?"selected":""}>${l}</option>`).join("")}</select>${mk.tab==="buy"?`<button class="chip mk-miss" data-mk="missing" data-v="${!mk.missing}" aria-pressed="${mk.missing}">${mk.missing?"✓ ":""}Qui me manquent</button>`:""}
+      <select id="mksort" aria-label="Trier">${[["ending","Finissent bientôt"],["recent","Plus récentes"],["cheap","Prix croissant"],["dear","Prix décroissant"],["rare","Plus rares d'abord"],["name","Nom (A → Z)"]].map(([v,l])=>`<option value="${v}" ${mk.sort===v?"selected":""}>${l}</option>`).join("")}</select>${mk.tab==="buy"?`<button class="chip mk-miss" data-mk="missing" data-v="${!mk.missing}" aria-pressed="${mk.missing}">${mk.missing?"✓ ":""}Qui me manquent</button>`:""}
     </div>
     <div class="chips mk-f">${chip("brand","all","Toutes marques")}${bl.map(b=>chip("brand",b.id,esc(b.name))).join("")}</div>
     <div class="chips mk-f">${chip("rar","all","Toutes raretés")}${rl.map(r=>chip("rar",r,esc(rlabel(r)))).join("")}</div>
     <div id="mkList">${mkListHTML()}</div>`;
 }
+setInterval(()=>{let ended=false;document.querySelectorAll(".au-time[data-end]").forEach(e=>{const l=+e.dataset.end-Date.now();e.textContent=aucLeft(l);e.classList.toggle("hot",l<60000);if(l<=0)ended=true;});if(ended&&!window.__aucReload){window.__aucReload=1;setTimeout(()=>{window.__aucReload=0},5000);scheduleReload();}},1000);
 function viewTrades(){
   const inc=trades.filter(t=>t.to_player===uid), out=trades.filter(t=>t.from_player===uid);
   const side=(label,ids,note)=>{const cs=ids.map(id=>cardById[id]).filter(Boolean);
@@ -1392,7 +1438,9 @@ function openCardDlg(id){
   d.innerHTML=`<div style="position:relative"><button class="close" data-act="close" aria-label="Fermer">×</button><div class="mdl">${cardHTML(c)}
    <div><h4>${esc(c.name)}</h4><div class="meta" style="color:var(--soft)">${esc(rlabel(c.rarity))} · tu en as ${n}</div>
    <div class="acts">
-    <div class="box"><label class="field">Vendre au marché (prix en bidons)<input id="sellPrice" type="number" min="1" value="${Math.max(2,v*3)}"></label><button class="btn small" style="margin-top:6px" data-sell="${esc(c.id)}">Mettre en vente</button></div>
+    <div class="box"><label class="field">Mettre aux enchères · mise de départ (bidons)<input id="sellPrice" type="number" min="1" value="${Math.max(2,v*3)}"></label>
+      <div class="au-dur" role="radiogroup" aria-label="Durée">${[1,2,5].map(h=>`<button class="chip" data-audur="${h}" aria-pressed="${h===1}">${h} h</button>`).join("")}</div>
+      <button class="btn small" style="margin-top:6px" data-sell="${esc(c.id)}">Lancer l'enchère</button></div>
     <div class="box"><button class="btn ghost small" data-act="tradefrom" data-give="${esc(c.id)}" ${players.length>1?"":"disabled"}>Proposer en échange</button></div>
     <div class="box"><button class="btn ghost small" data-discard="${esc(c.id)}">Défausser (+${v} bidon${v>1?"s":""})</button></div>
    </div></div></div></div>`;
@@ -1506,7 +1554,10 @@ document.addEventListener("click",async e=>{
   if(ds.pbrand){pBrand=ds.pbrand;render();return}
   if(ds.flip!==undefined){flipped.add(+ds.flip);t.classList.add("on");return}
   if(ds.card){openCardDlg(ds.card);return}
-  if(ds.sell){const p=parseInt($("#sellPrice").value);closeDlg();await act(()=>rpc("create_listing",{card_id:ds.sell,ask:p}),"Carte mise en vente.");return}
+  if(ds.audur){document.querySelectorAll("[data-audur]").forEach(b=>b.setAttribute("aria-pressed",b===t));return}
+  if(ds.sell){const p=parseInt($("#sellPrice").value), h=+(document.querySelector('[data-audur][aria-pressed="true"]')?.dataset.audur||1);closeDlg();await act(()=>rpc("create_auction",{card_id:ds.sell,start_price:p,hours:h}),`Enchère lancée pour ${h} h.`);return}
+  if(ds.bid){const a=auctions.find(x=>x.id===+ds.bid), v=parseInt($("#bid-"+ds.bid)?.value); if(!a) return; t.disabled=true; await act(()=>rpc("place_bid",{auction_id:a.id,amount:v}),r=>r&&r.extended?`Mise de ${v} bidons ! L'enchère est prolongée d'une minute.`:`Mise de ${v} bidons : tu as la main !`);return}
+  if(ds.aucancel){t.disabled=true;await act(()=>rpc("cancel_auction",{auction_id:+ds.aucancel}),"Enchère annulée, carte récupérée.");return}
   if(ds.discard){closeDlg();await act(()=>rpc("discard",{card_id:ds.discard}),v=>`+${v} bidon${v>1?"s":""}`);return}
   if(ds.annok){closeDlg(); try{ await rpc("announcement_ack",{ann_id:+ds.annok}); }catch(e){} annShown=false; setTimeout(async()=>{ await maybeAnn(); if(!$("#dlg").open) maybeOath(); },300); return}
   if(ds.offer){openOfferDlg(+ds.offer);return}
@@ -1603,7 +1654,7 @@ async function start(session){
   }catch(e){ $("#main").innerHTML=`<div class="empty">${esc(errMsg(e))}</div>`; return; }
   render(true); setTimeout(async()=>{ await maybeAnn(); if(!$("#dlg").open) maybeOath(); },600);
   sb.channel("jeu")
-    .on("postgres_changes",{event:"*",schema:"public",table:"listings"},scheduleReload)
+    .on("postgres_changes",{event:"*",schema:"public",table:"auctions"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"trades"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"offers"},scheduleReload)
     .on("postgres_changes",{event:"*",schema:"public",table:"feed"},scheduleReload)
