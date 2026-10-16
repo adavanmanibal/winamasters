@@ -747,6 +747,11 @@ nav.tabs button{position:relative}
 .card.k-ghost-passionauto .nm{color:#fff;text-shadow:0 0 12px rgba(255,180,190,.9),0 0 2px #fff;letter-spacing:.02em}
 .card.k-ghost-passionauto .ds{opacity:.85;font-style:italic}
 .card.k-ghost-passionauto .st span{background:rgba(255,255,255,.14);color:#ffe9eb}
+
+.ann-body .ann-h{margin:14px 0 4px;font-size:15px;font-weight:900;font-stretch:110%;color:#0b1736}
+.ann-body .ann-h:first-child{margin-top:0}
+.ann-body .ann-ul{margin:0 0 4px;padding-left:20px}.ann-body .ann-ul li{margin:3px 0;line-height:1.4}
+.ann-body{max-height:62vh;overflow:auto;text-align:left;outline:none;padding-right:4px}
 </style>
 </head>
 <body>
@@ -1069,12 +1074,17 @@ async function swearOath(accept){
   await act(()=>rpc("swear_oath",{accept}),v=>accept?`Serment accepté. Le Seigneur ${lord()} te verse ${v} bidons.`:"Tu as choisi la voie des Orques. Pas de bidons aujourd'hui.");
 }
 let annShown=false;
+function annBody(t){return String(t||"").split(/\n\n+/).map(par=>{const L=par.split("\n");
+  const head=L.length>1&&!/^•/.test(L[0])&&L.slice(1).every(x=>/^•/.test(x));
+  const items=(head?L.slice(1):L).filter(x=>/^•/.test(x));
+  if(items.length&&items.length===(head?L.length-1:L.length)) return `${head?`<h5 class="ann-h">${esc(L[0])}</h5>`:""}<ul class="ann-ul">${items.map(x=>`<li>${esc(x.replace(/^•\s*/,""))}</li>`).join("")}</ul>`;
+  return `<p>${esc(par).replace(/\n/g,"<br>")}</p>`}).join("")}
 async function maybeAnn(){
   if(annShown||document.getElementById("ov")||$("#dlg").open) return;
   let a=null; try{ a=await rpc("announcement_next",{}); }catch(e){ return; }
   if(!a||!a.id) return; annShown=true;
   const d=$("#dlg");
-  d.innerHTML=`<div class="ann"><div class="ann-kicker">Annonce officielle</div><h4>${esc(a.title)}</h4><div class="ann-body"><p>${esc(a.body).replace(/\n\n/g,"</p><p>").replace(/\n/g,"<br>")}</p></div><button class="btn cta" data-annok="${a.id}">Compris</button></div>`;
+  d.innerHTML=`<div class="ann"><div class="ann-kicker">Annonce officielle</div><h4>${esc(a.title)}</h4><div class="ann-body">${annBody(a.body)}</div><button class="btn cta" data-annok="${a.id}">Compris</button></div>`;
   d.showModal();
 }
 function maybeOath(){ /* plus de fenêtre automatique : le serment se fait depuis le petit bandeau */ }
