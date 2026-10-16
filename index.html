@@ -461,6 +461,10 @@ dialog.tb-dlg{max-width:min(920px,96vw);height:min(860px,92vh)}
 .tb-arrow{align-self:center;font-size:22px;font-weight:900;color:var(--soft)}
 .tb-sel{display:flex;flex-wrap:wrap;gap:6px}
 .tb-empty{font-size:13px;color:var(--soft)}
+.tb-coins{display:flex;align-items:center;gap:6px;margin-top:8px;font-size:13px;font-weight:700;color:var(--soft)}
+.tb-coins input{width:92px;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--panel);font-size:14px;font-weight:800;color:inherit}
+.tcoins{margin-top:6px;font-size:13px;font-weight:700}.tcoins b{font-size:15px}
+.tcoins.big{width:84px;height:124px;border:2px solid #E3B341;background:rgba(227,179,65,.12);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0}.tcoins.big b{font-size:30px;font-weight:900}.tcoins.big small{font-size:12px;color:var(--soft)}
 .tb-chip{display:flex;align-items:center;gap:6px;padding:3px 8px 3px 3px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:12.5px;font-weight:700;max-width:100%}
 .tb-chip .tb-cn{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:120px}
 .tb-chip .tb-x{color:var(--soft);font-weight:900}
@@ -826,7 +830,7 @@ function duelRow(d){
   const o=plink(opp(d)), st=d.stake?`<span class="dl-stake"><span class="drop"></span>${d.stake}</span>`:`<span class="dl-stake free">amical</span>`;
   let txt="",acts="";
   if(d.status==="playing_c"&&d.mine){txt=`Tu as commencé ce défi contre ${o} (${d.my_idx}/${d.total})`;acts=`<button class="btn small" data-duel="${d.id}">Continuer</button>`}
-  else if(d.status==="waiting"&&d.mine){txt=`Tu as fait <b>${d.c_correct}/${d.total}</b>. En attente de ${o} · expire dans ${hLeft(d.expires_at)}`;acts=`<button class="btn ghost small" data-dcancel="${d.id}">Annuler</button>`}
+  else if(d.status==="waiting"&&d.mine){txt=`Tu as fait <b>${d.c_correct}/${d.total}</b>. En attente de ${o} · expire dans ${hLeft(d.expires_at)}`;acts=""}
   else if(d.status==="waiting"){txt=`${o} te défie ! Son score est caché jusqu'à la fin · expire dans ${hLeft(d.expires_at)}`;acts=`<button class="btn small" data-daccept="${d.id}" ${me.coins<d.stake?"disabled":""}>Accepter</button><button class="btn ghost small" data-ddecline="${d.id}">Refuser</button>`}
   else if(d.status==="playing_o"&&!d.mine){txt=`Duel en cours contre ${o} (${d.my_idx}/${d.total})`;acts=`<button class="btn small" data-duel="${d.id}">Continuer</button>`}
   else if(d.status==="playing_o"){txt=`Tu as fait <b>${d.c_correct}/${d.total}</b>. ${o} est en train de jouer…`}
@@ -1207,7 +1211,7 @@ function viewFeed(){
     if(f.kind==="duel_tie")return me1||me2?`Égalité parfaite à l'Arène entre ${a} et ${b} : mises remboursées`:`${a} et ${b} ont fait match nul à l'Arène`;
     if(f.kind==="team"){const bn=esc(brands[f.note]?.name||f.note||"");return me1?`Tu as complété l'équipe ${bn} ! Prime d'équipe : +${f.price} bidons`:`${a} a complété l'équipe ${bn} (+${f.price} bidons)`}
     if(f.kind==="refuse")return me1?`Tu as refusé de prêter serment. Les Orques t'acclament.`:`${a} a refusé de prêter serment. Honte sur sa lignée.`;
-    if(f.kind==="trade"){const x=+f.note||0, n2=x?`${n} et ${x} autre${x>1?"s":""} carte${x>1?"s":""}`:n;return me1?`Tu as échangé ${n2} avec ${b}`:me2?`${a} a échangé ${n2} avec toi`:`${a} et ${b} ont échangé ${n2}`;}return""};
+    if(f.kind==="trade"){const x=+f.note||0, n2=x?`${n} et ${x} autre${x>1?"s":""} carte${x>1?"s":""}`:n;const pc=f.price?` (avec ${f.price} bidons)`:"";return me1?`Tu as échangé ${n2} avec ${b}${pc}`:me2?`${a} a échangé ${n2} avec toi${pc}`:`${a} et ${b} ont échangé ${n2}${pc}`;}return""};
   return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}${cfg.is_admin?`<span class="when">${ago(f.created_at)}</span>`:""}</li>`).join("")}</ul></section>`;
 }
 function viewBooster(){
@@ -1335,18 +1339,20 @@ function viewMarket(){
 setInterval(()=>{let ended=false;document.querySelectorAll(".au-time[data-end]").forEach(e=>{const l=+e.dataset.end-Date.now();e.textContent=aucLeft(l);e.classList.toggle("hot",l<60000);if(l<=0)ended=true;});if(ended&&!window.__aucReload){window.__aucReload=1;setTimeout(()=>{window.__aucReload=0},5000);scheduleReload();}},1000);
 function viewTrades(){
   const inc=trades.filter(t=>t.to_player===uid), out=trades.filter(t=>t.from_player===uid);
-  const side=(label,ids,note)=>{const cs=ids.map(id=>cardById[id]).filter(Boolean);
+  const side=(label,ids,note,coins)=>{const cs=ids.map(id=>cardById[id]).filter(Boolean);
+    const cn=coins?`<div class="tcoins">${cs.length?"+ ":""}<b>${coins}</b> bidons</div>`:"";
+    if(!cs.length&&coins) return `<div class="tside"><div class="tlabel">${label}</div><div class="tcoins big"><b>${coins}</b><small>bidons</small></div>${note||""}</div>`;
     const body=!cs.length?`<div class="tgift">Rien<small>c'est un cadeau</small></div>`:cs.length===1?`${zoomBtn(cs[0],0.42)}<div class="tname">${esc(cs[0].name)}</div>${rpill(cs[0].rarity)}`:`<div class="tmulti">${cs.map(c=>zoomBtn(c,0.26)).join("")}</div><div class="tname">${cs.length} cartes</div>`;
-    return `<div class="tside ${cs.length>1?"multi":""}"><div class="tlabel">${label}</div>${body}${note||""}</div>`};
+    return `<div class="tside ${cs.length>1?"multi":""}"><div class="tlabel">${label}</div>${body}${cn}${note||""}</div>`};
   const row=(t,incoming)=>{const G=t.gives||[t.give], W=t.wants||(t.want?[t.want]:[]);
-    const cnt={}; W.forEach(id=>cnt[id]=(cnt[id]||0)+1); const lack=Object.keys(cnt).some(id=>(inv[id]||0)<cnt[id]); const w=lack;
-    const left=incoming?side("Tu reçois",G):side("Tu donnes",G);
-    const right=incoming?side("Tu donnes",W,lack?`<div class="twarn">Tu n'as plus toutes ces cartes</div>`:""):side("Tu demandes",W);
+    const cnt={}; W.forEach(id=>cnt[id]=(cnt[id]||0)+1); const lack=Object.keys(cnt).some(id=>(inv[id]||0)<cnt[id]); const poor=incoming&&(t.want_coins||0)>((me&&me.coins)||0); const w=lack||poor;
+    const left=incoming?side("Tu reçois",G.filter(Boolean),"",t.give_coins):side("Tu donnes",G.filter(Boolean),"",t.give_coins);
+    const right=incoming?side("Tu donnes",W,lack?`<div class="twarn">Tu n'as plus toutes ces cartes</div>`:poor?`<div class="twarn">Pas assez de bidons</div>`:"",t.want_coins):side("Tu demandes",W,"",t.want_coins);
     return `<div class="trade">${left}<div class="tarrow">⇄</div>${right}
       <div class="tinfo"><div class="ttl">${incoming?plink(t.from_player)+" te propose un échange":"Proposition envoyée à "+plink(t.to_player)}</div>
       <div class="meta">${ago(t.created_at)} · clique sur une carte pour l'agrandir</div>
       <div class="row">${incoming?`<button class="btn small" data-accept="${t.id}" ${w?"disabled":""}>Accepter</button><button class="btn ghost small" data-decline="${t.id}">Refuser</button>`:`<button class="btn ghost small" data-tcancel="${t.id}">Annuler</button>`}</div></div></div>`};
-  return `<h2>Échanges</h2><p class="sub">Propose une ou plusieurs de tes cartes contre une ou plusieurs cartes d'un collègue, ou offre tes doublons. Tes cartes sont mises de côté jusqu'à sa réponse.</p>
+  return `<h2>Échanges</h2><p class="sub">Propose des cartes et/ou des bidons contre les cartes d'un collègue (ou vends-lui tes cartes contre des bidons), ou offre tes doublons. Ce que tu proposes est mis de côté jusqu'à sa réponse.</p>
     <div class="row"><button class="btn" data-act="newtrade">Proposer un échange</button></div>
     <h3>Reçues</h3>${inc.length?`<div class="list">${inc.map(t=>row(t,true)).join("")}</div>`:`<div class="empty">Aucune proposition en attente.</div>`}
     <h3>Envoyées</h3>${out.length?`<div class="list">${out.map(t=>row(t,false)).join("")}</div>`:`<div class="empty">Tu n'as rien proposé pour l'instant.</div>`}`;
@@ -1459,18 +1465,20 @@ async function openTradeDlg(give,toId){
   const others=players.filter(p=>p.id!==uid).sort((a,b)=>a.pseudo.localeCompare(b.pseudo,"fr"));
   if(!others.length) return toast("Personne d'autre n'a encore rejoint le jeu.");
   if(!cards.some(c=>has(c.id))) return toast("Ouvre d'abord un booster pour avoir des cartes à échanger.");
-  tb={to:toId&&others.some(p=>p.id===toId)?toId:others[0].id, gives:{}, wants:{}, side:"mine", q:"", theirs:null};
+  tb={to:toId&&others.some(p=>p.id===toId)?toId:others[0].id, gives:{}, wants:{}, gc:0, wc:0, side:"mine", q:"", theirs:null};
   if(give&&has(give)) tb.gives[give]=1;
   const d=$("#dlg"); d.classList.add("tb-dlg");
   d.innerHTML=`<div class="tb"><div class="tb-head"><h4>Proposer un échange</h4><button class="close" data-act="close" aria-label="Fermer">×</button></div>
     <label class="fl tb-to">Avec<select id="tbTo">${others.map(p=>`<option value="${esc(p.id)}" ${p.id===tb.to?"selected":""}>${esc(p.pseudo||"Un collègue")}</option>`).join("")}</select></label>
-    <div class="tb-trays"><div class="tb-tray"><div class="tb-lbl">Tu donnes</div><div class="tb-sel" id="tbGive"></div></div><div class="tb-arrow">⇄</div><div class="tb-tray"><div class="tb-lbl">Tu demandes</div><div class="tb-sel" id="tbWant"></div></div></div>
+    <div class="tb-trays"><div class="tb-tray"><div class="tb-lbl">Tu donnes</div><div class="tb-sel" id="tbGive"></div><label class="tb-coins">+ <input id="tbGc" type="number" min="0" step="1" inputmode="numeric" placeholder="0"> bidons</label></div><div class="tb-arrow">⇄</div><div class="tb-tray"><div class="tb-lbl">Tu demandes</div><div class="tb-sel" id="tbWant"></div><label class="tb-coins">+ <input id="tbWc" type="number" min="0" step="1" inputmode="numeric" placeholder="0"> bidons</label></div></div>
     <div class="tb-tabs"><button class="chip" data-tbside="mine" id="tbSideMine">Mes cartes</button><button class="chip" data-tbside="theirs" id="tbSideTheirs">Ses cartes</button><input id="tbQ" type="search" placeholder="Chercher…" autocomplete="off"></div>
     <div class="tb-grid" id="tbGrid"></div>
     <div class="tb-foot"><p id="tbNote" class="tb-note"></p><button class="btn" id="tbSend" data-act="tbsend">Envoyer la proposition</button></div></div>`;
   d.showModal();
   $("#tbTo").addEventListener("change",e=>{tb.to=e.target.value; tb.wants={}; tb.theirs=null; tbLoad();});
   $("#tbQ").addEventListener("input",e=>{tb.q=e.target.value; tbGrid();});
+  const coinIn=(sel,k)=>$(sel).addEventListener("input",e=>{tb[k]=Math.max(0,Math.floor(+e.target.value||0)); tbCheck();});
+  coinIn("#tbGc","gc"); coinIn("#tbWc","wc");
   tbLoad();
 }
 async function tbLoad(){
@@ -1500,10 +1508,15 @@ function tbGrid(){
 }
 function tbCheck(){
   const ng=tbSum(tb.gives), nw=tbSum(tb.wants); let msg="", ok=true;
-  if(!ng){msg="Choisis au moins une carte à donner.";ok=false}
+  const gc=tb.gc||0, wc=tb.wc||0, cs=n=>`${n} carte${n>1?"s":""}`;
+  const part=(n,c)=>[n?cs(n):"",c?`${c} bidons`:""].filter(Boolean).join(" + ");
+  if(gc&&wc){msg="Mets des bidons d'un seul côté de l'échange.";ok=false}
+  else if(!ng&&!nw){msg="Il faut au moins une carte dans l'échange.";ok=false}
+  else if(!ng&&!gc){msg="Choisis au moins une carte ou des bidons à donner.";ok=false}
+  else if(gc>((me&&me.coins)||0)){msg=`Tu n'as que ${(me&&me.coins)||0} bidons.`;ok=false}
   else if(ng>TB_MAX||nw>TB_MAX){msg=`Maximum ${TB_MAX} cartes de chaque côté.`;ok=false}
-  else if(!nw&&Object.keys(tb.gives).some(id=>(inv[id]||0)-tb.gives[id]<1)){msg="Sans contrepartie, tu ne peux offrir que tes doublons. Demande au moins une carte, ou garde un exemplaire.";ok=false}
-  else msg=nw?`Tu donnes ${ng} carte${ng>1?"s":""} contre ${nw} carte${nw>1?"s":""}. Tes cartes sont mises de côté jusqu'à sa réponse.`:`Cadeau de ${ng} carte${ng>1?"s":""}.`;
+  else if(!nw&&!wc&&Object.keys(tb.gives).some(id=>(inv[id]||0)-tb.gives[id]<1)){msg="Sans contrepartie, tu ne peux offrir que tes doublons. Demande une carte ou des bidons, ou garde un exemplaire.";ok=false}
+  else msg=(nw||wc)?`Tu donnes ${part(ng,gc)} contre ${part(nw,wc)}. Ce que tu proposes est mis de côté jusqu'à sa réponse.`:`Cadeau de ${cs(ng)}.`;
   $("#tbNote").textContent=msg; $("#tbNote").classList.toggle("bad",!ok); $("#tbSend").disabled=!ok;
 }
 function tbRender(){
@@ -1554,7 +1567,6 @@ document.addEventListener("click",async e=>{
   if(ds.duel){duelPlay(+ds.duel);return}
   if(ds.daccept){t.disabled=true; try{ await rpc("duel_accept",{did:+ds.daccept}); await loadGame(); duelPlay(+ds.daccept); }catch(e){ t.disabled=false; toast(errMsg(e)); } return}
   if(ds.ddecline){await act(()=>rpc("duel_decline",{did:+ds.ddecline}),"Défi refusé, la mise est rendue à ton collègue.");return}
-  if(ds.dcancel){await act(()=>rpc("duel_decline",{did:+ds.dcancel}),"Défi annulé, ta mise t'est rendue.");return}
   if(ds.teamb){brandFilter=ds.teamb;collFilter="team";render();return}
   if(ds.player){showPlayer(ds.player);return}
   if(ds.pfilter){pFilter=ds.pfilter;render();return}
@@ -1599,7 +1611,7 @@ document.addEventListener("click",async e=>{
     case "newtrade": openTradeDlg(null); break;
     case "tradewith": openTradeDlg(null,ds.to); break;
     case "tradefrom": closeDlg(); openTradeDlg(ds.give); break;
-    case "tbsend": {if(!tb) break; const ex=o=>Object.entries(o).flatMap(([id,n])=>Array(n).fill(id)); const to=tb.to,g=ex(tb.gives),w=ex(tb.wants); closeDlg(); await act(()=>rpc("propose_trade_multi",{to_id:to,give_cards:g,want_cards:w}),"Proposition envoyée."); break}
+    case "tbsend": {if(!tb) break; const ex=o=>Object.entries(o).flatMap(([id,n])=>Array(n).fill(id)); const to=tb.to,g=ex(tb.gives),w=ex(tb.wants),gc=tb.gc||0,wc=tb.wc||0; closeDlg(); await act(()=>rpc("propose_trade_full",{to_id:to,give_cards:g,want_cards:w,give_coins:gc,want_coins:wc}),"Proposition envoyée."); break}
     case "addcard": {const f=readAdminForm();f.c.push({id:"c"+Date.now().toString(36),name:"Nouveau produit",brand:f.b[0]?.id||"gs27",rarity:"C",descr:"",atk:30,def:30,shape:"flacon",active:true,img:"",job:"",sort:f.c.length});applyLocal(f);adminDirty=true;render(true);break}
     case "savecat": t.disabled=true; await saveCatalog(); t.disabled=false; break;
   }
