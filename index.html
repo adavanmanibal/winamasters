@@ -687,6 +687,53 @@ nav.tabs button{position:relative}
   .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- Chat Noir & Trèfle ---------- */
+.charms{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:4px 0 22px}
+@media (max-width:760px){.charms{grid-template-columns:1fr}}
+.ch-tile{display:flex;gap:14px;align-items:center;border-radius:16px;padding:12px 14px;color:#fff;position:relative;overflow:hidden}
+.ch-tile p{margin:0 0 6px;font-size:13.5px;line-height:1.4}.ch-tile .ch-soft{opacity:.78;font-size:12.5px}
+.ch-tile .plink{color:inherit}
+.ch-name{font-weight:900;font-stretch:110%;font-size:17px;margin-bottom:4px;letter-spacing:.01em}
+.ch-card{flex:0 0 auto}
+.ch-chat-noir{background:radial-gradient(circle at 85% 0%,#4a2390 0%,#1b0b38 45%,#07030f 100%);box-shadow:inset 0 0 0 1px rgba(170,130,255,.35)}
+.ch-chat-noir .ch-name{color:#e2d4ff;text-shadow:0 0 12px rgba(160,110,255,.7)}
+.ch-chat-noir.mine{box-shadow:inset 0 0 0 2px #c8f03a,0 0 24px rgba(200,240,58,.35);animation:catpulse 2.6s ease-in-out infinite}
+@keyframes catpulse{50%{box-shadow:inset 0 0 0 2px #c8f03a,0 0 40px rgba(200,240,58,.55)}}
+.ch-trefle{background:radial-gradient(circle at 15% 0%,#3fd06e 0%,#0e6b37 50%,#03200f 100%);box-shadow:inset 0 0 0 1px rgba(255,224,122,.45)}
+.ch-trefle .ch-name{color:#fff3c0;text-shadow:0 0 12px rgba(255,224,122,.7)}
+.ch-trefle.mine{box-shadow:inset 0 0 0 2px #f2c94c,0 0 26px rgba(242,201,76,.45)}
+.ch-pay{background:#c8f03a;color:#160a2b}.ch-steal{background:linear-gradient(90deg,#f7e08a,#d9a21e);color:#2b1a00}
+.ch-ico{display:inline-flex;width:18px;height:18px;vertical-align:-3px;margin-left:6px}.ch-ico svg{width:100%;height:100%}
+.ch-ico.cat{color:#1b0b38}.ch-ico.clover{color:#18a24a}
+.malus{margin-left:6px;font-size:11.5px;font-weight:800;color:#b3261e;background:rgba(179,38,30,.1);padding:1px 6px;border-radius:999px}
+/* cartes */
+.card.r-M{padding:7px}
+.card.k-chat-noir{background:linear-gradient(145deg,#2a1450,#0b0518 40%,#3d1d78 70%,#0b0518);box-shadow:0 0 0 1px rgba(170,130,255,.7),0 0 26px rgba(120,70,220,.6),0 0 46px rgba(200,240,58,.18);animation:catframe 4s ease-in-out infinite}
+@keyframes catframe{50%{box-shadow:0 0 0 1px rgba(200,240,58,.8),0 0 32px rgba(140,90,240,.8),0 0 60px rgba(200,240,58,.3)}}
+.card.k-chat-noir .inner{background:radial-gradient(circle at 70% 0%,#3b1a6b,#14082a 60%,#07030f);color:#ece2ff;box-shadow:inset 0 0 0 1px rgba(180,150,255,.4)}
+.card.k-chat-noir .inner::before{background:radial-gradient(1.5px 1.5px at 12% 18%,#fff,transparent),radial-gradient(1px 1px at 30% 8%,#fff,transparent),radial-gradient(1.5px 1.5px at 85% 30%,#fff,transparent),radial-gradient(1px 1px at 60% 92%,#d4ff4a,transparent),radial-gradient(1.5px 1.5px at 8% 70%,#d4ff4a,transparent);animation:twinkle 2.8s ease-in-out infinite alternate}
+.card.k-chat-noir .brand{background:#c8f03a;color:#160a2b}
+.card.k-chat-noir .rlab{background:#0b0518;color:#c8f03a;box-shadow:0 0 0 1px #c8f03a}
+.card.k-chat-noir .art{background:#07030f;box-shadow:inset 0 0 0 1px rgba(200,240,58,.5)}
+.card.k-chat-noir .art img{object-fit:cover}
+.card.k-chat-noir .nm{font-family:Georgia,serif;letter-spacing:.02em;text-shadow:0 0 10px rgba(160,110,255,.8)}
+.card.k-chat-noir .st span{background:rgba(200,240,58,.12);color:#d4ff4a}
+.card.k-trefle{background:linear-gradient(115deg,#0d7a33,#f7e08a 18%,#1fa04b 34%,#fff6cf 50%,#0d7a33 66%,#f2c94c 82%,#0d7a33);background-size:250% 250%;animation:gold 4.5s linear infinite;box-shadow:0 0 0 1px rgba(255,236,150,.9),0 0 26px rgba(47,191,85,.6),0 0 46px rgba(242,201,76,.35)}
+.card.k-trefle .inner{background:radial-gradient(circle at 50% 0%,#3fd06e,#0e6b37 55%,#063d1d);color:#fffbe6;box-shadow:inset 0 0 0 1px rgba(255,236,150,.7)}
+.card.k-trefle .inner::before{background:radial-gradient(2px 2px at 15% 20%,#fff6c9,transparent),radial-gradient(1.5px 1.5px at 80% 12%,#fff,transparent),radial-gradient(2px 2px at 88% 66%,#ffe07a,transparent),radial-gradient(1.5px 1.5px at 10% 84%,#fff,transparent),radial-gradient(2px 2px at 52% 95%,#ffe07a,transparent);animation:twinkle 2s ease-in-out infinite alternate}
+.card.k-trefle .brand{background:linear-gradient(90deg,#fff3c0,#e3b341);color:#063d1d}
+.card.k-trefle .rlab{background:linear-gradient(90deg,#fff3c0,#e3b341);color:#063d1d}
+.card.k-trefle .art{background:#063d1d;box-shadow:inset 0 0 0 1px rgba(255,236,150,.7)}
+.card.k-trefle .art img{object-fit:cover}
+.card.k-trefle .nm{color:#fff3c0;text-shadow:0 1px 0 #063d1d,0 0 10px rgba(255,224,122,.6)}
+.card.k-trefle .st span{background:rgba(255,236,150,.16);color:#fff3c0}
+.card.k-chat-noir::after,.card.k-trefle::after{content:"";position:absolute;top:-10%;bottom:-10%;left:0;width:55%;z-index:4;pointer-events:none;background:linear-gradient(90deg,transparent,rgba(255,255,255,.22),transparent);animation:shine 3.2s ease-in-out infinite}
+.ch-dlg{text-align:center;max-width:420px}.ch-dlg h4{margin:4px 0 12px;font-size:22px;font-weight:900;font-stretch:110%}
+.ch-kicker{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;opacity:.7}
+.ch-dlg.cat .ch-kicker{color:#6b3fbf}.ch-dlg.clover .ch-kicker{color:#0e8a3e}
+.ch-big{display:flex;justify-content:center;margin:6px 0 14px}
+.ch-dlg p{font-size:14px;line-height:1.45;margin:0 0 16px}
 </style>
 </head>
 <body>
@@ -715,7 +762,7 @@ const PACK_SIZE = 5;
 const RORDER = ["C","U","R","E","Q","L","S"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
-let RAR={}, brands={}, cards=[], cardById={};
+let RAR={}, brands={}, cards=[], cardById={}, charmSt=null;
 let me=null, inv={}, players=[], listings=[], auctions=[], aucOn=false, trades=[], feed=[], board=[], teamDone=[], offers=[];
 let tab="booster", brandFilter="all", collFilter="all", lastPull=null, flipped=new Set(), adminDirty=false, busy=false;
 let loginMode="login";
@@ -760,6 +807,51 @@ function cardHTML(c,{count=0,locked=false,tag="div",attrs=""}={}){
     </div></${tag}>`;
 }
 
+
+/* ---------- Chat Noir & Trèfle (JS) ---------- */
+const CAT_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 3l3 4.2c1.5-.5 3.2-.7 5-.7s3.5.2 5 .7L20 3l.4 7.4C21.4 12 22 13.8 22 16c0 3.9-4.5 6-10 6S2 19.9 2 16c0-2.2.6-4 1.6-5.6z"/><circle cx="8.6" cy="13.6" r="1.5" fill="#d4ff4a"/><circle cx="15.4" cy="13.6" r="1.5" fill="#d4ff4a"/></svg>';
+const CLOVER_SVG='<svg viewBox="0 0 24 24" aria-hidden="true"><g fill="currentColor"><path d="M12 11C9 9 7 7.5 8 5.5c.8-1.6 3-1.3 4 .5 1-1.8 3.2-2.1 4-.5 1 2-1 3.5-4 5.5z"/><path d="M12 11C9 9 7 7.5 8 5.5c.8-1.6 3-1.3 4 .5 1-1.8 3.2-2.1 4-.5 1 2-1 3.5-4 5.5z" transform="rotate(90 12 11)"/><path d="M12 11C9 9 7 7.5 8 5.5c.8-1.6 3-1.3 4 .5 1-1.8 3.2-2.1 4-.5 1 2-1 3.5-4 5.5z" transform="rotate(180 12 11)"/><path d="M12 11C9 9 7 7.5 8 5.5c.8-1.6 3-1.3 4 .5 1-1.8 3.2-2.1 4-.5 1 2-1 3.5-4 5.5z" transform="rotate(270 12 11)"/></g><path d="M12 11c.3 4 1.5 7 3.5 10" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>';
+function charm(id){return charmSt&&(charmSt.charms||[]).find(c=>c.id===id)}
+function charmIcons(pid){if(!charmSt) return ""; let h="";
+  if(charm("chat-noir")?.holder===pid) h+=`<span class="ch-ico cat" title="A le Chat Noir">${CAT_SVG}</span>`;
+  if(charm("trefle")?.holder===pid) h+=`<span class="ch-ico clover" title="A le Trèfle à 4 feuilles">${CLOVER_SVG}</span>`;
+  return h}
+function charmPanel(){
+  if(!charmSt||!cardById["chat-noir"]||!cardById["trefle"]) return "";
+  const C=charmSt.cfg||{}, cat=charm("chat-noir")||{}, clo=charm("trefle")||{};
+  const tile=(id,ch,body,acts)=>{const c=cardById[id], found=!!ch.holder;
+    return `<div class="ch-tile ch-${id} ${ch.holder===uid?"mine":""}">
+      <div class="ch-card">${found?zoomBtn(c,0.5):scaledCard(cardHTML(c,{locked:true}),0.5)}</div>
+      <div class="ch-txt"><div class="ch-name">${esc(c.name)}</div>${body}${acts?`<div class="row">${acts}</div>`:""}</div></div>`};
+  let cb, ca="";
+  if(!cat.holder) cb=`<p>Caché dans un booster, quelque part. Celui qui le trouve perd <b>${C.cat_malus} points</b> au classement toutes les ${C.cat_every} h.</p>`;
+  else if(cat.holder===uid){const left=Math.max(0,(C.cat_wins||3)-(cat.wins||0));
+    cb=`<p><b>Il ronronne chez toi.</b> Tu perds ${C.cat_malus} points toutes les ${C.cat_every} h (prochaine fois dans ${hLeft(cat.next_tick)}).</p><p>Il partira tout seul dans ${hLeft(cat.leave_at)}, ou dès que tu auras gagné encore <b>${left} défi${left>1?"s":""}</b> à l'Arène.</p>`;
+    ca=`<button class="btn small ch-pay" data-act="catpass" ${me.coins<C.cat_pay?"disabled":""}>Le faire passer · ${C.cat_pay} bidons</button>`}
+  else cb=`<p>Il traîne chez ${plink(cat.holder)}, qui perd ${C.cat_malus} points toutes les ${C.cat_every} h.</p><p class="ch-soft">Il changera de maison dans ${hLeft(cat.leave_at)}… et ça pourrait être la tienne.${charmSt.immune_until?` Tu es immunisé encore ${hLeft(charmSt.immune_until)}.`:""}</p>`;
+  let tb2, ta="";
+  if(!clo.holder) tb2=`<p>Caché dans un booster. Celui qui le trouve a <b>${C.mult} fois plus de chances</b> de tirer une Épique, une carte Équipe, une Légendaire ou une Shiny.</p>`;
+  else if(clo.holder===uid) tb2=`<p><b>Il porte bonheur à tes boosters :</b> chances ×${C.mult} pour les Épiques, cartes Équipe, Légendaires et Shiny.</p><p class="ch-soft">Les autres peuvent tenter de te le voler (et chaque tentative ratée te rapporte ${C.try_cost} bidons). Il s'envolera dans ${hLeft(clo.leave_at)}.</p>`;
+  else {const n=charmSt.tries_left||0;
+    tb2=`<p>Il porte bonheur à ${plink(clo.holder)} (chances ×${C.mult}). Il s'envolera dans ${hLeft(clo.leave_at)}.</p><p class="ch-soft">Tente de le voler : ${C.try_cost} bidons, 1 chance sur ${Math.round(100/(C.try_pct||10))}. Raté, tes bidons partent chez lui. ${n} tentative${n>1?"s":""} restante${n>1?"s":""} aujourd'hui.</p>`;
+    ta=`<button class="btn small ch-steal" data-act="steal" ${!n||me.coins<C.try_cost?"disabled":""}>Tenter le vol · ${C.try_cost} bidons</button>`}
+  return `<section class="charms">${tile("chat-noir",cat,cb,ca)}${tile("trefle",clo,tb2,ta)}</section>`;
+}
+function maybeCharmDlg(){
+  if(!charmSt||$("#dlg").open||document.getElementById("ov")) return;
+  for(const ch of charmSt.charms||[]){ if(ch.holder!==uid) continue;
+    const k="wm_charm_"+ch.id; let seen=null; try{seen=localStorage.getItem(k)}catch(e){}
+    if(seen===ch.since) continue; try{localStorage.setItem(k,ch.since)}catch(e){}
+    const c=cardById[ch.id], C=charmSt.cfg||{}, cat=ch.id==="chat-noir";
+    const d=$("#dlg");
+    d.innerHTML=`<div class="ch-dlg ${cat?"cat":"clover"}"><div class="ch-kicker">${cat?"Pas de chance…":"Quelle chance !"}</div><h4>${cat?"Le Chat Noir a croisé ta route":"Tu as le Trèfle à 4 feuilles"}</h4>
+      <div class="ch-big">${scaledCard(cardHTML(c),innerWidth<640?0.95:1.15)}</div>
+      <p>${cat?`Tant qu'il est chez toi, tu perds <b>${C.cat_malus} points</b> au classement toutes les ${C.cat_every} h. Pour t'en débarrasser : paie <b>${C.cat_pay} bidons</b>, ou gagne <b>${C.cat_wins} défis</b> à l'Arène. Sinon, il partira tout seul au bout de ${C.max_hours} h.`
+        :`Tes chances de tirer une Épique, une carte Équipe, une Légendaire ou une Shiny sont multipliées par <b>${C.mult}</b>. Attention : chacun peut tenter de te le voler. Il s'envolera au bout de ${C.max_hours} h.`}</p>
+      <button class="btn cta" data-act="close">${cat?"Miaou…":"Je file ouvrir mes boosters"}</button></div>`;
+    d.showModal(); return;
+  }
+}
 /* ---------- boosters gratuits ---------- */
 function tokens(){return bstate.available||0}
 function reserve(){return bstate.bought||0}
@@ -790,7 +882,7 @@ async function loadCatalog(){
   cards=c.data; cardById=Object.fromEntries(cards.map(x=>[x.id,x]));
 }
 async function loadGame(){
-  const [p,i,pl,l,t,f,lb,bs,tb,qs]=await Promise.all([
+  const [p,i,pl,l,t,f,lb,bs,tb,qs,cs]=await Promise.all([
     sb.from("players").select("*").eq("id",uid).single(),
     sb.from("inventory").select("card,qty").eq("player",uid),
     sb.from("players").select("id,pseudo"),
@@ -800,7 +892,8 @@ async function loadGame(){
     sb.from("leaderboard").select("*").order("score",{ascending:false}).limit(200),
     sb.rpc("booster_state"),
     sb.from("team_bonus").select("brand").eq("player",uid),
-    sb.rpc("duel_list")]);
+    sb.rpc("duel_list"),
+    sb.rpc("charm_state")]);
   if(p.error) throw p.error;
   teamDone=(tb&&!tb.error&&tb.data||[]).map(x=>x.brand);
   arenaOn=!!(qs&&!qs.error); duels=arenaOn?(qs.data||[]):[];
@@ -808,6 +901,7 @@ async function loadGame(){
   me=p.data; inv=Object.fromEntries((i.data||[]).map(x=>[x.card,x.qty]));
   if(bs&&bs.data) bstate=bs.data;
   players=pl.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
+  charmSt=(cs&&!cs.error&&cs.data)||null;
 }
 let reloadTimer=null;
 function scheduleReload(){clearTimeout(reloadTimer);reloadTimer=setTimeout(async()=>{try{await loadGame();render()}catch(e){}},500)}
@@ -1180,6 +1274,7 @@ function render(force){
   $("#top").hidden=false;
   renderTabs(); renderWallet();
   if(!me) return;
+  if(!window.__chDlg) window.__chDlg=setTimeout(()=>{window.__chDlg=0; maybeCharmDlg();},700);
   if(tab==="admin"&&adminDirty&&!force&&document.querySelector("#cardsEd")) return;
   const m=$("#main");
   const ae=document.activeElement, keep=ae&&ae.id&&/^(bid-|mkq)/.test(ae.id)?{id:ae.id,v:ae.value,s:ae.selectionStart}:null;
@@ -1201,6 +1296,14 @@ function viewFeed(){
     if(f.kind==="sale")return me1?`Tu as acheté ${n} à ${b} pour ${f.price} bidons`:me2?`${a} t'a acheté ${n} pour ${f.price} bidons`:`${a} a acheté ${n} à ${b} pour ${f.price} bidons`;
     if(f.kind==="oath")return me1?`Tu as prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`:`${a} a prêté serment au Seigneur ${esc(lord())} (+${f.price} bidons)`;
     if(f.kind==="auction")return me1?`Tu as remporté ${n} aux enchères pour ${f.price} bidons (vendue par ${b})`:me2?`${a} a remporté ta carte ${n} aux enchères pour ${f.price} bidons`:`${a} a remporté ${n} aux enchères pour ${f.price} bidons`;
+    if(f.kind==="charm"){const cat=f.card==="chat-noir", nm=cat?"<b>le Chat Noir</b>":"<b>le Trèfle à 4 feuilles</b>", Nm=cat?"<b>Le Chat Noir</b>":"<b>Le Trèfle à 4 feuilles</b>", r=f.note;
+      if(r==="found")return me1?`Tu as trouvé ${nm} dans un booster !`:`${a} a trouvé ${nm} dans un booster`;
+      if(r==="steal")return me1?`Tu as volé ${nm} à ${b} !`:me2?`${a} t'a volé ${nm} !`:`${a} a volé ${nm} à ${b}`;
+      if(r==="pay")return me1?`${b} t'a refilé ${nm} (il a payé pour s'en débarrasser)`:me2?`Tu as payé pour refiler ${nm} : il file chez ${a}`:`${b} a payé pour se débarrasser du Chat Noir : il file chez ${a}`;
+      if(r==="wins")return me1?`${b} a gagné 3 défis et t'a refilé ${nm}`:me2?`Tes victoires ont chassé ${nm} : il file chez ${a}`:`${b} a chassé le Chat Noir à coups de victoires : il file chez ${a}`;
+      if(cat)return me1?`${Nm} a traversé la route… et s'installe chez toi`:me2?`${Nm} a quitté ta maison pour celle de ${a}`:`${Nm} a quitté ${b} pour s'installer chez ${a}`;
+      return me1?`${Nm} s'est envolé jusqu'à toi`:me2?`${Nm} s'est envolé de chez toi pour rejoindre ${a}`:`${Nm} s'est envolé de chez ${b} pour rejoindre ${a}`;}
+    if(f.kind==="clover_fail")return me1?`Tu as tenté de voler le Trèfle de ${b}… raté (−${f.price} bidons)`:me2?`${a} a tenté de te voler le Trèfle… raté ! Tu empoches ${f.price} bidons`:`${a} a tenté de voler le Trèfle de ${b}… raté`;
     if(f.kind==="news")return `<span class="news-line"><b>Annonce</b> · ${esc(f.note||"")}</span>`;
     if(f.kind==="fine"){const mo=f.note?` pour ${esc(f.note)}`:"", L=esc(lord()), n=f.price;
       const T=me1?[`Tu as écopé de ${n} bidons d'amende${mo}. Le Seigneur ${L} a tranché.`,`Le tribunal de Cormery te condamne à ${n} bidons d'amende${mo}. Pas de sursis.`,`Tu t'es fait pincer${mo} : ${n} bidons confisqués. La honte sur ta lignée.`,`Tu règles une amende de ${n} bidons${mo}. Les Orques ricanent.`]
@@ -1226,7 +1329,7 @@ function viewBooster(){
   const oath=oathOpen()?`<div class="oath-mini"><span class="om-seal">⚜</span><span class="om-t"><b>Serment<span class="om-l"> de Midi</span></b><small> · jure fidélité au Seigneur ${esc(lord())}</small></span><button class="om-yes" data-act="oath-yes">Je le jure <b>+${bstate.oath_amount||100}</b></button><button class="om-no" data-act="oath-no" title="Refuser le serment">Refuser</button></div>`:"";
   const inv2=duels.filter(d=>!d.mine&&d.status==="waiting");
   const qb=inv2.length?`<button class="quiz-banner" data-tab="arena"><span class="qz-ico">⚔</span><span><b>${inv2.length>1?`${inv2.length} défis t'attendent`:`${esc(who(inv2[0].challenger))} te défie`} à l'Arène</b><br><small>${inv2.length>1?"Accepte-les ou refuse-les avant qu'ils expirent":`Mise : ${inv2[0].stake} bidons · 5 questions sur les produits du groupe`}</small></span><span class="go">Voir</span></button>`:"";
-  return `${oath}${qb}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
+  return `${oath}${qb}${charmPanel()}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
   <div class="bstage">
     <div class="packs">${packs}</div>
     <aside class="stock">
@@ -1360,9 +1463,9 @@ function viewTrades(){
 function plink(id,label){ if(!id) return esc(label||"Un collègue"); return `<button class="plink" data-player="${esc(id)}">${esc(label||who(id))}</button>`; }
 function viewRanking(){
   const total=cards.filter(c=>c.active).length;
-  return `<h2>Classement</h2><p class="sub">Le score additionne les points de chaque carte différente selon sa rareté. Clique sur un joueur pour voir sa collection.</p>
+  return `<h2>Classement</h2><p class="sub">Le score additionne les points de chaque carte différente selon sa rareté, moins les points perdus à cause du Chat Noir. Clique sur un joueur pour voir sa collection.</p>
   <div class="tablewrap"><table class="lb"><thead><tr><th>#</th><th>Joueur</th><th>Score</th><th>Collection</th><th>Boosters</th></tr></thead><tbody>
-  ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}" ><td class="rk">${i+1}</td><td>${p.id===uid?`<button class="plink" data-tab="collection">${esc(p.pseudo)} (toi)</button>`:plink(p.id,p.pseudo)}</td><td><b>${p.score}</b></td><td>${p.uniq} / ${total}</td><td>${p.opened}</td></tr>`).join("")}
+  ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}" ><td class="rk">${i+1}</td><td>${p.id===uid?`<button class="plink" data-tab="collection">${esc(p.pseudo)} (toi)</button>`:plink(p.id,p.pseudo)}${charmIcons(p.id)}</td><td><b>${p.score}</b>${p.malus?`<span class="malus" title="Points perdus à cause du Chat Noir">−${p.malus}</span>`:""}</td><td>${p.uniq} / ${total}</td><td>${p.opened}</td></tr>`).join("")}
   </tbody></table></div>${viewFeed()}`;
 }
 
@@ -1578,7 +1681,7 @@ document.addEventListener("click",async e=>{
   if(ds.bid){const a=auctions.find(x=>x.id===+ds.bid), v=parseInt($("#bid-"+ds.bid)?.value); if(!a) return; t.disabled=true; await act(()=>rpc("place_bid",{auction_id:a.id,amount:v}),r=>r&&r.extended?`Mise de ${v} bidons ! L'enchère est prolongée d'une minute.`:`Mise de ${v} bidons : tu as la main !`);return}
   if(ds.aucancel){t.disabled=true;await act(()=>rpc("cancel_auction",{auction_id:+ds.aucancel}),"Enchère annulée, carte récupérée.");return}
   if(ds.discard){closeDlg();await act(()=>rpc("discard",{card_id:ds.discard}),v=>`+${v} bidon${v>1?"s":""}`);return}
-  if(ds.annok){closeDlg(); try{ await rpc("announcement_ack",{ann_id:+ds.annok}); }catch(e){} annShown=false; setTimeout(async()=>{ await maybeAnn(); if(!$("#dlg").open) maybeOath(); },300); return}
+  if(ds.annok){closeDlg(); try{ await rpc("announcement_ack",{ann_id:+ds.annok}); }catch(e){} annShown=false; setTimeout(async()=>{ await maybeAnn(); if(!$("#dlg").open) maybeCharmDlg(); },300); return}
   if(ds.offer){openOfferDlg(+ds.offer);return}
   if(ds.ofcancel){await act(()=>rpc("cancel_offer",{offer_id:+ds.ofcancel}),"Offre annulée, tes bidons te sont rendus.");return}
   if(ds.ofok){t.disabled=true;await act(()=>rpc("answer_offer",{offer_id:+ds.ofok,accept:true}),"Vendu !");return}
@@ -1591,6 +1694,8 @@ document.addEventListener("click",async e=>{
   if(ds.upl){uploadFor(ds.upl);return}
   switch(ds.act){
     case "free": openBooster(false); break;
+    case "catpass": {const C=(charmSt&&charmSt.cfg)||{}; if(!confirm(`Payer ${C.cat_pay} bidons pour que le Chat Noir parte chez un joueur tiré au sort ?`)) break; t.disabled=true; await act(()=>rpc("cat_pass",{}),"Ouf ! Le Chat Noir est parti chez quelqu'un d'autre."); break}
+    case "steal": {t.disabled=true; await act(()=>rpc("clover_steal",{}),r=>r&&r.ok?"Bien joué ! Le Trèfle à 4 feuilles est à toi.":`Raté ! Tes ${r?r.cost:""} bidons partent chez son propriétaire.`); break}
     case "paid": t.disabled=true; await buyBooster(); break;
     case "openbought": openBooster(true); break;
     case "opengold": openBooster("gold"); break;
