@@ -752,6 +752,51 @@ nav.tabs button{position:relative}
 .ann-body .ann-h:first-child{margin-top:0}
 .ann-body .ann-ul{margin:0 0 4px;padding-left:20px}.ann-body .ann-ul li{margin:3px 0;line-height:1.4}
 .ann-body{max-height:62vh;overflow:auto;text-align:left;outline:none;padding-right:4px}
+/* ---------- Jeu de la semaine ---------- */
+.gm-hero{position:relative;overflow:hidden;border-radius:18px;padding:22px 22px 20px;color:#fff;margin-bottom:14px;background:#141a30}
+.gm-kart{background:linear-gradient(180deg,rgba(10,14,40,.2),rgba(10,14,40,.85)),repeating-linear-gradient(90deg,#3f8f3a 0 40px,#46993f 40px 80px);box-shadow:inset 0 0 0 2px #ffcf2e}
+.gm-kart::before{content:"";position:absolute;left:0;right:0;top:0;height:14px;background:repeating-linear-gradient(90deg,#111 0 14px,#fff 14px 28px),#fff;background-size:28px 7px;background-repeat:repeat-x;opacity:.9}
+.gm-kart::after{content:"";position:absolute;left:0;right:0;top:7px;height:7px;background:repeating-linear-gradient(90deg,#fff 0 14px,#111 14px 28px)}
+.gm-kick{font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:#ffcf2e;margin-top:6px}
+.gm-title{font-family:"Courier New",monospace;font-weight:900;font-size:40px;letter-spacing:.06em;text-transform:uppercase;line-height:1;margin:6px 0 8px;text-shadow:3px 3px 0 #e53935,6px 6px 0 rgba(0,0,0,.35)}
+.gm-desc{margin:0 0 12px;opacity:.9}
+.gm-meta{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;margin-bottom:14px}
+.gm-play{font-family:"Courier New",monospace;font-weight:900;font-size:20px;letter-spacing:.14em;padding:12px 30px;background:#ffcf2e;color:#141a30;box-shadow:0 4px 0 #a07a00;animation:ctapulse 2s ease-in-out infinite}
+.gm-pods{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:6px}
+.gm-pod{border-radius:14px;padding:12px;background:var(--panel);border:1px solid var(--line);text-align:center}
+.gm-pod.p1{border:2px solid #e3b341;background:linear-gradient(180deg,rgba(227,179,65,.18),transparent)}
+.gm-pod.p2{border:2px solid #aab4c4}.gm-pod.p3{border:2px solid #c98a4b}
+.gm-rk{font-family:"Courier New",monospace;font-weight:900;font-size:22px}
+.gm-rw{font-weight:800;font-size:13px;margin:4px 0}.gm-who{font-size:12px;color:var(--soft)}
+.gm-t{font-family:"Courier New",monospace;font-weight:900}
+.gm-prize{font-size:12px;font-weight:800;color:#8a6212;background:rgba(227,179,65,.18);padding:2px 8px;border-radius:999px;white-space:nowrap}
+@media (max-width:640px){.gm-pods{grid-template-columns:1fr}.gm-title{font-size:32px}}
+.game-banner{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:14px;padding:12px 14px;margin-bottom:12px;color:#fff;cursor:pointer;background:linear-gradient(90deg,#141a30,#2b3656);box-shadow:inset 0 0 0 2px #ffcf2e}
+.game-banner .gb-ico{font-size:26px}.game-banner b{font-family:"Courier New",monospace;letter-spacing:.06em}
+.game-banner small{opacity:.8}.game-banner .gb-go{margin-left:auto;background:#ffcf2e;color:#141a30;font-weight:900;border-radius:10px;padding:8px 12px;font-family:"Courier New",monospace}
+/* plein écran du kart */
+body.k-open{overflow:hidden}
+#kart{position:fixed;inset:0;z-index:1000;background:#0a0e1e;touch-action:none;user-select:none;-webkit-user-select:none}
+#kc{width:100%;height:100%;display:block;image-rendering:pixelated;image-rendering:crisp-edges}
+.k-hud{position:absolute;left:0;right:0;top:0;display:flex;justify-content:space-between;align-items:flex-start;padding:10px 54px 0 12px;font-family:"Courier New",monospace;color:#fff;font-weight:900;text-shadow:2px 2px 0 #000;pointer-events:none}
+.k-lap{font-size:18px;color:#ffcf2e}.k-time{font-size:26px}.k-best{font-size:13px;text-align:right}.k-best b{color:#6dffac}
+.k-quit{position:absolute;top:8px;right:10px;width:36px;height:36px;border-radius:50%;border:2px solid #fff;background:rgba(0,0,0,.4);color:#fff;font-size:22px;line-height:1;cursor:pointer}
+.k-mid{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;pointer-events:none;font-family:"Courier New",monospace;color:#fff;text-shadow:3px 3px 0 #000}
+.k-mid button,.k-mid .k-res{pointer-events:auto}
+.k-big{font-size:46px;font-weight:900;letter-spacing:.06em}.k-big.go{color:#6dffac}
+.k-lights{display:flex;gap:12px;background:#141a30;padding:10px 14px;border-radius:14px;box-shadow:0 0 0 3px #000}
+.k-lights span{width:30px;height:30px;border-radius:50%;background:#3a1010;box-shadow:inset 0 0 0 3px #000}.k-lights span.on{background:#ff3b30;box-shadow:0 0 14px #ff3b30,inset 0 0 0 3px #000}
+.k-res{background:rgba(10,14,30,.88);border:3px solid #ffcf2e;border-radius:16px;padding:18px 22px;text-align:center;max-width:92vw;text-shadow:none}
+.k-final{font-size:40px;font-weight:900;color:#ffcf2e}.k-laps{font-size:13px;opacity:.8;margin:4px 0 8px}.k-msg{font-family:system-ui,sans-serif;font-size:14px;margin:6px 0 12px}
+.k-btns{display:flex;gap:10px;justify-content:center}.k-btns .btn:first-child{background:#ffcf2e;color:#141a30}
+.k-pad{position:absolute;bottom:18px;left:14px;display:flex;gap:14px}
+.k-pad.k-right{left:auto;right:14px}
+.k-pad button{width:76px;height:76px;border-radius:50%;border:3px solid rgba(255,255,255,.85);background:rgba(10,14,30,.45);color:#fff;font-size:28px;font-weight:900;font-family:"Courier New",monospace;touch-action:none}
+.k-right button{font-size:15px;width:90px;height:90px}
+.k-pad button.on{background:rgba(255,207,46,.6);color:#141a30}
+.k-help{position:absolute;bottom:10px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:12px;pointer-events:none}
+@media (hover:hover) and (pointer:fine){.k-pad{display:none}}
+@media (hover:none),(pointer:coarse){.k-help{display:none}}
 </style>
 </head>
 <body>
@@ -870,6 +915,213 @@ function maybeCharmDlg(){
     d.showModal(); return;
   }
 }
+/* ---------- Jeu de la semaine ---------- */
+let game=null;
+function fmtMs(ms){if(ms==null)return "–";ms=Math.max(0,Math.round(ms));const m=Math.floor(ms/60000),s=Math.floor(ms%60000/1000),c=Math.floor(ms%1000/10);return `${m}:${String(s).padStart(2,"0")}.${String(c).padStart(2,"0")}`}
+function rankLbl(i){return i===0?"1er":`${i+1}e`}
+function rewardTxt(r){if(!r)return "";const a=[];if(r.gold)a.push(`${r.gold} booster${r.gold>1?"s":""} OR`);if(r.bought)a.push(`${r.bought} booster${r.bought>1?"s":""}`);return a.join(" + ")}
+function dLeft(t){const ms=Date.parse(t)-Date.now(); if(ms<=0) return "terminé"; const d=Math.floor(ms/86400000), h=Math.floor(ms%86400000/3600000), m=Math.floor(ms%3600000/60000);
+  return d?`${d} j ${h} h`:h?`${h} h ${String(m).padStart(2,"0")}`:`${m} min`}
+const GAME_NAMES={kart:"Kart rétro"};
+function viewGame(){
+  if(!game) return `<h2>Jeu de la semaine</h2><div class="empty">Pas de jeu en ce moment… le prochain arrive bientôt.</div>`;
+  const rw=game.rewards||[], b=game.board||[], live=game.live, my=b.findIndex(x=>x.player===uid);
+  const pod=rw.map((r,i)=>`<div class="gm-pod p${i+1}"><div class="gm-rk">${rankLbl(i)}</div><div class="gm-rw">${rewardTxt(r)}</div><div class="gm-who">${b[i]?esc(who(b[i].player))+" · "+fmtMs(b[i].best):"—"}</div></div>`).join("");
+  const rows=b.map((x,i)=>`<tr class="${x.player===uid?"me":""}"><td class="rk">${i+1}</td><td>${x.player===uid?`<b>${esc(me.pseudo)} (toi)</b>`:plink(x.player)}</td><td class="gm-t">${fmtMs(x.best)}</td><td>${x.tries}</td><td>${rw[i]?`<span class="gm-prize">${rewardTxt(rw[i])}</span>`:""}</td></tr>`).join("");
+  const nxt=game.next?`<p class="sub">Prochain jeu : <b>${esc(game.next.title)}</b>, dans ${dLeft(game.next.starts_at)}.</p>`:"";
+  return `<div class="gm-hero gm-${esc(game.slug)}">
+      <div class="gm-kick">Jeu de la semaine</div>
+      <div class="gm-title">${esc(game.title)}</div>
+      <p class="gm-desc">${esc(game.descr||"")}</p>
+      <div class="gm-meta">${live?`<span>Fin dans <b>${dLeft(game.ends_at)}</b></span>`:`<span><b>Terminé</b> · récompenses distribuées</span>`}
+        <span>Ton meilleur temps : <b>${my>=0?fmtMs(b[my].best):"–"}</b>${my>=0?` · ${rankLbl(my)}`:""}</span></div>
+      ${live?`<button class="btn gm-play" data-act="gameplay">JOUER</button>`:""}
+    </div>
+    ${nxt}
+    <h3>À gagner</h3><div class="gm-pods">${pod}</div>
+    <h3>Classement</h3>
+    ${b.length?`<div class="tablewrap"><table class="lb gm-lb"><thead><tr><th>#</th><th>Joueur</th><th>Meilleur temps</th><th>Essais</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`
+      :`<div class="empty">Personne n'a encore de temps. À toi de poser le premier chrono !</div>`}
+    <p class="sub">Essais illimités : seul ton meilleur temps compte. Les boosters sont distribués automatiquement à la fin de la semaine.</p>`;
+}
+
+/* ---------- Kart rétro ---------- */
+const KART=(()=>{
+  const PTS=[[300,1300],[300,720],[420,430],[700,330],[1000,420],[1110,640],[1010,850],[800,910],[760,1060],[900,1190],[1300,1180],[1550,1000],[1600,700],[1800,450],[2060,420],[2210,620],[2210,1150],[2050,1400],[1700,1500],[700,1500],[420,1460]];
+  const WW=2520, WH=1820, TW=118, LAPS=3, SUB=22;
+  let path=null, cum=null, total=0, off=null, boosts=[], deco=[];
+  function cr(p0,p1,p2,p3,t){const t2=t*t,t3=t2*t;return [0.5*((2*p1[0])+(-p0[0]+p2[0])*t+(2*p0[0]-5*p1[0]+4*p2[0]-p3[0])*t2+(-p0[0]+3*p1[0]-3*p2[0]+p3[0])*t3),0.5*((2*p1[1])+(-p0[1]+p2[1])*t+(2*p0[1]-5*p1[1]+4*p2[1]-p3[1])*t2+(-p0[1]+3*p1[1]-3*p2[1]+p3[1])*t3)]}
+  function build(){
+    if(path) return; path=[]; const n=PTS.length;
+    for(let i=0;i<n;i++){const p0=PTS[(i-1+n)%n],p1=PTS[i],p2=PTS[(i+1)%n],p3=PTS[(i+2)%n];for(let k=0;k<SUB;k++)path.push(cr(p0,p1,p2,p3,k/SUB))}
+    cum=[0];for(let i=1;i<=path.length;i++){const a=path[i-1],b=path[i%path.length];cum.push(cum[i-1]+Math.hypot(b[0]-a[0],b[1]-a[1]))}total=cum[path.length];
+    boosts=[0.17,0.47,0.80].map(f=>{const i=Math.floor(f*path.length);return {i,x:path[i][0],y:path[i][1],a:tang(i)}});
+    let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+    for(let k=0;k<420&&deco.length<70;k++){const x=60+rnd()*(WW-120),y=60+rnd()*(WH-120);if(near(x,y).d>TW/2+70&&!deco.some(o=>Math.hypot(o.x-x,o.y-y)<70))deco.push({x,y,t:rnd()<.78?"tree":"tire",r:18+rnd()*14})}
+    renderTrack();
+  }
+  function tang(i){const a=path[(i-1+path.length)%path.length],b=path[(i+1)%path.length];return Math.atan2(b[1]-a[1],b[0]-a[0])}
+  function near(x,y,hint){
+    let best=1e18,bi=0,from=0,to=path.length;
+    if(hint!=null){from=hint-40;to=hint+40}
+    for(let j=from;j<to;j++){const i=(j+path.length)%path.length,a=path[i],b=path[(i+1)%path.length];const dx=b[0]-a[0],dy=b[1]-a[1];let t=((x-a[0])*dx+(y-a[1])*dy)/(dx*dx+dy*dy);t=t<0?0:t>1?1:t;const px=a[0]+dx*t-x,py=a[1]+dy*t-y,d=px*px+py*py;if(d<best){best=d;bi=i}}
+    return {d:Math.sqrt(best),i:bi}
+  }
+  function strokePath(c){c.beginPath();path.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));c.closePath();c.stroke()}
+  function renderTrack(){
+    off=document.createElement("canvas");off.width=WW;off.height=WH;const c=off.getContext("2d");
+    c.fillStyle="#3f8f3a";c.fillRect(0,0,WW,WH);c.fillStyle="#46993f";
+    for(let y=0;y<WH;y+=64)for(let x=(y/64%2)*64;x<WW;x+=128)c.fillRect(x,y,64,64);
+    c.lineJoin="round";c.lineCap="round";
+    c.strokeStyle="#d8c07e";c.lineWidth=TW+70;strokePath(c);
+    c.strokeStyle="#c9ae66";c.setLineDash([6,14]);c.lineWidth=TW+66;strokePath(c);c.setLineDash([]);
+    c.strokeStyle="#f4f4f4";c.lineWidth=TW+18;strokePath(c);
+    c.strokeStyle="#d8262f";c.setLineDash([22,22]);c.lineWidth=TW+18;strokePath(c);c.setLineDash([]);
+    c.strokeStyle="#55585f";c.lineWidth=TW;strokePath(c);
+    c.strokeStyle="#5d6068";c.lineWidth=TW-26;strokePath(c);
+    c.strokeStyle="rgba(255,255,255,.55)";c.lineWidth=4;c.setLineDash([34,40]);strokePath(c);c.setLineDash([]);
+    // ligne de départ
+    const s0=path[0],a0=tang(0);c.save();c.translate(s0[0],s0[1]);c.rotate(a0);
+    for(let r=0;r<2;r++)for(let k=-TW/2;k<TW/2;k+=12){c.fillStyle=((k/12+r)&1)?"#111":"#fff";c.fillRect(-12+r*12,k,12,12)}c.restore();
+    // plots de boost
+    boosts.forEach(b=>{c.save();c.translate(b.x,b.y);c.rotate(b.a);c.fillStyle="#ffcf2e";c.strokeStyle="#7a5200";c.lineWidth=3;
+      for(let k=-1;k<=1;k++){c.beginPath();c.moveTo(-14+k*18,-20);c.lineTo(6+k*18,0);c.lineTo(-14+k*18,20);c.lineTo(-24+k*18,20);c.lineTo(-4+k*18,0);c.lineTo(-24+k*18,-20);c.closePath();c.fill();c.stroke()}c.restore()});
+    // tribune + bannière près du départ
+    c.save();c.translate(s0[0]-150,s0[1]-60);c.fillStyle="#2b3656";c.fillRect(0,0,70,180);
+    for(let y=8;y<176;y+=12)for(let x=6;x<66;x+=10){c.fillStyle=["#ffcf2e","#e53935","#5ec8ff","#fff","#6dffac"][(x+y)%5];c.fillRect(x,y,6,6)}c.restore();
+    c.save();c.translate(s0[0]+110,s0[1]-120);c.rotate(Math.PI/2);c.fillStyle="#141a30";c.fillRect(-110,-22,220,44);c.fillStyle="#ffcf2e";c.font="bold 26px Arial Black,Arial";c.textAlign="center";c.textBaseline="middle";c.fillText("WINAMASTERS GP",0,2);c.restore();
+    deco.forEach(o=>{if(o.t==="tree"){c.fillStyle="rgba(0,0,0,.25)";c.beginPath();c.arc(o.x+6,o.y+8,o.r,0,7);c.fill();c.fillStyle="#1f5e2a";c.beginPath();c.arc(o.x,o.y,o.r,0,7);c.fill();c.fillStyle="#2d7a37";c.beginPath();c.arc(o.x-o.r*.3,o.y-o.r*.3,o.r*.55,0,7);c.fill()}
+      else{for(let k=0;k<3;k++){c.fillStyle="#1b1b1f";c.beginPath();c.arc(o.x+k*16-16,o.y,9,0,7);c.fill();c.fillStyle="#555";c.beginPath();c.arc(o.x+k*16-16,o.y,4,0,7);c.fill()}}});
+  }
+  // ---------- course ----------
+  let R=null;
+  const keys={l:0,r:0,b:0};
+  function ghostKey(){return "wm_kart_ghost_"+(game&&game.id)}
+  function loadGhost(){try{const g=JSON.parse(localStorage.getItem(ghostKey())||"null");return g&&g.f?g:null}catch(e){return null}}
+  function saveGhost(ms,f){try{const g=loadGhost();if(!g||ms<g.ms)localStorage.setItem(ghostKey(),JSON.stringify({ms,f}))}catch(e){}}
+  function beep(f,d){try{const A=window.__ac||(window.__ac=new (window.AudioContext||window.webkitAudioContext)());const o=A.createOscillator(),g=A.createGain();o.type="square";o.frequency.value=f;g.gain.value=.06;o.connect(g);g.connect(A.destination);o.start();o.stop(A.currentTime+d)}catch(e){}}
+  function open(){
+    build();
+    const ov=document.createElement("div");ov.id="kart";ov.innerHTML=`<canvas id="kc"></canvas>
+      <div class="k-hud"><div class="k-lap" id="kLap">TOUR 1/${LAPS}</div><div class="k-time" id="kTime">0:00.00</div><div class="k-best">MEILLEUR <b id="kBest">–</b></div></div>
+      <div class="k-mid" id="kMid"></div>
+      <button class="k-quit" data-k="quit" aria-label="Quitter">×</button>
+      <div class="k-pad"><button data-k="l" aria-label="Gauche">◀</button><button data-k="r" aria-label="Droite">▶</button></div>
+      <div class="k-pad k-right"><button data-k="b" aria-label="Freiner">FREIN</button></div>
+      <div class="k-help">← → ou Q D pour tourner · ↓ ou Espace pour freiner · l'accélération est automatique</div>`;
+    document.body.appendChild(ov);document.body.classList.add("k-open");
+    ov.querySelectorAll("[data-k]").forEach(b=>{const k=b.dataset.k;if(k==="quit"){b.onclick=close;return}
+      const on=e=>{e.preventDefault();keys[k]=1;b.classList.add("on")},offf=e=>{e.preventDefault();keys[k]=0;b.classList.remove("on")};
+      b.addEventListener("pointerdown",on);b.addEventListener("pointerup",offf);b.addEventListener("pointerleave",offf);b.addEventListener("pointercancel",offf);b.addEventListener("contextmenu",e=>e.preventDefault())});
+    addEventListener("keydown",kd);addEventListener("keyup",ku);addEventListener("resize",size);
+    size();start();
+  }
+  function kd(e){const k=e.key;if(["ArrowLeft","q","Q","a","A"].includes(k))keys.l=1;else if(["ArrowRight","d","D"].includes(k))keys.r=1;else if(["ArrowDown","s","S"," "].includes(k))keys.b=1;else if(k==="Escape")close();else return;e.preventDefault()}
+  function ku(e){const k=e.key;if(["ArrowLeft","q","Q","a","A"].includes(k))keys.l=0;else if(["ArrowRight","d","D"].includes(k))keys.r=0;else if(["ArrowDown","s","S"," "].includes(k))keys.b=0}
+  function size(){if(!R)R={};const cv=document.getElementById("kc");if(!cv)return;const w=innerWidth,h=innerHeight;const port=h>w;R.lw=port?240:360;R.lh=Math.round(R.lw*h/w);cv.width=R.lw;cv.height=R.lh;R.vw=port?460:760;R.sc=R.lw/R.vw;R.vh=R.lh/R.sc;R.ctx=cv.getContext("2d");R.ctx.imageSmoothingEnabled=false}
+  async function start(){
+    const s0=path[2],a=tang(2);
+    Object.assign(R,{x:s0[0],y:s0[1],a,vx:0,vy:0,idx:2,lap:1,cp:1,state:"wait",t0:0,ms:0,boostT:0,run:null,parts:[],rec:[],recT:0,ghost:loadGhost(),last:performance.now(),acc:0,laps:[]});
+    keys.l=keys.r=keys.b=0;
+    const g=loadGhost();document.getElementById("kBest").textContent=g?fmtMs(g.ms):"–";
+    mid("Préparation…");
+    try{R.run=await rpc("game_start",{game_id:game.id})}catch(e){mid(`<div class="k-msg">${esc(errMsg(e))}</div><button class="btn" data-k2="quit">Fermer</button>`);bindMid();return}
+    R.state="count";R.cd=performance.now();cancelAnimationFrame(R.raf);R.raf=requestAnimationFrame(loop);
+  }
+  function mid(h){const m=document.getElementById("kMid");if(m){m.innerHTML=h;m.style.display=h?"flex":"none"}}
+  function bindMid(){document.querySelectorAll("#kMid [data-k2]").forEach(b=>b.onclick=()=>{if(b.dataset.k2==="quit")close();else start()})}
+  const CP=6;
+  function step(dt){
+    const nr=near(R.x,R.y,R.idx);R.idx=nr.i;const onT=nr.d<TW/2+4, gravel=!onT&&nr.d<TW/2+38;
+    if(R.boostT>0)R.boostT-=dt;
+    boosts.forEach(b=>{if(Math.hypot(b.x-R.x,b.y-R.y)<34&&R.boostT<=0.6){R.boostT=1.1;beep(880,.08)}});
+    const fx=Math.cos(R.a),fy=Math.sin(R.a),nx=-fy,ny=fx;
+    let sp=R.vx*fx+R.vy*fy,lat=R.vx*nx+R.vy*ny;
+    let vmax=onT?560:gravel?300:190;if(R.boostT>0)vmax*=1.45;
+    if(keys.b)sp-=900*dt;else sp+=(sp<vmax?420:0)*dt;
+    if(sp>vmax)sp-=(sp-vmax)*(onT?2:4.5)*dt;if(sp<-60)sp=-60;
+    const st=(keys.r?1:0)-(keys.l?1:0);
+    R.a+=st*2.7*dt*Math.min(1,Math.abs(sp)/170)*(keys.b?1.15:1);
+    lat*=Math.exp(-(onT?7.5:4)*dt);
+    const fx2=Math.cos(R.a),fy2=Math.sin(R.a);
+    R.vx=fx2*sp+(-fy2)*lat;R.vy=fy2*sp+fx2*lat;
+    R.x=Math.max(20,Math.min(WW-20,R.x+R.vx*dt));R.y=Math.max(20,Math.min(WH-20,R.y+R.vy*dt));
+    if(!onT)for(const o of deco){const rr=(o.t==="tree"?o.r:26)+10,dx=R.x-o.x,dy=R.y-o.y,dd=Math.hypot(dx,dy);
+      if(dd<rr){R.x=o.x+dx/dd*rr;R.y=o.y+dy/dd*rr;R.vx*=-.25;R.vy*=-.25;if(!R.bump||R.ms-R.bump>400){R.bump=R.ms;beep(120,.08)}}}
+    if(!onT&&Math.abs(sp)>60&&Math.random()<.5)R.parts.push({x:R.x-fx2*14,y:R.y-fy2*14,t:.45,c:gravel?"#c9ae66":"#2d6b2a"});
+    if(R.boostT>0)R.parts.push({x:R.x-fx2*16+(Math.random()-.5)*6,y:R.y-fy2*16+(Math.random()-.5)*6,t:.25,c:Math.random()<.5?"#ffcf2e":"#ff6a1a"});
+    R.parts.forEach(p=>p.t-=dt);R.parts=R.parts.filter(p=>p.t>0).slice(-80);
+    // tours : passer les points de contrôle dans l'ordre
+    const N=path.length, target=Math.floor(R.cp*N/CP)%N;
+    const dI=((R.idx-target)%N+N)%N;
+    if(R.cp<CP&&dI<N/4&&nr.d<TW*1.6)R.cp++;
+    else if(R.cp>=CP&&R.idx<N/8&&R.idx>=0&&nr.d<TW*1.6){
+      R.laps.push(R.ms);R.cp=1;
+      if(R.lap>=LAPS){finish();return}
+      R.lap++;beep(660,.12);document.getElementById("kLap").textContent=`TOUR ${R.lap}/${LAPS}`;
+      if(R.lap===LAPS)flash("DERNIER TOUR !");
+    }
+    R.recT+=dt;if(R.recT>=0.05){R.recT=0;R.rec.push(Math.round(R.x),Math.round(R.y),Math.round(R.a*100)/100)}
+  }
+  function flash(t){const m=document.getElementById("kMid");if(!m)return;m.innerHTML=`<div class="k-big">${t}</div>`;m.style.display="flex";clearTimeout(R.fl);R.fl=setTimeout(()=>{if(R.state==="race")mid("")},1200)}
+  async function finish(){
+    R.state="done";const ms=Math.round(R.ms);beep(990,.25);
+    saveGhost(ms,R.rec);
+    mid(`<div class="k-res"><div class="k-big">ARRIVÉE</div><div class="k-final">${fmtMs(ms)}</div><div class="k-msg">Envoi du temps…</div></div>`);
+    let res=null,err=null;try{res=await rpc("game_finish",{run_id:R.run,ms})}catch(e){err=errMsg(e)}
+    const laps=R.laps.map((t,i)=>fmtMs(t-(i?R.laps[i-1]:0))).join(" · ");
+    mid(`<div class="k-res"><div class="k-big">${res&&res.record?"NOUVEAU RECORD !":"ARRIVÉE"}</div><div class="k-final">${fmtMs(ms)}</div><div class="k-laps">${laps}</div>
+      <div class="k-msg">${err?esc(err):`Ton meilleur temps : <b>${fmtMs(res.best)}</b> · ${rankLbl(res.rank-1)} au classement`}</div>
+      <div class="k-btns"><button class="btn" data-k2="again">Rejouer</button><button class="btn ghost" data-k2="quit">Quitter</button></div></div>`);
+    bindMid();const g=loadGhost();document.getElementById("kBest").textContent=g?fmtMs(g.ms):"–";
+    try{await loadGame()}catch(e){}
+  }
+  function loop(now){
+    if(!document.getElementById("kart"))return;
+    let dt=Math.min(.1,(now-R.last)/1000);R.last=now;
+    if(R.state==="count"){const e=(now-R.cd)/1000,n=3-Math.floor(e);
+      if(n!==R.lastN){R.lastN=n;if(n>0){mid(`<div class="k-lights">${[1,2,3].map(i=>`<span class="${i<=4-n?"on":""}"></span>`).join("")}</div><div class="k-big">${n}</div>`);beep(440,.15)}}
+      if(e>=3){R.state="race";R.t0=now;R.acc=0;mid(`<div class="k-big go">GO !</div>`);beep(880,.3);setTimeout(()=>{if(R.state==="race")mid("")},700)}}
+    if(R.state==="race"){R.acc+=dt;while(R.acc>=1/120&&R.state==="race"){step(1/120);R.acc-=1/120;R.ms=performance.now()-R.t0}
+      const t=document.getElementById("kTime");if(t)t.textContent=fmtMs(R.ms)}
+    draw(now);
+    R.raf=requestAnimationFrame(loop);
+  }
+  function kartSprite(c,x,y,a,body,alpha){
+    c.save();c.globalAlpha=alpha;c.translate(x,y);c.rotate(a);
+    c.fillStyle="rgba(0,0,0,.3)";c.fillRect(-14,-8,32,20);
+    c.fillStyle="#111";c.fillRect(-13,-12,9,5);c.fillRect(-13,7,9,5);c.fillRect(7,-11,8,4);c.fillRect(7,7,8,4);
+    c.fillStyle=body;c.fillRect(-15,-8,30,16);c.fillRect(13,-5,6,10);
+    c.fillStyle="#fff";c.fillRect(-15,-2,30,4);
+    c.fillStyle="#222";c.fillRect(-17,-10,4,20);
+    c.fillStyle="#ffcf2e";c.beginPath();c.arc(-3,0,6,0,7);c.fill();c.fillStyle="#141a30";c.fillRect(-1,-3,4,6);
+    c.restore();
+  }
+  function draw(){
+    const c=R.ctx;if(!c)return;const look=.22;
+    let cx=R.x+R.vx*look,cy=R.y+R.vy*look;cx=Math.max(R.vw/2,Math.min(WW-R.vw/2,cx));cy=Math.max(R.vh/2,Math.min(WH-R.vh/2,cy));
+    const sx=cx-R.vw/2,sy=cy-R.vh/2;
+    c.imageSmoothingEnabled=false;c.drawImage(off,sx,sy,R.vw,R.vh,0,0,R.lw,R.lh);
+    c.save();c.scale(R.sc,R.sc);c.translate(-sx,-sy);
+    R.parts.forEach(p=>{c.fillStyle=p.c;c.globalAlpha=Math.min(1,p.t*3);c.fillRect(p.x-3,p.y-3,6,6)});c.globalAlpha=1;
+    if(R.ghost&&R.state!=="wait"){const f=R.ghost.f,t=R.state==="race"?R.ms/1000:0,i=Math.floor(t/.05)*3;if(i+5<f.length){const k=(t%.05)/.05;kartSprite(c,f[i]+(f[i+3]-f[i])*k,f[i+1]+(f[i+4]-f[i+1])*k,f[i+2],"#9fb6ea",.45)}}
+    kartSprite(c,R.x,R.y,R.a,"#e53935",1);
+    c.restore();
+    // mini-carte
+    const mw=Math.round(R.lw*(R.lh>R.lw?.3:.16)),ms=mw/WW,mh=WH*ms,mx=R.lw-mw-6,my=R.lh-mh-(R.lh>R.lw?92:8);
+    c.fillStyle="rgba(10,14,30,.55)";c.fillRect(mx-3,my-3,mw+6,mh+6);
+    c.strokeStyle="#cfd6e6";c.lineWidth=2;c.beginPath();path.forEach((p,i)=>i%3===0&&(i?c.lineTo(mx+p[0]*ms,my+p[1]*ms):c.moveTo(mx+p[0]*ms,my+p[1]*ms)));c.closePath();c.stroke();
+    c.fillStyle="#e53935";c.fillRect(mx+R.x*ms-2,my+R.y*ms-2,4,4);
+  }
+  function close(){
+    const ov=document.getElementById("kart");if(ov)ov.remove();document.body.classList.remove("k-open");
+    removeEventListener("keydown",kd);removeEventListener("keyup",ku);removeEventListener("resize",size);
+    if(R){cancelAnimationFrame(R.raf);R.state="off"}render0();
+  }
+  function render0(){try{render(true)}catch(e){}}
+  return {open,dbg:()=>({R,path,keys})};
+})();
+
 /* ---------- boosters gratuits ---------- */
 function tokens(){return bstate.available||0}
 function reserve(){return bstate.bought||0}
@@ -900,7 +1152,7 @@ async function loadCatalog(){
   cards=c.data; cardById=Object.fromEntries(cards.map(x=>[x.id,x]));
 }
 async function loadGame(){
-  const [p,i,pl,l,t,f,lb,bs,tb,qs,cs]=await Promise.all([
+  const [p,i,pl,l,t,f,lb,bs,tb,qs,cs,gm]=await Promise.all([
     sb.from("players").select("*").eq("id",uid).single(),
     sb.from("inventory").select("card,qty").eq("player",uid),
     sb.from("players").select("id,pseudo"),
@@ -911,7 +1163,8 @@ async function loadGame(){
     sb.rpc("booster_state"),
     sb.from("team_bonus").select("brand").eq("player",uid),
     sb.rpc("duel_list"),
-    sb.rpc("charm_state")]);
+    sb.rpc("charm_state"),
+    sb.rpc("game_current")]);
   if(p.error) throw p.error;
   teamDone=(tb&&!tb.error&&tb.data||[]).map(x=>x.brand);
   arenaOn=!!(qs&&!qs.error); duels=arenaOn?(qs.data||[]):[];
@@ -920,6 +1173,7 @@ async function loadGame(){
   if(bs&&bs.data) bstate=bs.data;
   players=pl.data||[]; trades=t.data||[]; feed=f.data||[]; board=lb.data||[];
   charmSt=(cs&&!cs.error&&cs.data)||null;
+  game=(gm&&!gm.error&&gm.data)||null;
 }
 let reloadTimer=null;
 function scheduleReload(){clearTimeout(reloadTimer);reloadTimer=setTimeout(async()=>{try{await loadGame();render()}catch(e){}},500)}
@@ -1261,8 +1515,9 @@ function openZoom(id){
 }
 
 /* ---------- rendu ---------- */
-const TABS=[["booster","Boosters"],["arena","Arène"],["collection","Collection"],["market","Marché"],["trades","Échanges"],["ranking","Classement"]];
+const TABS=[["booster","Boosters"],["game","Jeu"],["arena","Arène"],["collection","Collection"],["market","Marché"],["trades","Échanges"],["ranking","Classement"]];
 const TAB_ICONS={
+ game:'<path d="M6 11h4M8 9v4"/><circle cx="15.5" cy="10.5" r="1"/><circle cx="17.5" cy="13" r="1"/><path d="M7 6h10a5 5 0 0 1 5 5v1a5 5 0 0 1-9 3h-2a5 5 0 0 1-9-3v-1a5 5 0 0 1 5-5z"/>',
  booster:'<rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 7h12M6 17h12"/>',
  arena:'<path d="M4 4l9 9M4 4v4M4 4h4"/><path d="M20 4l-9 9M20 4v4M20 4h-4"/><path d="M8 16l-3 3M16 16l3 3M6.5 13.5l4 4M17.5 13.5l-4 4"/>',
  collection:'<rect x="3" y="5" width="11" height="15" rx="2"/><path d="M9 3h10a2 2 0 0 1 2 2v13"/>',
@@ -1307,6 +1562,7 @@ function render(force){
   else if(tab==="trades") m.innerHTML=viewTrades();
   else if(tab==="ranking") m.innerHTML=viewRanking();
   else if(tab==="arena") {m.innerHTML=viewArena(); quizTick();}
+  else if(tab==="game") m.innerHTML=viewGame();
   else if(tab==="player") m.innerHTML=viewPlayer();
   else if(tab==="admin") m.innerHTML=viewAdmin();
 }
@@ -1326,6 +1582,8 @@ function viewFeed(){
       if(r==="wins")return me1?`${b} a gagné 3 défis et t'a refilé ${nm}`:me2?`Tes victoires ont chassé ${nm} : il file chez ${a}`:`${b} a chassé le Chat Noir à coups de victoires : il file chez ${a}`;
       if(cat)return me1?`${Nm} a traversé la route… et s'installe chez toi`:me2?`${Nm} a quitté ta maison pour celle de ${a}`:`${Nm} a quitté ${b} pour s'installer chez ${a}`;
       return me1?`${Nm} s'est envolé jusqu'à toi`:me2?`${Nm} s'est envolé de chez toi pour rejoindre ${a}`:`${Nm} s'est envolé de chez ${b} pour rejoindre ${a}`;}
+    if(f.kind==="game_best"){const r=f.price;return me1?`Nouveau record au ${esc(f.note||"jeu de la semaine")} : tu passes ${rankLbl(r-1)} !`:`${a} pointe à la ${r===1?"1re":r+"e"} place du ${esc(f.note||"jeu de la semaine")}`}
+    if(f.kind==="game_reward"){const [rk,g,bo,ti]=String(f.note||"").split(";"),rw=rewardTxt({gold:+g,bought:+bo});return me1?`Tu termines ${rankLbl(+rk-1)} au ${esc(ti||"jeu de la semaine")} : +${rw} !`:`${a} termine ${rankLbl(+rk-1)} au ${esc(ti||"jeu de la semaine")} (+${rw})`}
     if(f.kind==="clover_fail")return me1?`Tu as tenté de voler le Trèfle de ${b}… raté (−${f.price} bidons)`:me2?`${a} a tenté de te voler le Trèfle… raté ! Tu empoches ${f.price} bidons`:`${a} a tenté de voler le Trèfle de ${b}… raté`;
     if(f.kind==="news")return `<span class="news-line"><b>Annonce</b> · ${esc(f.note||"")}</span>`;
     if(f.kind==="fine"){const mo=f.note?` pour ${esc(f.note)}`:"", L=esc(lord()), n=f.price;
@@ -1352,7 +1610,8 @@ function viewBooster(){
   const oath=oathOpen()?`<div class="oath-mini"><span class="om-seal">⚜</span><span class="om-t"><b>Serment<span class="om-l"> de Midi</span></b><small> · jure fidélité au Seigneur ${esc(lord())}</small></span><button class="om-yes" data-act="oath-yes">Je le jure <b>+${bstate.oath_amount||100}</b></button><button class="om-no" data-act="oath-no" title="Refuser le serment">Refuser</button></div>`:"";
   const inv2=duels.filter(d=>!d.mine&&d.status==="waiting");
   const qb=inv2.length?`<button class="quiz-banner" data-tab="arena"><span class="qz-ico">⚔</span><span><b>${inv2.length>1?`${inv2.length} défis t'attendent`:`${esc(who(inv2[0].challenger))} te défie`} à l'Arène</b><br><small>${inv2.length>1?"Accepte-les ou refuse-les avant qu'ils expirent":`Mise : ${inv2[0].stake} bidons · 5 questions sur les produits du groupe`}</small></span><span class="go">Voir</span></button>`:"";
-  return `${oath}${qb}${charmPanel()}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
+  const gb=game&&game.live?`<button class="game-banner" data-tab="game"><span class="gb-ico">🏁</span><span><b>${esc(game.title).toUpperCase()}</b> · le jeu de la semaine<br><small>Fin dans ${dLeft(game.ends_at)} · le podium gagne des boosters OR</small></span><span class="gb-go">JOUER</span></button>`:"";
+  return `${oath}${qb}${gb}${charmPanel()}<h2>Boosters</h2><p class="sub">Chaque jour à ${hoursText()}, tu reçois ${per} boosters gratuits. Tu peux aussi en acheter pour ${cfg.booster_price} bidons et les ouvrir quand tu veux.</p>
   <div class="bstage">
     <div class="packs">${packs}</div>
     <aside class="stock">
@@ -1523,7 +1782,7 @@ function viewPlayer(){
 }
 function viewAdmin(){
   const bopts=k=>Object.values(brands).map(b=>`<option value="${esc(b.id)}" ${b.id===k?"selected":""}>${esc(b.name)}</option>`).join("");
-  const ropts=r=>RORDER.map(x=>`<option value="${x}" ${x===r?"selected":""}>${esc(rlabel(x))}</option>`).join("");
+  const ropts=r=>[...RORDER,...Object.keys(RAR).filter(x=>!RORDER.includes(x))].map(x=>`<option value="${x}" ${x===r?"selected":""}>${esc(rlabel(x))}</option>`).join("");
   const sopts=s=>["spray","flacon","bidon","eponge","pot","kit","legende"].map(x=>`<option ${x===s?"selected":""}>${x}</option>`).join("");
   return `<h2>Catalogue</h2><p class="sub">Visible par les admins uniquement. Modifie les produits, ajoute des photos (clique sur la vignette), puis enregistre. Décocher « En jeu » retire la carte des boosters sans l'enlever à ceux qui l'ont déjà.</p>
   <h3>Marques</h3>
@@ -1717,6 +1976,7 @@ document.addEventListener("click",async e=>{
   if(ds.upl){uploadFor(ds.upl);return}
   switch(ds.act){
     case "free": openBooster(false); break;
+    case "gameplay": if(game&&game.slug==="kart") KART.open(); break;
     case "catpass": {const C=(charmSt&&charmSt.cfg)||{}; if(!confirm(`Payer ${C.cat_pay} bidons pour que le Chat Noir parte chez un joueur tiré au sort ?`)) break; t.disabled=true; await act(()=>rpc("cat_pass",{}),"Ouf ! Le Chat Noir est parti chez quelqu'un d'autre."); break}
     case "steal": {t.disabled=true; await act(()=>rpc("clover_steal",{}),r=>r&&r.ok?"Bien joué ! Le Trèfle à 4 feuilles est à toi.":`Raté ! Tes ${r?r.cost:""} bidons partent chez son propriétaire.`); break}
     case "paid": t.disabled=true; await buyBooster(); break;
