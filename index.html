@@ -1217,7 +1217,7 @@ function viewArena(){
     const d=duels.find(x=>x.id===qcur.duel)||{};
     const b=brands[qcur.brand]||{name:QB[qcur.brand]||qcur.brand,color:"#23201C"};
     const opts=qcur.options.map((o,i)=>{let c="";if(qres){if(i===qres.answer)c="good";else if(i===qres.choice)c="bad";}
-      return `<button class="qz-opt ${c}" data-qa="${i}" ${qres?"disabled":""}><span class="qz-l">${"ABCD"[i]}</span><span>${esc(o)}</span></button>`}).join("");
+      return `<button class="qz-opt ${c}" data-qa="${i}" ${qres?"disabled":""}><span class="qz-l">${"ABCD"[i]}${!qres&&qcur.hint===i?"·":""}</span><span>${esc(o)}</span></button>`}).join("");
     let fb="";
     if(qres){
       let endTxt="";
