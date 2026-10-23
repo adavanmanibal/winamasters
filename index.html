@@ -797,6 +797,50 @@ body.k-open{overflow:hidden}
 .k-help{position:absolute;bottom:10px;left:0;right:0;text-align:center;color:rgba(255,255,255,.7);font-size:12px;pointer-events:none}
 @media (hover:hover) and (pointer:fine){.k-pad{display:none}}
 @media (hover:none),(pointer:coarse){.k-help{display:none}}
+/* ===== ouverture v2 : déchirure au doigt + pile à faire glisser ===== */
+.ov.ov2{justify-content:center;gap:14px;overflow:hidden}
+.ov.ov2>*{margin:0!important}
+.op-head{text-align:center;min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:0 50px}
+.op-head .big-hint{display:flex;gap:10px;align-items:center;justify-content:center;flex-wrap:wrap}
+.op-sub{opacity:.75;font-size:14px;font-weight:600;margin-top:6px}
+.op-sub .sw-ico{display:inline-block;animation:swipehint 1.6s ease-in-out infinite}
+@keyframes swipehint{0%,100%{transform:translateX(0)}50%{transform:translateX(-10px) rotate(-12deg)}}
+.op-foot{display:flex;flex-direction:column;align-items:center;gap:12px;min-height:72px}
+.stage{position:relative;width:calc(var(--pw) + 20px);height:calc(var(--ph) + 10px);touch-action:none;flex:0 0 auto}
+.stage .burst{z-index:3}
+.pk{--mx:30%;--rx:0deg;--ry:0deg;position:absolute;left:50%;top:50%;width:var(--pw);height:var(--ph);transform:translate(-50%,-50%);z-index:3;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}
+.pk.idle{animation:nudge2 2.8s ease-in-out infinite}
+@keyframes nudge2{0%,70%,100%{transform:translate(-50%,-50%)}76%{transform:translate(-50%,-50%) rotate(-2.5deg)}82%{transform:translate(-50%,-50%) rotate(2.5deg)}88%{transform:translate(-50%,-50%) rotate(-1deg)}}
+.pk.wait{animation:tug2 .5s ease-in-out infinite}
+@keyframes tug2{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-50%) scale(1.02)}}
+.pk.drop{transition:transform .6s cubic-bezier(.55,0,.75,.35),opacity .55s;transform:translate(-50%,40%) rotate(4deg);opacity:0}
+.pk-l{position:absolute;inset:0;filter:drop-shadow(0 22px 30px rgba(0,0,0,.55))}
+.pk-l .bp-in{filter:none;animation:none;transform:none}
+.pk-top{z-index:2;will-change:transform;clip-path:polygon(0 0,100% 0,100% 14.6%,93% 15.9%,86% 14.2%,79% 15.7%,72% 14%,65% 15.8%,58% 14.3%,51% 16%,44% 14.1%,37% 15.6%,30% 14.2%,23% 15.9%,16% 14.4%,9% 15.7%,0 14.5%)}
+.pk-body{clip-path:polygon(0 14.5%,9% 15.7%,16% 14.4%,23% 15.9%,30% 14.2%,37% 15.6%,44% 14.1%,51% 16%,58% 14.3%,65% 15.8%,72% 14%,79% 15.7%,86% 14.2%,93% 15.9%,100% 14.6%,100% 100%,0 100%)}
+.pk-top.fly{transition:transform .7s cubic-bezier(.2,.7,.3,1),opacity .7s;transform:translate(var(--fx),-260px) rotate(var(--fr))!important;opacity:0}
+.pk-glow{position:absolute;left:6%;right:6%;top:10%;height:10%;z-index:1;opacity:0;pointer-events:none;border-radius:50%;background:radial-gradient(ellipse at 50% 60%,#fff 0,rgba(255,240,190,.9) 30%,rgba(255,220,120,0) 70%);filter:blur(2px)}
+.pk-glow::before{content:"";position:absolute;left:10%;right:10%;bottom:40%;height:340%;background:linear-gradient(0deg,rgba(255,240,190,.75),rgba(255,240,190,0));clip-path:polygon(30% 100%,70% 100%,100% 0,0 0);opacity:0;transition:opacity .4s}
+.pk-glow.on{opacity:1!important;transition:opacity .3s}
+.pk-glow.on::before{opacity:1}
+.pk-zone{position:absolute;left:0;right:0;top:4%;height:20%;z-index:4;display:flex;align-items:center;justify-content:flex-start;transition:opacity .2s}
+.pk-zone::before{content:"";position:absolute;left:5%;right:5%;top:52%;border-top:2px dashed rgba(255,255,255,.9);animation:zonepulse 1.4s ease-in-out infinite}
+@keyframes zonepulse{50%{opacity:.35}}
+.pk-arrow{position:relative;font-size:26px;font-weight:900;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.6);animation:arrowgo 1.6s ease-in-out infinite;margin-top:6%}
+@keyframes arrowgo{0%{transform:translateX(10px);opacity:0}20%{opacity:1}80%{opacity:1}100%{transform:translateX(calc(var(--pw) - 50px));opacity:0}}
+.pk:not(.idle) .pk-zone{opacity:0}
+.pk-bits{position:absolute;left:0;right:0;top:15%;height:0;z-index:5;pointer-events:none}
+.pk-bits i{position:absolute;width:6px;height:4px;border-radius:1px;background:#e8eef9;box-shadow:0 0 0 1px rgba(0,0,0,.15);animation:bit .9s ease-in forwards}
+@keyframes bit{from{transform:translate(0,0)}to{transform:translate(var(--dx),130px) rotate(var(--r));opacity:0}}
+.pile{position:absolute;left:50%;top:50%;width:200px;height:296px;margin:-148px 0 0 -100px;z-index:2;transform:translateY(calc(var(--ch)*.17)) scale(calc(var(--k)*.93));transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.pile.rise{transform:translateY(calc(var(--ch)*-.42)) scale(calc(var(--k)*.93))}
+.pile.front{z-index:4;transform:scale(var(--k));transition:transform .55s cubic-bezier(.2,.9,.3,1.15)}
+.dk2{position:absolute;inset:0;transition:transform .35s cubic-bezier(.2,.8,.2,1);touch-action:none;cursor:grab}
+.dk2.drag{transition:none;cursor:grabbing}
+.dk2.gone{transition:transform .32s cubic-bezier(.4,0,.9,.6),opacity .32s;opacity:0}
+.dk2 .flip{width:200px;height:296px;display:block;perspective:1100px}
+.dk2 .flip .back,.dk2 .flip .face{box-shadow:0 10px 26px rgba(0,0,0,.45);border-radius:12px}
+.dk2:not(.top) .flip .back{filter:brightness(.82)}
 </style>
 </head>
 <body>
@@ -1370,105 +1414,177 @@ function packInner(gold){
   return `<div class="bp-in"><div class="bpf ${gold?"gold":""}"><span class="crimp t"></span><span class="tear"></span><div class="body"><div class="holo">W</div><div class="ttl">${gold?"BOOSTER OR":"WINAMASTERS"}</div><div class="ed">${gold?"Récompense de l'Arène":"Édition 2026"}</div><div class="brands">${bl}</div><div class="count">5 CARTES</div></div><div class="foot">${gold?"1 légendaire garantie":"1 carte rare minimum"}</div><span class="crimp b"></span></div></div>`;
 }
 (function(){const n=24,t=[],b=[];for(let i=0;i<=n;i++){const x=(i/n*100).toFixed(2);t.push(`${x}% ${i%2?1.5:0}%`);b.push(`${(100-i/n*100).toFixed(2)}% ${i%2?98.5:100}%`)}document.documentElement.style.setProperty("--zz",`polygon(${t.join(",")},${b.join(",")})`)})();
+function cardSize(){
+  // taille d'affichage des cartes : grande, mais toujours entière à l'écran
+  const w=Math.min(innerWidth-48,340), h=innerHeight-300;
+  return Math.max(150,Math.min(w,h*200/296));
+}
 function showOpening(paid){
   closeOverlay(true);
-  const ov=document.createElement("div"); ov.className="ov"; ov.id="ov";
+  const cw=Math.round(cardSize()), ch=Math.round(cw*296/200), pw=Math.round(cw*1.06), ph=Math.round(pw*340/220);
+  const ov=document.createElement("div"); ov.className="ov ov2"; ov.id="ov";
   ov.innerHTML=`<button class="ov-x" data-ov="close" aria-label="Fermer">×</button>
-    <div class="big-hint">Déchire ton booster !</div>
-    <button class="op idle" id="op" data-ov="tear" aria-label="Déchirer le booster"><div class="peek"></div><div class="layer p-body">${packInner(paid==="gold")}</div><div class="layer p-top">${packInner(paid==="gold")}</div></button>
-    <button class="btn cta pulse" id="tearBtn" data-ov="tear">Déchirer le booster</button>
-    <button class="linkbtn light" id="laterBtn" data-ov="close">Garder pour plus tard</button>`;
+    <div class="op-head" id="opHead"><div class="big-hint" id="opHint">Déchire ton booster !</div><div class="op-sub" id="opSub">Glisse le doigt le long du haut du booster</div></div>
+    <div class="stage deck" id="stage" style="--cw:${cw}px;--ch:${ch}px;--pw:${pw}px;--ph:${ph}px;--k:${(cw/200).toFixed(3)}">
+      <div class="pile" id="pile"></div>
+      <div class="pk idle" id="pk">
+        <div class="pk-l pk-body">${packInner(paid==="gold")}</div>
+        <div class="pk-glow" id="pkGlow"></div>
+        <div class="pk-l pk-top" id="pkTop">${packInner(paid==="gold")}</div>
+        <div class="pk-zone" id="pkZone"><span class="pk-arrow">⟶</span></div>
+        <div class="pk-bits" id="pkBits"></div>
+      </div>
+      <div class="burst" id="burst"></div>
+    </div>
+    <div class="op-foot" id="opFoot">
+      <button class="btn cta" id="tearBtn" data-ov="tear">Ouvrir d'un coup</button>
+      <button class="linkbtn light" id="laterBtn" data-ov="close">Garder pour plus tard</button>
+    </div>`;
   document.body.appendChild(ov); document.body.style.overflow="hidden";
-  ovState={ids:null,paid,idx:0,seen:new Set(),phase:"pack"};
+  ovState={ids:null,paid,idx:0,seen:new Set(),phase:"pack",tear:0,req:null};
+  bindTear();
 }
-async function tearPack(){
-  if(!ovState||ovState.phase!=="pack") return; ovState.phase="tearing";
-  const st=ovState;
-  const op=document.getElementById("op"); op.classList.remove("idle");
-  ["#ov .big-hint","#tearBtn","#laterBtn","#ov .ov-x"].forEach(q=>{const e=document.querySelector(q); if(e) e.style.visibility="hidden"});
-  op.classList.add("shake");
-  const wait=new Promise(r=>setTimeout(r,450));
-  let ids;
-  try{ ids=st.paid==="gold"?await rpc("open_gold",{}):await rpc("open_booster",{paid:st.paid}); }
-  catch(e){ closeOverlay(); toast(errMsg(e)); return; }
-  await wait; if(ovState!==st) return;
-  st.ids=ids; lastPull=ids;
-  loadGame().then(()=>{ if(!document.getElementById("ov")) render(); else renderWallet(); }).catch(()=>{});
-  op.classList.remove("shake"); op.classList.add("torn");
-  setTimeout(()=>op.classList.add("drop"),500);
-  setTimeout(()=>{ if(ovState===st){ st.phase="reveal"; renderReveal(); } },1200);
+/* --- 1. déchirer le haut du booster --- */
+function tearRequest(){
+  const st=ovState; if(!st||st.req) return st&&st.req;
+  st.req=(st.paid==="gold"?rpc("open_gold",{}):rpc("open_booster",{paid:st.paid})).then(ids=>{
+    if(ovState!==st) return null; st.ids=ids; lastPull=ids;
+    loadGame().then(()=>{ if(!document.getElementById("ov")) render(); else renderWallet(); }).catch(()=>{});
+    buildPile(); return ids;
+  }).catch(e=>{ if(ovState===st){ closeOverlay(); toast(errMsg(e)); } return null; });
+  return st.req;
 }
-function bigScale(){return Math.max(0.85,Math.min(1.8,(innerHeight-340)/296,(innerWidth-100)/200))}
-function dotsHTML(){
-  const st=ovState;
-  return st.ids.map((id,i)=>{const c=cardById[id];return `<i class="${st.seen.has(i)?"seen r-"+c.rarity:""} ${i===st.idx?"cur":""}"></i>`}).join("");
+function setTear(p,dir){
+  const st=ovState, top=document.getElementById("pkTop"); if(!st||!top) return;
+  st.tear=p; st.dir=dir||st.dir||1;
+  const o=st.dir>0?"100% 15%":"0% 15%";
+  top.style.transformOrigin=o;
+  top.style.transform=`rotate(${(-st.dir*p*24).toFixed(2)}deg) translateY(${(-p*4).toFixed(2)}%)`;
+  const g=document.getElementById("pkGlow"); if(g) g.style.opacity=(p*0.9).toFixed(2);
 }
-function dotsLabel(){const st=ovState,left=st.ids.length-st.seen.size;return left?`${left} carte${left>1?"s":""} à découvrir`:"Toutes les cartes sont découvertes"}
-function revealTitle(){
-  const st=ovState,c=cardById[st.ids[st.idx]];
-  return st.seen.has(st.idx)?`<span>${esc(c.name)}</span>${rpill(c.rarity)}`:`<span>Carte ${st.idx+1} sur ${st.ids.length}</span>`;
+function tearBits(x){
+  const box=document.getElementById("pkBits"); if(!box) return;
+  for(let k=0;k<2;k++){const b=document.createElement("i");b.style.left=(x+(Math.random()-.5)*14)+"%";
+    b.style.setProperty("--dx",((Math.random()-.5)*60).toFixed(0)+"px");b.style.setProperty("--r",(Math.random()*360).toFixed(0)+"deg");
+    box.appendChild(b);setTimeout(()=>b.remove(),900)}
 }
-function ctaLabel(){
-  const st=ovState;
-  if(!st.seen.has(st.idx)) return "Retourner la carte";
-  return st.idx<st.ids.length-1?"Carte suivante":"Voir mes 5 cartes";
+function bindTear(){
+  const pk=document.getElementById("pk"); if(!pk) return;
+  let x0=null,y0=null,moved=false,lastBit=0;
+  pk.addEventListener("pointerdown",e=>{
+    const st=ovState; if(!st||st.phase!=="pack") return;
+    x0=e.clientX;y0=e.clientY;moved=false;pk.setPointerCapture(e.pointerId);pk.classList.remove("idle");tearRequest();
+  });
+  pk.addEventListener("pointermove",e=>{
+    const st=ovState; if(x0===null||!st||st.phase!=="pack") return;
+    const r=pk.getBoundingClientRect(), dx=e.clientX-x0;
+    if(Math.abs(dx)>6) moved=true;
+    const p=Math.min(1,Math.abs(dx)/(r.width*.75));
+    setTear(p,dx>=0?1:-1);
+    const px=((e.clientX-r.left)/r.width*100);
+    if(Math.abs(px-lastBit)>6){lastBit=px;tearBits(Math.max(4,Math.min(96,px)))}
+    if(p>=1){x0=null;finishTear()}
+  });
+  const up=()=>{
+    const st=ovState; if(x0===null||!st||st.phase!=="pack") return; x0=null;
+    if(!moved||st.tear>=.55) autoTear(); else { const top=document.getElementById("pkTop"); if(top){top.style.transition="transform .3s cubic-bezier(.2,.9,.3,1.3)";setTear(0);setTimeout(()=>top.style.transition="",320)} pk.classList.add("idle"); }
+  };
+  pk.addEventListener("pointerup",up); pk.addEventListener("pointercancel",up);
 }
-let animLock=0;
-function locked(ms){ const now=Date.now(); if(now<animLock) return true; animLock=now+ms; return false; }
-function renderReveal(){
-  const ov=document.getElementById("ov"); if(!ov||!ovState) return;
-  const st=ovState, s=bigScale();
-  const dks=st.ids.map((id,i)=>{const c=cardById[id];
-    return `<div class="dk" data-i="${i}"><button class="flip" data-ov="big" aria-label="Retourner la carte" tabindex="-1"><div class="fi"><div class="back ${["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></button></div>`}).join("");
-  ov.innerHTML=`<div class="rv">
-    <div class="rv-title" id="rvTitle"></div>
-    <div class="dots" id="dots"></div>
-    <div class="dots-lbl" id="dotsLbl"></div>
-    <div class="deck" id="deck" style="width:${Math.round(200*s)+30}px;height:${Math.round(296*s)+26}px"><div class="burst" id="burst"></div>
-      <div class="deck-in" style="transform:scale(${s})">${dks}</div></div>
-    <button class="btn cta pulse" id="rvCta" data-ov="big"></button>
-    <button class="linkbtn light" data-ov="all">Tout révéler d'un coup</button></div>`;
-  layoutDeck(); updateHud(); animLock=Date.now()+250;
+function autoTear(){
+  const st=ovState; if(!st||st.phase!=="pack") return; tearRequest();
+  document.getElementById("pk")?.classList.remove("idle");
+  const from=st.tear||0, t0=performance.now(), dur=420*(1-from)+80;
+  const stepA=now=>{ if(ovState!==st||st.phase!=="pack") return; const k=Math.min(1,(now-t0)/dur), p=from+(1-from)*(1-Math.pow(1-k,2));
+    setTear(p,st.dir||1); if(Math.random()<.5) tearBits(st.dir>0?p*100:100-p*100);
+    if(k<1) requestAnimationFrame(stepA); else finishTear(); };
+  requestAnimationFrame(stepA);
 }
-function layoutDeck(){
+async function finishTear(){
+  const st=ovState; if(!st||st.phase!=="pack") return; st.phase="tearing";
+  try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}
+  ["opFoot","opSub"].forEach(id=>{const e=document.getElementById(id); if(e) e.style.visibility="hidden"});
+  document.querySelector("#ov .ov-x").style.visibility="hidden";
+  document.getElementById("opHint").textContent="";
+  const top=document.getElementById("pkTop"), pk=document.getElementById("pk");
+  top.classList.add("fly"); top.style.setProperty("--fx",(st.dir>0?1:-1)*160+"px"); top.style.setProperty("--fr",(st.dir>0?-1:1)*38+"deg");
+  document.getElementById("pkGlow").classList.add("on");
+  pk.classList.add("wait");
+  const ids=await tearRequest(); if(!ids||ovState!==st) return;
+  pk.classList.remove("wait");
+  // les cartes sortent du booster, puis le sachet tombe
+  const pile=document.getElementById("pile"); pile.classList.add("rise");
+  setTimeout(()=>{ if(ovState!==st) return; pk.classList.add("drop"); pile.classList.remove("rise"); pile.classList.add("front"); },650);
+  setTimeout(()=>{ if(ovState!==st) return; pk.remove(); st.phase="reveal"; document.getElementById("opHint").innerHTML=""; revealTop(); },1250);
+}
+/* --- 2. la pile de cartes --- */
+function buildPile(){
+  const st=ovState, pile=document.getElementById("pile"); if(!pile||!st.ids) return;
+  pile.innerHTML=st.ids.map((id,i)=>{const c=cardById[id];
+    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip"><div class="fi"><div class="back ${["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
+  layoutPile(); bindSwipe();
+}
+function layoutPile(){
   const st=ovState; if(!st) return;
-  document.querySelectorAll("#deck .dk").forEach(el=>{
-    const d=+el.dataset.i-st.idx;
-    el.classList.toggle("front",d===0);
-    if(d<0){ el.style.transform="translate(-150%,-20px) rotate(-18deg)"; el.style.opacity="0"; }
-    else { const k=Math.min(d,4); el.style.transform=`translate(${k*7}px,${k*6}px) rotate(${(k*2.2).toFixed(1)}deg)`; el.style.opacity=d>4?"0":"1"; }
+  document.querySelectorAll("#pile .dk2").forEach(el=>{
+    const d=+el.dataset.i-st.idx; if(d<0) return;
     el.style.zIndex=String(20-d);
+    el.classList.toggle("top",d===0);
+    if(!el.classList.contains("drag")) el.style.transform=d===0?"none":`translateY(${-Math.min(d,4)*7}px) scale(${1-Math.min(d,4)*.035}) rotate(var(--rot))`;
   });
 }
-function updateHud(){
-  const st=ovState; if(!st) return; const on=st.seen.has(st.idx);
-  document.getElementById("rvTitle").innerHTML=revealTitle();
-  document.getElementById("dots").innerHTML=dotsHTML();
-  document.getElementById("dotsLbl").textContent=dotsLabel();
-  const b=document.getElementById("rvCta"); b.textContent=ctaLabel(); b.classList.toggle("pulse",!on);
+function hud(){
+  const st=ovState; if(!st||st.phase!=="reveal") return; const c=cardById[st.ids[st.idx]], on=st.seen.has(st.idx);
+  const h=document.getElementById("opHint"); if(h) h.innerHTML=on?`<span>${esc(c.name)}</span> ${rpill(c.rarity)}`:`Carte ${st.idx+1} sur ${st.ids.length}`;
+  const s=document.getElementById("opSub"); if(s){s.style.visibility="visible";s.innerHTML=st.idx<st.ids.length-1?`<span class="sw-ico">👆</span> Glisse la carte pour découvrir la suivante · ${st.ids.length-st.idx-1} restante${st.ids.length-st.idx-1>1?"s":""}`:`Glisse la carte pour voir tes ${st.ids.length} cartes`}
+  const f=document.getElementById("opFoot"); if(f){f.style.visibility="visible";f.innerHTML=`<div class="dots">${st.ids.map((id,i)=>`<i class="${st.seen.has(i)?"seen r-"+cardById[id].rarity:""} ${i===st.idx?"cur":""}"></i>`).join("")}</div><button class="linkbtn light" data-ov="all">Tout révéler d'un coup</button>`}
+  document.querySelector("#ov .ov-x").style.visibility="visible";
 }
-function flipCurrent(){
-  const st=ovState; if(!st||st.seen.has(st.idx)||locked(520)) return;
-  const c=cardById[st.ids[st.idx]];
-  const el=document.querySelector(`#deck .dk[data-i="${st.idx}"] .flip`); if(el) el.classList.add("on");
-  st.seen.add(st.idx);
-  const bu=document.getElementById("burst");
-  if(bu&&["R","E","Q","L","S"].includes(c.rarity)){ bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity; },260); }
-  updateHud();
+function revealTop(){
+  const st=ovState; if(!st||st.phase!=="reveal") return;
+  const el=document.querySelector(`#pile .dk2[data-i="${st.idx}"] .flip`), c=cardById[st.ids[st.idx]];
+  hud();
+  setTimeout(()=>{ if(ovState!==st||!el) return; el.classList.add("on"); st.seen.add(st.idx); hud();
+    if(["R","E","Q","L","S"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
+      try{navigator.vibrate&&navigator.vibrate(["L","S"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
+  },st.idx===0?150:260);
 }
-function nextCard(){
-  const st=ovState; if(!st||locked(380)) return;
-  if(st.idx>=st.ids.length-1){ renderSummary(); return; }
-  st.idx++; layoutDeck(); updateHud();
+function throwTop(dir){
+  const st=ovState; if(!st||st.phase!=="reveal"||st.busy) return;
+  if(!st.seen.has(st.idx)){ const d=document.querySelector(`#pile .dk2[data-i="${st.idx}"]`); if(d){d.classList.remove("drag");d.style.transform="none";d.querySelector(".flip").classList.add("on");st.seen.add(st.idx);hud()} return; }
+  const el=document.querySelector(`#pile .dk2[data-i="${st.idx}"]`); if(!el) return;
+  st.busy=true; dir=dir||-1;
+  el.classList.remove("drag"); el.classList.add("gone");
+  el.style.transform=`translate(${dir*Math.max(innerWidth,600)}px,-40px) rotate(${dir*28}deg)`;
+  setTimeout(()=>{ el.remove(); st.busy=false;
+    if(st.idx>=st.ids.length-1){ renderSummary(); return; }
+    st.idx++; layoutPile(); revealTop(); },320);
 }
-let swipeX=null,lastSwipe=0;
-document.addEventListener("pointerdown",e=>{if(ovState&&ovState.phase==="reveal"&&e.target.closest("#deck")) swipeX=e.clientX});
-document.addEventListener("pointerup",e=>{
-  if(swipeX===null) return; const dx=e.clientX-swipeX; swipeX=null;
-  if(Math.abs(dx)>50&&ovState&&ovState.phase==="reveal"){lastSwipe=Date.now(); if(!ovState.seen.has(ovState.idx)) flipCurrent(); else nextCard();}
-});
+function bindSwipe(){
+  const pile=document.getElementById("pile"); if(!pile||pile.dataset.b) return; pile.dataset.b=1;
+  let s=null;
+  pile.addEventListener("pointerdown",e=>{
+    const st=ovState; if(!st||st.phase!=="reveal"||st.busy) return;
+    const el=e.target.closest(".dk2.top"); if(!el) return;
+    s={el,x:e.clientX,y:e.clientY,t:performance.now(),dx:0,dy:0}; el.classList.add("drag"); pile.setPointerCapture(e.pointerId);
+  });
+  pile.addEventListener("pointermove",e=>{
+    if(!s) return; s.dx=e.clientX-s.x; s.dy=e.clientY-s.y;
+    s.el.style.transform=`translate(${s.dx}px,${s.dy*.35}px) rotate(${s.dx*.07}deg)`;
+  });
+  const end=()=>{
+    if(!s) return; const {el,dx,t}=s; s=null; const v=Math.abs(dx)/Math.max(1,performance.now()-t);
+    if(Math.abs(dx)<8){ el.classList.remove("drag"); el.style.transform="none"; throwTop(-1); return; }
+    if(Math.abs(dx)>90||v>.6){ throwTop(dx>0?1:-1); return; }
+    el.classList.remove("drag"); el.style.transform="none";
+  };
+  pile.addEventListener("pointerup",end); pile.addEventListener("pointercancel",end);
+}
+
 function renderSummary(){
   const ov=document.getElementById("ov"); if(!ov||!ovState) return;
+  if(!ovState.ids) return;
+  ov.classList.remove("ov2");
   ovState.phase="summary"; ovState.ids.forEach((_,i)=>ovState.seen.add(i));
   const s=innerWidth<640?Math.min(0.72,(innerWidth-60)/400):0.9;
   const t=totalPacks();
@@ -1487,11 +1603,10 @@ function closeOverlay(silent){
 }
 function ovAction(a,ds){
   if(!ovState&&a!=="close") return;
-  if(a==="tear"){tearPack();return}
+  if(a==="tear"){autoTear();return}
   if(a==="close"&&ovState&&ovState.phase==="tearing") return;
-  if(a==="big"){ if(ovState.phase!=="reveal"||Date.now()-lastSwipe<400) return; if(!ovState.seen.has(ovState.idx)) flipCurrent(); else nextCard(); return}
   if(a==="collection"){closeOverlay(true);tab="collection";collFilter="all";render(true);scrollTo(0,0);return}
-  if(a==="all"){renderSummary();return}
+  if(a==="all"){ if(ovState.phase==="reveal") renderSummary(); return}
   if(a==="close"){closeOverlay();return}
   if(a==="again"){closeOverlay(true);openNext();return}
 }
@@ -1499,7 +1614,8 @@ document.addEventListener("keydown",e=>{
   if(!ovState) return;
   if(e.key==="Escape"){ if(ovState.phase!=="tearing") closeOverlay(); return }
   if([" ","Enter","ArrowRight"].includes(e.key)){e.preventDefault(); if(e.repeat) return;
-    if(ovState.phase==="pack") tearPack(); else if(ovState.phase==="reveal") ovAction("big",{});}
+    if(ovState.phase==="pack") autoTear(); else if(ovState.phase==="reveal") throwTop(-1);}
+  if(e.key==="ArrowLeft"&&ovState.phase==="reveal"){e.preventDefault(); throwTop(-1);}
 });
 document.addEventListener("pointermove",e=>{
   const b=e.target.closest&&e.target.closest(".bp:not(.off)");
