@@ -894,7 +894,7 @@ body.mg-open{overflow:hidden}
 .gm-pods{grid-template-columns:repeat(5,1fr)!important;gap:8px!important}
 .gm-pod{padding:9px 6px!important}
 .gm-pod .gm-rk{font-size:17px}
-.gm-pod .gm-rw{font-size:12px}.gm-pod .gm-rw b{font-size:20px;font-family:"Courier New",monospace}
+.gm-pod .gm-rw{font-size:12px;line-height:1.25}.gm-pod .gm-rw small{font-size:11px;font-weight:700;opacity:.85}.gm-pod .gm-rw b{font-size:20px;font-family:"Courier New",monospace}
 .gm-pod.gold{border:2px solid #e3b341!important;background:linear-gradient(180deg,rgba(227,179,65,.22),transparent)!important}
 .gm-pod.gold .gm-rw b{color:#b8861a}
 .gm-pod:not(.gold){border:1px solid var(--line)!important;background:var(--panel)!important}
@@ -1030,7 +1030,7 @@ const GAME_NAMES={kart:"Kart rétro"};
 function viewGame(){
   if(!game) return `<h2>Jeu de la semaine</h2><div class="empty">Pas de jeu en ce moment… le prochain arrive bientôt.</div>`;
   const rw=game.rewards||[], b=game.board||[], live=game.live, my=b.findIndex(x=>x.player===uid);
-  const pod=rw.map((r,i)=>`<div class="gm-pod p${i+1} ${r.gold?"gold":""}"><div class="gm-rk">${rankLbl(i)}</div><div class="gm-rw">${r.gold?`<b>${r.gold}</b> OR`:`<b>${r.bought||0}</b> booster${(r.bought||0)>1?"s":""}`}</div><div class="gm-who">${b[i]?esc(b[i].player===uid?"Toi":who(b[i].player)):"—"}</div></div>`).join("");
+  const pod=rw.map((r,i)=>`<div class="gm-pod p${i+1} ${r.gold?"gold":""}"><div class="gm-rk">${rankLbl(i)}</div><div class="gm-rw">${r.gold?`<b>${r.gold}</b> OR${r.bought?`<br><small>+ ${r.bought} booster${r.bought>1?"s":""}</small>`:""}`:`<b>${r.bought||0}</b> booster${(r.bought||0)>1?"s":""}`}</div><div class="gm-who">${b[i]?esc(b[i].player===uid?"Toi":who(b[i].player)):"—"}</div></div>`).join("");
   const rows=b.map((x,i)=>`<tr class="${x.player===uid?"me":""}"><td class="rk">${i+1}</td><td>${x.player===uid?`<b>${esc(me.pseudo)} (toi)</b>`:plink(x.player)}</td><td class="gm-t">${gBest(x.best)}</td><td>${x.tries}</td><td>${rw[i]?`<span class="gm-prize">${rewardTxt(rw[i])}</span>`:""}</td></tr>`).join("");
   const nxt=game.next?`<p class="sub">Prochain jeu : <b>${esc(game.next.title)}</b>, dans ${dLeft(game.next.starts_at)}.</p>`:"";
   return `<div class="gm-hero gm-${esc(game.slug)}">
