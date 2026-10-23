@@ -841,6 +841,9 @@ body.k-open{overflow:hidden}
 .dk2 .flip{width:200px;height:296px;display:block;perspective:1100px}
 .dk2 .flip .back,.dk2 .flip .face{box-shadow:0 10px 26px rgba(0,0,0,.45);border-radius:12px}
 .dk2:not(.top) .flip .back{filter:brightness(.82)}
+.dk2:not(.top) .flip .face{filter:brightness(.88)}
+.dk2 .flip.on .fi{transition-duration:.6s}
+#pile:not(.front) .dk2:not([data-i="0"]) .fi{transition:none}
 </style>
 </head>
 <body>
@@ -1521,7 +1524,7 @@ async function finishTear(){
 function buildPile(){
   const st=ovState, pile=document.getElementById("pile"); if(!pile||!st.ids) return;
   pile.innerHTML=st.ids.map((id,i)=>{const c=cardById[id];
-    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip"><div class="fi"><div class="back ${["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
+    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
   layoutPile(); bindSwipe();
 }
 function layoutPile(){
@@ -1544,10 +1547,11 @@ function revealTop(){
   const st=ovState; if(!st||st.phase!=="reveal") return;
   const el=document.querySelector(`#pile .dk2[data-i="${st.idx}"] .flip`), c=cardById[st.ids[st.idx]];
   hud();
+  const already=el&&el.classList.contains("on");
   setTimeout(()=>{ if(ovState!==st||!el) return; el.classList.add("on"); st.seen.add(st.idx); hud();
     if(["R","E","Q","L","S"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
       try{navigator.vibrate&&navigator.vibrate(["L","S"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
-  },st.idx===0?150:260);
+  },already?0:150);
 }
 function throwTop(dir){
   const st=ovState; if(!st||st.phase!=="reveal"||st.busy) return;
