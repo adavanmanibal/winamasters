@@ -1004,7 +1004,7 @@ function charmPanel(){
   return `<section class="charms">${tile("chat-noir",cat,cb,ca)}${tile("trefle",clo,tb2,ta)}</section>`;
 }
 function maybeCharmDlg(){
-  if(!charmSt||$("#dlg").open||document.getElementById("ov")) return;
+  if(!charmSt||$("#dlg").open||document.getElementById("ov")||document.getElementById("kart")||document.getElementById("mgov")) return;
   for(const ch of charmSt.charms||[]){ if(ch.holder!==uid) continue;
     const k="wm_charm_"+ch.id; let seen=null; try{seen=localStorage.getItem(k)}catch(e){}
     if(seen===ch.since) continue; try{localStorage.setItem(k,ch.since)}catch(e){}
@@ -1112,7 +1112,7 @@ const KART=(()=>{
   const keys={l:0,r:0,b:0};
   function ghostKey(){return "wm_kart_ghost_"+(game&&game.id)}
   function loadGhost(){try{const g=JSON.parse(localStorage.getItem(ghostKey())||"null");return g&&g.f?g:null}catch(e){return null}}
-  function saveGhost(ms,f){try{const g=loadGhost();if(!g||ms<g.ms)localStorage.setItem(ghostKey(),JSON.stringify({ms,f}))}catch(e){}}
+  function saveGhost(ms,f){try{const g=loadGhost();if(!g||ms<g.ms)localStorage.setItem(ghostKey(),JSON.stringify({ms,f,v:3}))}catch(e){}}
   function beep(f,d){try{const A=window.__ac||(window.__ac=new (window.AudioContext||window.webkitAudioContext)());const o=A.createOscillator(),g=A.createGain();o.type="square";o.frequency.value=f;g.gain.value=.06;o.connect(g);g.connect(A.destination);o.start();o.stop(A.currentTime+d)}catch(e){}}
   function open(){
     build();
@@ -1175,7 +1175,7 @@ const KART=(()=>{
       R.lap++;beep(660,.12);document.getElementById("kLap").textContent=`TOUR ${R.lap}/${LAPS}`;
       if(R.lap===LAPS)flash("DERNIER TOUR !");
     }
-    R.recT+=dt;if(R.recT>=0.05){R.recT=0;R.rec.push(Math.round(R.x),Math.round(R.y),Math.round(R.a*100)/100)}
+    R.recN=(R.recN||0)+1;if(R.recN%6===0)R.rec.push(Math.round(R.x),Math.round(R.y),Math.round(R.a*100)/100)
   }
   function flash(t){const m=document.getElementById("kMid");if(!m)return;m.innerHTML=`<div class="k-big">${t}</div>`;m.style.display="flex";clearTimeout(R.fl);R.fl=setTimeout(()=>{if(R.state==="race")mid("")},1200)}
   async function finish(){
@@ -1195,8 +1195,8 @@ const KART=(()=>{
     let dt=Math.min(.1,(now-R.last)/1000);R.last=now;R.dtv=dt;
     if(R.state==="count"){const e=(now-R.cd)/1000,n=3-Math.floor(e);
       if(n!==R.lastN){R.lastN=n;if(n>0){mid(`<div class="k-lights">${[1,2,3].map(i=>`<span class="${i<=4-n?"on":""}"></span>`).join("")}</div><div class="k-big">${n}</div>`);beep(440,.15)}}
-      if(e>=3){R.state="race";R.t0=now;R.acc=0;mid(`<div class="k-big go">GO !</div>`);beep(880,.3);setTimeout(()=>{if(R.state==="race")mid("")},700)}}
-    if(R.state==="race"){R.acc+=dt;while(R.acc>=1/120&&R.state==="race"){step(1/120);R.acc-=1/120;R.ms=performance.now()-R.t0}
+      if(e>=3){R.state="race";R.t0=now;R.acc=0;R.rec=[Math.round(R.x),Math.round(R.y),Math.round(R.a*100)/100];R.recN=0;R.simT=0;mid(`<div class="k-big go">GO !</div>`);beep(880,.3);setTimeout(()=>{if(R.state==="race")mid("")},700)}}
+    if(R.state==="race"){R.acc+=dt;while(R.acc>=1/120&&R.state==="race"){step(1/120);R.acc-=1/120;R.simT+=1/120;R.ms=performance.now()-R.t0}
       const t=document.getElementById("kTime");if(t)t.textContent=fmtMs(R.ms)}
     draw(now);
     R.raf=requestAnimationFrame(loop);
@@ -1222,7 +1222,7 @@ const KART=(()=>{
     const sx=Math.max(0,R.x-rad),sy=Math.max(0,R.y-rad),sw=Math.min(WW,R.x+rad)-sx,sh=Math.min(WH,R.y+rad)-sy;
     if(sw>0&&sh>0)c.drawImage(off,sx,sy,sw,sh,sx,sy,sw,sh);
     R.parts.forEach(p=>{c.fillStyle=p.c;c.globalAlpha=Math.min(1,p.t*3);c.fillRect(p.x-3,p.y-3,6,6)});c.globalAlpha=1;
-    if(R.ghost&&R.state!=="wait"){const f=R.ghost.f,t=R.state==="race"?R.ms/1000:0,i=Math.floor(t/.05)*3;if(i+5<f.length){const k=(t%.05)/.05;kartSprite(c,f[i]+(f[i+3]-f[i])*k,f[i+1]+(f[i+4]-f[i+1])*k,f[i+2],"#9fb6ea",.45)}}
+    if(R.ghost&&R.state!=="wait"){const f=R.ghost.f,fd=R.ghost.v===3?.05:7/120,t=Math.max(0,(R.state==="race"?(R.simT||0):0)-(R.ghost.v===3?0:fd)),i=Math.floor(t/fd)*3;if(i+5<f.length){const k=(t%fd)/fd;kartSprite(c,f[i]+(f[i+3]-f[i])*k,f[i+1]+(f[i+4]-f[i+1])*k,f[i+2],"#9fb6ea",.45)}}
     kartSprite(c,R.x,R.y,R.a,"#e53935",1);
     c.restore();
     // mini-carte
@@ -1293,9 +1293,9 @@ const FLAPPY=(()=>{
   function kd(e){if(!S)return;if([" ","ArrowUp","Enter"].includes(e.key)){e.preventDefault();if(!e.repeat)input()}else if(e.key==="Escape")close()}
   function lvl(){let L=LEVELS[0];for(const x of LEVELS)if(S.pots>=x.from)L=x;return L}
   function reset(){
-    Object.assign(S,{fapT:0,picks:[],state:"ready",y:H*.42,vy:0,pipes:[],pots:0,drops:0,score:0,t:0,dist:0,acc:0,last:performance.now(),parts:[],flap:0,shake:0,t0:0,lvIdx:0,night:0,coins:[]});
+    Object.assign(S,{shield:0,inv:0,smkT:0,coughT:0,picks:[],state:"ready",y:H*.42,vy:0,pipes:[],pots:0,drops:0,score:0,t:0,dist:0,acc:0,last:performance.now(),parts:[],flap:0,shake:0,t0:0,lvIdx:0,night:0,coins:[]});
     for(let i=0;i<3;i++)addPipe(W+90+i*SPACING);
-    mid(`<div class="mg-card"><div class="mg-title">FLAPPY BIDON</div><div class="mg-txt">Tape (ou Espace) pour faire voler le bidon Restom entre les pots d'échappement.<br>Les gouttes d'or rapportent <b>+3</b>.<br>Ça se corse tous les 10 pots, et le bouclier FAP Spheretech protège de la fumée.</div><div class="mg-go">TAPE POUR JOUER</div></div>`,true);
+    mid(`<div class="mg-card"><div class="mg-title">FLAPPY BIDON</div><div class="mg-txt">Tape (ou Espace) pour faire voler le bidon Restom entre les pots d'échappement.<br>Les gouttes d'or rapportent <b>+3</b>.<br>Ça se corse tous les 10 pots, la fumée te secoue, et le bouclier FAP Spheretech t'en protège en t'offrant une vie : il encaisse un choc à ta place.</div><div class="mg-go">TAPE POUR JOUER</div></div>`,true);
     hud();const l=S.ov.querySelector("#fbLvl");l.className="fb-lvl";
   }
   function addPipe(x){
@@ -1304,8 +1304,8 @@ const FLAPPY=(()=>{
     if(Math.random()<L.move){p.amp=18+Math.random()*16;p.top=Math.max(mn+p.amp,Math.min(mx-p.amp,p.top))}
     if(Math.random()<L.smoke)p.smoke={side:Math.random()<.5?"top":"bot",t:Math.random()*2.2,on:0};
     p.base=p.top;
-    if(S.pots>=2&&Math.random()<.28){const side=Math.random()<.5?-1:1;S.coins.push({x:x+(Math.random()<.5?0:SPACING/2),pipe:p,dy:side*(gap/2-16),got:false,a:0})}
-    if(S.pots>=18&&!S.picks.length&&S.fapT<=0&&Math.random()<.13)S.picks.push({x:x+SPACING/2,pipe:p,a:0,got:false});
+    if(S.pots>=2&&Math.random()<.28){const side=Math.random()<.5?-1:1;S.coins.push({x:x+(Math.random()<.5?0:SPACING/2),pipe:p,dy:side*(gap/2-34),got:false,a:0})}
+    if(S.pots>=18&&!S.picks.length&&!S.shield&&Math.random()<.13)S.picks.push({x:x+SPACING/2,pipe:p,a:0,got:false});
     S.pipes.push(p);
   }
   function input(){
@@ -1331,23 +1331,40 @@ const FLAPPY=(()=>{
       if(!p.passed&&p.x+PW/2<BX){p.passed=true;const old=lvl();S.pots++;hud();beep(880,.06,"triangle");if(lvl()!==old){banner();beep(660,.12,"triangle");setTimeout(()=>beep(990,.15,"triangle"),120)}}});
     if(S.pipes[0].x<-60){S.pipes.shift();addPipe(S.pipes[S.pipes.length-1].x+SPACING)}
     S.coins.forEach(c=>{c.x-=sp*dt;c.a+=dt*5;const cy=c.pipe.top+c.pipe.gap/2+c.dy;c.y=cy;
-      if(!c.got&&Math.hypot(c.x-BX,cy-S.y)<20){c.got=true;S.drops++;hud();beep(1320,.08,"triangle");setTimeout(()=>beep(1760,.1,"triangle"),70);
+      if(!c.got&&touch(c.x,cy,9,12)){c.got=true;S.drops++;hud();beep(1320,.08,"triangle");setTimeout(()=>beep(1760,.1,"triangle"),70);
         for(let k=0;k<10;k++)S.parts.push({x:c.x,y:cy,vx:(Math.random()-.5)*160,vy:(Math.random()-.5)*160,t:.5,c:"#ffd45e",r:2.5})}});
     S.coins=S.coins.filter(c=>c.x>-30&&!c.got);
-    if(S.fapT>0)S.fapT-=dt;
+    if(S.inv>0)S.inv-=dt;if(S.smkT>0)S.smkT-=dt;
     S.picks.forEach(k=>{k.x-=sp*dt;k.a+=dt*3;k.y=k.pipe.top+k.pipe.gap/2+Math.sin(k.a)*10;
-      if(!k.got&&Math.hypot(k.x-BX,k.y-S.y)<24){k.got=true;S.fapT=8;beep(700,.08,"triangle");setTimeout(()=>beep(1050,.1,"triangle"),80);setTimeout(()=>beep(1400,.14,"triangle"),160);
-        const e=S.ov.querySelector("#fbLvl");e.innerHTML=`<b>BOUCLIER FAP</b><span>La fumée est sans effet 8 s</span>`;e.className="fb-lvl show fap";clearTimeout(S.bt);S.bt=setTimeout(()=>{if(S)e.className="fb-lvl"},1600)}});
+      if(!k.got&&touch(k.x,k.y,16,18)){k.got=true;S.shield=1;beep(700,.08,"triangle");setTimeout(()=>beep(1050,.1,"triangle"),80);setTimeout(()=>beep(1400,.14,"triangle"),160);
+        const e=S.ov.querySelector("#fbLvl");e.innerHTML=`<b>BOUCLIER FAP</b><span>+1 vie : il encaisse le prochain choc</span>`;e.className="fb-lvl show fap";clearTimeout(S.bt);S.bt=setTimeout(()=>{if(S)e.className="fb-lvl"},1600)}});
     S.picks=S.picks.filter(k=>k.x>-30&&!k.got);
     // collisions
     const bx0=BX-13,bx1=BX+13,by0=S.y-16,by1=S.y+16;
-    if(by1>=GROUND||by0<-30)return crash();
-    for(const p of S.pipes){
-      if(bx1>p.x-PW/2&&bx0<p.x+PW/2&&(by0<p.top||by1>p.top+p.gap))return crash();
-      if(S.fapT<=0&&p.smoke&&p.smoke.on&&bx1>p.x-PW/2-6&&bx0<p.x+PW/2+6){const reach=p.gap*.55;
-        if(p.smoke.side==="top"?by0<p.top+reach:by1>p.top+p.gap-reach)return crash(true)}
+    let hit=by1>=GROUND?"ground":by0<-30?"top":"";
+    if(!hit)for(const p of S.pipes){
+      if(bx1>p.x-PW/2&&bx0<p.x+PW/2&&(by0<p.top||by1>p.top+p.gap)){hit="pipe";break}
+      // la fumée ne tue pas : elle secoue le bidon et le pousse vers le pot (sauf avec le bouclier FAP)
+      if(p.smoke&&p.smoke.on&&!S.shield&&bx1>p.x-PW/2-6&&bx0<p.x+PW/2+6){const reach=p.gap*.55;
+        if(p.smoke.side==="top"?by0<p.top+reach:by1>p.top+p.gap-reach){
+          S.vy+=((p.smoke.side==="top"?1:-1)*1100+(Math.random()-.5)*2600)*dt;S.smkT=.2;S.shake=Math.max(S.shake,.16);
+          if(S.t>S.coughT){S.coughT=S.t+.22;beep(110+Math.random()*60,.07,"sawtooth")}}}
     }
+    if(!hit)return;
+    if(S.inv<=0){
+      if(!S.shield)return crash(S.smkT>0);
+      // la bulle éclate à la place du bidon, et la partie continue
+      S.shield=0;S.inv=1;S.shake=.25;beep(300,.12,"triangle");setTimeout(()=>beep(200,.15,"triangle"),90);
+      for(let k=0;k<18;k++){const a=k/18*6.28;S.parts.push({x:BX+Math.cos(a)*34,y:S.y+Math.sin(a)*34,vx:Math.cos(a)*120,vy:Math.sin(a)*120,t:.45,c:"#9fe0ff",r:2.5})}
+      const e=S.ov.querySelector("#fbLvl");e.innerHTML=`<b>BULLE ÉCLATÉE !</b><span>Tu continues, sans filet</span>`;e.className="fb-lvl show fap";clearTimeout(S.bt);S.bt=setTimeout(()=>{if(S)e.className="fb-lvl"},1300);
+    }
+    // protégé : on rebondit sur le sol ou le plafond, on traverse le pot (tant qu'on est dedans, on reste protégé)
+    if(hit==="ground"){S.y=GROUND-17;S.vy=-380}
+    else if(hit==="top"){S.y=-13;S.vy=Math.max(0,S.vy)}
+    else S.inv=Math.max(S.inv,.15);
   }
+  // ramassage large : tout ce qui touche le dessin du bidon (ailes et poignée comprises) compte
+  function touch(x,y,rx,ry){return Math.abs(x-BX)<rx+22&&Math.abs(y-S.y)<ry+24}
   function crash(smoke){
     S.state="over";S.shake=.4;beep(140,.25,"sawtooth");
     for(let k=0;k<16;k++)S.parts.push({x:BX,y:S.y,vx:(Math.random()-.5)*240,vy:(Math.random()-.8)*240,t:.8,c:Math.random()<.5?"#7a1e1e":"#f2c230",r:3});
@@ -1407,9 +1424,12 @@ const FLAPPY=(()=>{
     c.fillStyle="#3b3e48";c.fillRect(0,GROUND,W,H-GROUND);c.fillStyle="#565a66";c.fillRect(0,GROUND,W,5);
     c.fillStyle="#f2d68a";const off3=S.dist%36;for(let x=-off3;x<W;x+=36)c.fillRect(x,GROUND+22,18,4);
     S.parts.forEach(p=>{c.globalAlpha=Math.max(0,Math.min(1,p.t*2));c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r||2,0,7);c.fill()});c.globalAlpha=1;
-    drawBidon(c,BX,S.y,S.state==="ready"?0:Math.max(-.45,Math.min(1.1,S.vy/600)));
-    if(S.fapT>0){const blink=S.fapT<2&&Math.floor(S.fapT*8)%2;if(!blink){c.strokeStyle="rgba(94,200,255,.9)";c.lineWidth=3;c.fillStyle="rgba(94,200,255,.18)";c.beginPath();c.arc(BX,S.y,30,0,7);c.fill();c.stroke()}
-      c.fillStyle="rgba(10,14,30,.6)";c.fillRect(W-74,10,64,10);c.fillStyle="#5ec8ff";c.fillRect(W-72,12,60*Math.max(0,S.fapT)/8,6);c.fillStyle="#fff";c.font="bold 9px Arial";c.textAlign="right";c.fillText("FAP",W-78,19)}
+    if(S.inv>0&&Math.floor(S.inv*10)%2)c.globalAlpha=.35;
+    const sk=S.smkT>0&&S.state==="play";
+    drawBidon(c,BX+(sk?(Math.random()-.5)*5:0),S.y,(S.state==="ready"?0:Math.max(-.45,Math.min(1.1,S.vy/600)))+(sk?(Math.random()-.5)*.5:0));c.globalAlpha=1;
+    if(S.shield){const r=36+Math.sin(S.t*5)*1.5;c.strokeStyle="rgba(94,200,255,.9)";c.lineWidth=3;c.fillStyle="rgba(94,200,255,.16)";c.beginPath();c.arc(BX,S.y-4,r,0,7);c.fill();c.stroke();
+      c.strokeStyle="rgba(255,255,255,.7)";c.lineWidth=2;c.beginPath();c.arc(BX,S.y-4,r-6,3.6,4.4);c.stroke();
+      c.fillStyle="rgba(10,14,30,.6)";c.fillRect(W-62,10,52,14);c.fillStyle="#5ec8ff";c.font="bold 10px Arial";c.textAlign="right";c.fillText("FAP ×1",W-14,21)}
     if(n>.05){const rg=c.createRadialGradient(BX,S.y,30,BX,S.y,260);rg.addColorStop(0,"rgba(0,0,0,0)");rg.addColorStop(1,`rgba(0,0,10,${.45*n})`);c.fillStyle=rg;c.fillRect(0,0,W,H)}
     c.restore();
   }
@@ -1635,7 +1655,7 @@ function annBody(t){return String(t||"").split(/\n\n+/).map(par=>{const L=par.sp
   if(items.length&&items.length===(head?L.length-1:L.length)) return `${head?`<h5 class="ann-h">${esc(L[0])}</h5>`:""}<ul class="ann-ul">${items.map(x=>`<li>${esc(x.replace(/^•\s*/,""))}</li>`).join("")}</ul>`;
   return `<p>${esc(par).replace(/\n/g,"<br>")}</p>`}).join("")}
 async function maybeAnn(){
-  if(annShown||document.getElementById("ov")||$("#dlg").open) return;
+  if(annShown||document.getElementById("ov")||document.getElementById("kart")||document.getElementById("mgov")||$("#dlg").open) return;
   let a=null; try{ a=await rpc("announcement_next",{}); }catch(e){ return; }
   if(!a||!a.id) return; annShown=true;
   const d=$("#dlg");
