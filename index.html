@@ -763,6 +763,21 @@ nav.tabs button{position:relative}
 .bigwrap .burst.go-P,.deck .burst.go-P{background:radial-gradient(circle,rgba(255,255,255,.85),rgba(190,220,255,.2) 45%,transparent 65%);animation:burst 1.5s ease-out}
 .dots i.r-P.seen{background:#fff;box-shadow:0 0 8px #bfe0ff}
 .uniq-note{font-size:13.5px;line-height:1.45;color:var(--soft);max-width:30ch}
+/* rareté Halloween */
+.card.r-H{padding:7px;background:linear-gradient(115deg,#2B1840,#FF7A1A 18%,#3A1D5C 36%,#FFB347 52%,#2B1840 70%,#FF7A1A 86%,#2B1840);background-size:250% 250%;animation:gold 6s linear infinite;box-shadow:0 0 0 1px rgba(255,160,70,.7),0 0 24px rgba(255,122,26,.55),0 6px 22px rgba(43,24,64,.4)}
+.card.r-H .inner{background:radial-gradient(circle at 70% 0%,#4A2470,#22102F 60%,#12081B);color:#FFE6C7;box-shadow:inset 0 0 0 1px rgba(255,160,70,.45)}
+.card.r-H .inner::before{background:radial-gradient(1.5px 1.5px at 12% 18%,#FFD9A0,transparent),radial-gradient(1px 1px at 34% 8%,#fff,transparent),radial-gradient(1.5px 1.5px at 86% 28%,#FFB347,transparent),radial-gradient(1px 1px at 62% 94%,#fff,transparent)}
+.card.r-H .rlab{background:linear-gradient(90deg,#FFB347,#FF7A1A);color:#2B1000}
+.card.r-H .art{background:radial-gradient(circle at 50% 45%,#FFE3A3,#F59A3E 55%,#6A2F7E 100%);box-shadow:inset 0 0 0 1px rgba(255,190,110,.8)}
+.card.r-H .nm{color:#FFC98A;text-shadow:0 0 10px rgba(255,122,26,.6)}
+.card.r-H .ds{opacity:.9}
+.card.r-H .st span{background:rgba(255,160,70,.18);color:#FFE6C7}
+.rpill.r-H{background:linear-gradient(90deg,#FF7A1A,#7B3FC4);color:#fff}
+.cback.hint-H,.flip .back.hint-H{box-shadow:0 0 0 3px #FF7A1A,0 0 26px rgba(255,122,26,.9);animation:pulseH 1.2s infinite}
+@keyframes pulseH{50%{box-shadow:0 0 0 3px #7B3FC4,0 0 10px rgba(123,63,196,.7)}}
+.bigwrap .burst.go-H,.deck .burst.go-H{background:radial-gradient(circle,rgba(255,150,60,.8),rgba(123,63,196,.25) 45%,transparent 65%);animation:burst 1.3s ease-out}
+.dots i.r-H.seen{background:#FF7A1A}
+.tb-tile.r-H{border-color:#FF7A1A}
 
 .ann-body .ann-h{margin:14px 0 4px;font-size:15px;font-weight:900;font-stretch:110%;color:#0b1736}
 .ann-body .ann-h:first-child{margin-top:0}
@@ -941,7 +956,7 @@ const LOGIN_DOMAIN      = "winamasters.adavan.fr";  // sert juste à fabriquer u
 
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const PACK_SIZE = 5;
-const RORDER = ["C","U","R","E","Q","L","S","P"];
+const RORDER = ["C","U","R","E","H","Q","L","S","P"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={}, charmSt=null;
@@ -1694,7 +1709,7 @@ function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) ope
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
-function cardBack(c){return `<div class="cback ${c&&["R","E","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
+function cardBack(c){return `<div class="cback ${c&&["R","E","H","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
 function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
 const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
 function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
@@ -1736,8 +1751,11 @@ function showOpening(paid){
 /* --- 1. déchirer le haut du booster --- */
 function tearRequest(){
   const st=ovState; if(!st||st.req) return st&&st.req;
-  st.req=(st.paid==="gold"?rpc("open_gold",{}):rpc("open_booster",{paid:st.paid})).then(ids=>{
-    if(ovState!==st) return null; st.ids=ids; lastPull=ids;
+  st.req=(st.paid==="gold"?rpc("open_gold",{}):rpc("open_booster",{paid:st.paid})).then(async ids=>{
+    if(ovState!==st) return null;
+    // une carte pas encore connue de la page (ajoutée depuis son ouverture) : on recharge le catalogue
+    if((ids||[]).some(id=>!cardById[id])){try{await loadCatalog()}catch(e){} if(ovState!==st) return null}
+    ids=(ids||[]).filter(id=>cardById[id]); st.ids=ids; lastPull=ids;
     loadGame().then(()=>{ if(!document.getElementById("ov")) render(); else renderWallet(); }).catch(()=>{});
     buildPile(); return ids;
   }).catch(e=>{ if(ovState===st){ closeOverlay(); toast(errMsg(e)); } return null; });
@@ -1810,7 +1828,7 @@ async function finishTear(){
 function buildPile(){
   const st=ovState, pile=document.getElementById("pile"); if(!pile||!st.ids) return;
   pile.innerHTML=st.ids.map((id,i)=>{const c=cardById[id];
-    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
+    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","H","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
   layoutPile(); bindSwipe();
 }
 function layoutPile(){
@@ -1835,7 +1853,7 @@ function revealTop(){
   hud();
   const already=el&&el.classList.contains("on");
   setTimeout(()=>{ if(ovState!==st||!el) return; el.classList.add("on"); st.seen.add(st.idx); hud();
-    if(["R","E","Q","L","S","P"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
+    if(["R","E","H","Q","L","S","P"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
       try{navigator.vibrate&&navigator.vibrate(["L","S","P"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
   },already?0:150);
 }
@@ -2035,7 +2053,8 @@ function viewBooster(){
     </aside>
   </div>${last}${viewFeed()}`;
 }
-function visibleCards(){return cards.filter(c=>c.active||has(c.id))}
+function live(c){return c.active&&!(c.drop_until&&new Date(c.drop_until)<=new Date())}
+function visibleCards(){return cards.filter(c=>live(c)||has(c.id))}
 function viewCollection(){
   const vis=visibleCards();
   const brandList=Object.values(brands).filter(b=>vis.some(c=>c.brand===b.id));
@@ -2154,7 +2173,7 @@ function viewTrades(){
 }
 function plink(id,label){ if(!id) return esc(label||"Un collègue"); return `<button class="plink" data-player="${esc(id)}">${esc(label||who(id))}</button>`; }
 function viewRanking(){
-  const total=cards.filter(c=>c.active).length;
+  const total=cards.filter(live).length;
   return `<h2>Classement</h2><p class="sub">Le score additionne les points de chaque carte différente selon sa rareté, moins les points perdus à cause du Chat Noir. Clique sur un joueur pour voir sa collection.</p>
   <div class="tablewrap"><table class="lb"><thead><tr><th>#</th><th>Joueur</th><th>Score</th><th>Collection</th><th>Boosters</th></tr></thead><tbody>
   ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}" ><td class="rk">${i+1}</td><td>${p.id===uid?`<button class="plink" data-tab="collection">${esc(p.pseudo)} (toi)</button>`:plink(p.id,p.pseudo)}${charmIcons(p.id)}</td><td><b>${p.score}</b>${p.malus?`<span class="malus" title="Points perdus à cause du Chat Noir">−${p.malus}</span>`:""}</td><td>${p.uniq} / ${total}</td><td>${p.opened}</td></tr>`).join("")}
@@ -2178,7 +2197,7 @@ function viewPlayer(){
     <div class="phead"><div><h2>${esc(pl.pseudo)}</h2><p class="sub">${rk>=0?`${rk+1}${rk===0?"er":"e"} au classement · score ${b.score} · ${b.uniq} cartes différentes`:""}</p></div>
     <button class="btn" data-act="tradewith" data-to="${esc(viewPid)}">Proposer un échange</button></div>`;
   if(!viewInv) return head+`<div class="empty">Chargement de sa collection…</div>`;
-  const theirs=c=>(viewInv[c.id]||0)>0; const vis=cards.filter(c=>c.active||has(c.id)||theirs(c));
+  const theirs=c=>(viewInv[c.id]||0)>0; const vis=cards.filter(c=>live(c)||has(c.id)||theirs(c));
   const inBrand=vis.filter(c=>pBrand==="all"||c.brand===pBrand);
   const F={theirs:["Ses cartes",inBrand.filter(theirs).length],want:["Qui te manquent",inBrand.filter(c=>theirs(c)&&!has(c.id)).length],dups:["Ses doublons",inBrand.filter(c=>(viewInv[c.id]||0)>1).length],all:["Tout le catalogue",inBrand.length]};
   const brandsChips=[["all","Toutes les marques"],...Object.values(brands).filter(x=>vis.some(c=>c.brand===x.id)).map(x=>[x.id,x.name])]
