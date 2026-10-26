@@ -747,6 +747,22 @@ nav.tabs button{position:relative}
 .card.k-ghost-passionauto .nm{color:#fff;text-shadow:0 0 12px rgba(255,180,190,.9),0 0 2px #fff;letter-spacing:.02em}
 .card.k-ghost-passionauto .ds{opacity:.85;font-style:italic}
 .card.k-ghost-passionauto .st span{background:rgba(255,255,255,.14);color:#ffe9eb}
+/* carte Unique : un seul exemplaire, pour une seule personne */
+.card.r-P{padding:7px;background:linear-gradient(115deg,#BFD3EE,#FFFFFF 18%,#D6E4F7 34%,#FFFFFF 50%,#C3D6F0 66%,#F4F8FF 82%,#BFD3EE);background-size:250% 250%;animation:gold 6s linear infinite;box-shadow:0 0 0 1px rgba(255,255,255,.9),0 0 22px rgba(160,200,255,.65),0 6px 22px rgba(20,40,90,.25)}
+.card.r-P .inner{background:linear-gradient(170deg,#F7FAFF,#DCE9FA 60%,#C7DBF4);color:#14254A;box-shadow:inset 0 0 0 1px rgba(120,160,215,.55)}
+.card.r-P .inner::before{background:radial-gradient(2px 2px at 14% 20%,#fff,transparent),radial-gradient(1.5px 1.5px at 84% 14%,#fff,transparent),radial-gradient(2px 2px at 88% 72%,#fff,transparent),linear-gradient(180deg,rgba(255,255,255,.35),rgba(255,255,255,0))}
+.card.r-P .brand{background:#14254A;color:#fff}
+.card.r-P .rlab{background:#fff;color:#14254A;box-shadow:0 0 0 1px #9DB8E0}
+.card.r-P .art{background:radial-gradient(circle at 50% 40%,#FFFFFF,#E3EEFB 70%);box-shadow:inset 0 0 0 1px rgba(120,160,215,.6)}
+.card.r-P .nm{color:#14254A}
+.card.r-P .ds{opacity:1;color:#2A3D66;font-style:italic}
+.card.r-P .st span{background:rgba(20,37,74,.1);color:#14254A}
+.rpill.r-P{background:#fff;color:#14254A;box-shadow:inset 0 0 0 1px #9DB8E0}
+.cback.hint-P,.flip .back.hint-P{box-shadow:0 0 0 3px #fff,0 0 30px rgba(190,220,255,.95);animation:pulseP 1.2s infinite}
+@keyframes pulseP{50%{box-shadow:0 0 0 3px #fff,0 0 10px rgba(190,220,255,.5)}}
+.bigwrap .burst.go-P,.deck .burst.go-P{background:radial-gradient(circle,rgba(255,255,255,.85),rgba(190,220,255,.2) 45%,transparent 65%);animation:burst 1.5s ease-out}
+.dots i.r-P.seen{background:#fff;box-shadow:0 0 8px #bfe0ff}
+.uniq-note{font-size:13.5px;line-height:1.45;color:var(--soft);max-width:30ch}
 
 .ann-body .ann-h{margin:14px 0 4px;font-size:15px;font-weight:900;font-stretch:110%;color:#0b1736}
 .ann-body .ann-h:first-child{margin-top:0}
@@ -925,7 +941,7 @@ const LOGIN_DOMAIN      = "winamasters.adavan.fr";  // sert juste à fabriquer u
 
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const PACK_SIZE = 5;
-const RORDER = ["C","U","R","E","Q","L","S"];
+const RORDER = ["C","U","R","E","Q","L","S","P"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={}, charmSt=null;
@@ -1678,7 +1694,7 @@ function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) ope
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
-function cardBack(c){return `<div class="cback ${c&&["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
+function cardBack(c){return `<div class="cback ${c&&["R","E","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
 function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
 const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
 function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
@@ -1794,7 +1810,7 @@ async function finishTear(){
 function buildPile(){
   const st=ovState, pile=document.getElementById("pile"); if(!pile||!st.ids) return;
   pile.innerHTML=st.ids.map((id,i)=>{const c=cardById[id];
-    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","Q","L","S"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
+    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
   layoutPile(); bindSwipe();
 }
 function layoutPile(){
@@ -1819,8 +1835,8 @@ function revealTop(){
   hud();
   const already=el&&el.classList.contains("on");
   setTimeout(()=>{ if(ovState!==st||!el) return; el.classList.add("on"); st.seen.add(st.idx); hud();
-    if(["R","E","Q","L","S"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
-      try{navigator.vibrate&&navigator.vibrate(["L","S"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
+    if(["R","E","Q","L","S","P"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
+      try{navigator.vibrate&&navigator.vibrate(["L","S","P"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
   },already?0:150);
 }
 function throwTop(dir){
@@ -2162,7 +2178,7 @@ function viewPlayer(){
     <div class="phead"><div><h2>${esc(pl.pseudo)}</h2><p class="sub">${rk>=0?`${rk+1}${rk===0?"er":"e"} au classement · score ${b.score} · ${b.uniq} cartes différentes`:""}</p></div>
     <button class="btn" data-act="tradewith" data-to="${esc(viewPid)}">Proposer un échange</button></div>`;
   if(!viewInv) return head+`<div class="empty">Chargement de sa collection…</div>`;
-  const vis=visibleCards(); const theirs=c=>(viewInv[c.id]||0)>0;
+  const theirs=c=>(viewInv[c.id]||0)>0; const vis=cards.filter(c=>c.active||has(c.id)||theirs(c));
   const inBrand=vis.filter(c=>pBrand==="all"||c.brand===pBrand);
   const F={theirs:["Ses cartes",inBrand.filter(theirs).length],want:["Qui te manquent",inBrand.filter(c=>theirs(c)&&!has(c.id)).length],dups:["Ses doublons",inBrand.filter(c=>(viewInv[c.id]||0)>1).length],all:["Tout le catalogue",inBrand.length]};
   const brandsChips=[["all","Toutes les marques"],...Object.values(brands).filter(x=>vis.some(c=>c.brand===x.id)).map(x=>[x.id,x.name])]
@@ -2229,13 +2245,13 @@ function openCardDlg(id){
   const d=$("#dlg");
   d.innerHTML=`<div style="position:relative"><button class="close" data-act="close" aria-label="Fermer">×</button><div class="mdl">${cardHTML(c)}
    <div><h4>${esc(c.name)}</h4><div class="meta" style="color:var(--soft)">${esc(rlabel(c.rarity))} · tu en as ${n}</div>
-   <div class="acts">
+   ${c.owner?`<p class="uniq-note">Carte unique, rien qu'à toi : elle ne peut être ni vendue, ni échangée, ni défaussée.</p>`:`<div class="acts">
     <div class="box"><label class="field">Mettre aux enchères · mise de départ (bidons)<input id="sellPrice" type="number" min="1" value="${Math.max(2,v*3)}"></label>
       <div class="au-dur" role="radiogroup" aria-label="Durée">${[1,2,5].map(h=>`<button class="chip" data-audur="${h}" aria-pressed="${h===1}">${h} h</button>`).join("")}</div>
       <button class="btn small" style="margin-top:6px" data-sell="${esc(c.id)}">Lancer l'enchère</button></div>
     <div class="box"><button class="btn ghost small" data-act="tradefrom" data-give="${esc(c.id)}" ${players.length>1?"":"disabled"}>Proposer en échange</button></div>
     <div class="box"><button class="btn ghost small" data-discard="${esc(c.id)}">Défausser (+${v} bidon${v>1?"s":""})</button></div>
-   </div></div></div></div>`;
+   </div>`}</div></div></div>`;
   d.showModal();
 }
 let tb=null;
@@ -2276,7 +2292,7 @@ function tbGrid(){
   const mine=tb.side==="mine", src=mine?inv:tb.theirs;
   if(!src){g.innerHTML=`<div class="empty">Chargement de sa collection…</div>`;return}
   const norm=x=>(x||"").normalize("NFD").replace(/[̀-ͯ]/g,"").toLowerCase(), q=norm(tb.q.trim());
-  const list=Object.keys(src).filter(id=>src[id]>0&&cardById[id]).map(id=>cardById[id])
+  const list=Object.keys(src).filter(id=>src[id]>0&&cardById[id]&&!cardById[id].owner).map(id=>cardById[id])
     .filter(c=>!q||norm(c.name+" "+(brands[c.brand]?.name||"")+" "+rlabel(c.rarity)).includes(q))
     .sort((a,b)=>RORDER.indexOf(b.rarity)-RORDER.indexOf(a.rarity)||a.name.localeCompare(b.name,"fr"));
   const sel=mine?tb.gives:tb.wants;
