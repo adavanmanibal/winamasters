@@ -921,6 +921,59 @@ body.mg-open{overflow:hidden}
 .fb-lvl.fap b{color:#5ec8ff}
 .gm-flappy{background:linear-gradient(180deg,rgba(29,43,90,.25),rgba(10,14,40,.9)),linear-gradient(180deg,#1d2b5a,#e07a4a 60%,#f6c56a);box-shadow:inset 0 0 0 2px #ffcf2e}
 .gm-flappy::before,.gm-flappy::after{display:none}
+/* ---------- La Cloche de 10h ---------- */
+.mg-ov.cl{background:#0b1024;padding:8px max(14px,env(safe-area-inset-left,0px)) 10px max(14px,env(safe-area-inset-right,0px));gap:8px}
+.cl-hud{display:flex;justify-content:space-between;align-items:center;gap:12px;min-height:44px}
+.cl-hud .mg-x{position:static;flex:none}
+.cl-hud>div:first-child{flex:1}
+.cl-lbl{font-family:"Courier New",monospace;font-weight:900;font-size:13px;letter-spacing:.08em;color:#aab3cf;text-transform:uppercase}
+.cl-pips{display:flex;gap:6px;margin-top:4px}.cl-pips i{width:11px;height:11px;border-radius:50%;background:rgba(255,255,255,.16)}
+.cl-pips i.ok{background:#6dffac}.cl-pips i.bad{background:#b3202a}.cl-pips i.cur{background:#ffcf2e;box-shadow:0 0 0 3px rgba(255,207,46,.35)}
+.cl-tot{font-family:"Courier New",monospace;font-weight:900;font-size:28px;text-shadow:3px 3px 0 #000;font-variant-numeric:tabular-nums;text-align:right;line-height:1}
+.cl-tot small{display:block;font-size:11px;letter-spacing:.08em;color:#aab3cf;text-shadow:none;margin-top:4px}
+.cl-stage{position:relative;flex:1;min-height:0;width:100%;max-width:520px;margin:0 auto;border-radius:16px;overflow:hidden;background:radial-gradient(120% 75% at 50% 0%,#1a2654,#0e1533 72%);box-shadow:0 0 0 3px #141a30,0 12px 40px rgba(0,0,0,.5)}
+.cl-stage svg{position:absolute;inset:0;width:100%;height:100%}
+.cl-stage::after{content:"";position:absolute;inset:0;background:#ffcf2e;opacity:0;pointer-events:none}
+.cl-stage.ring::after{animation:clflash .45s ease-out}
+@keyframes clflash{0%{opacity:.35}100%{opacity:0}}
+.cl-stage.oops{animation:cloops .35s}
+@keyframes cloops{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.cl-bell{transform-box:fill-box;transform-origin:50% 0%}
+.ring .cl-bell{animation:clswing .9s ease-out}
+@keyframes clswing{0%{transform:translateY(0) rotate(0)}10%{transform:translateY(-14px) rotate(-16deg)}25%{transform:translateY(-16px) rotate(14deg)}40%{transform:translateY(-12px) rotate(-10deg)}55%{transform:translateY(-7px) rotate(6deg)}75%{transform:translateY(-2px) rotate(-3deg)}100%{transform:none}}
+.fake .cl-bell{animation:clshiver .45s linear}
+@keyframes clshiver{20%{transform:rotate(-3deg)}40%{transform:rotate(3deg)}60%{transform:rotate(-2deg)}80%{transform:rotate(2deg)}}
+.cl-waves,.cl-ding{opacity:0}
+.ring .cl-waves{animation:clwaves .9s ease-out}
+@keyframes clwaves{0%{opacity:0}15%{opacity:1}100%{opacity:0}}
+.cl-ding{transform-box:fill-box;transform-origin:50% 50%}
+.ring .cl-ding{animation:cldingpop 1s ease-out forwards}
+@keyframes cldingpop{0%{opacity:0;transform:scale(.4) rotate(-10deg)}18%{opacity:1;transform:scale(1.15) rotate(-10deg)}35%{transform:scale(1) rotate(-10deg)}80%{opacity:1}100%{opacity:0;transform:scale(1) rotate(-10deg)}}
+.cl-steam path{animation:clsteam 2.4s ease-in-out infinite}.cl-steam path:nth-child(2){animation-delay:.6s}
+@keyframes clsteam{0%,100%{opacity:.25}50%{opacity:.8}}
+.cl-toast{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);text-align:center;pointer-events:none;width:calc(100% - 32px)}
+.cl-toast .ms{font-family:"Courier New",monospace;font-weight:900;font-size:44px;line-height:1;text-shadow:3px 3px 0 #000;font-variant-numeric:tabular-nums}
+.cl-toast .c{font-weight:800;font-size:15px;margin-top:6px;text-shadow:0 2px 0 #000}
+.cl-toast.pop{animation:clpop .35s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes clpop{from{transform:translate(-50%,10px) scale(.8);opacity:0}}
+.cl-toast .good{color:#6dffac}.cl-toast .mid{color:#ffcf2e}.cl-toast .bad{color:#ff6b6b}
+.cl-hint{text-align:center;font-family:"Courier New",monospace;font-weight:900;font-size:15px;letter-spacing:.06em;min-height:22px;color:#aab3cf}
+.cl-hint.go{color:#6dffac}
+.cl-hit{display:block;width:100%;max-width:520px;margin:0 auto;min-height:84px;border:0;border-radius:20px;font:900 22px/1 "Courier New",monospace;letter-spacing:.06em;text-transform:uppercase;color:#fff;background:linear-gradient(180deg,#2b3768,#1a2347);box-shadow:inset 0 0 0 3px #3d4c88,0 6px 0 #0a0f22;cursor:pointer;touch-action:manipulation;-webkit-user-select:none;user-select:none;transition:transform .05s}
+.cl-hit:active{transform:translateY(4px);box-shadow:inset 0 0 0 3px #3d4c88,0 2px 0 #0a0f22}
+.cl-hit.go{background:linear-gradient(180deg,#6dffac,#22c46e);color:#0b1024;box-shadow:inset 0 0 0 3px #b8ffd6,0 6px 0 #0d6b3a,0 0 30px rgba(109,255,172,.55)}
+.cl-hit:disabled{opacity:.45;cursor:default}
+.cl-hit:focus-visible{outline:3px solid #5ec8ff;outline-offset:3px}
+.cl-over{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(6,10,26,.55);cursor:default}
+.cl-over[hidden]{display:none}
+.cl-rules{text-align:left}.cl-rules ul{margin:0;padding-left:18px}.cl-rules li{margin:4px 0}
+.cl-rows{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;margin:10px 0 4px}
+.cl-rows span{font-family:"Courier New",monospace;font-weight:900;font-size:13px;padding:4px 8px;border-radius:8px;background:rgba(255,255,255,.08)}
+.cl-rows span.bad{background:rgba(179,32,42,.35);color:#ffd2d2}
+.gm-cloche{background:linear-gradient(180deg,rgba(26,38,84,.35),rgba(10,14,40,.92)),radial-gradient(circle at 80% 20%,#f7d778 0,#d9a21e 14%,rgba(217,162,30,0) 30%),linear-gradient(180deg,#1a2654,#0e1533);box-shadow:inset 0 0 0 2px #ffcf2e}
+.gm-cloche::before,.gm-cloche::after{display:none}
+@media (prefers-reduced-motion:reduce){.ring .cl-bell,.fake .cl-bell,.cl-stage.oops,.cl-toast.pop,.cl-hint.go{animation:none}}
+
 
 .gm-pods{grid-template-columns:repeat(5,1fr)!important;gap:8px!important}
 .gm-pod{padding:9px 6px!important}
@@ -1052,7 +1105,7 @@ function maybeCharmDlg(){
 /* ---------- Jeu de la semaine ---------- */
 let game=null;
 function fmtMs(ms){if(ms==null)return "–";ms=Math.max(0,Math.round(ms));const m=Math.floor(ms/60000),s=Math.floor(ms%60000/1000),c=Math.floor(ms%1000/10);return `${m}:${String(s).padStart(2,"0")}.${String(c).padStart(2,"0")}`}
-function gBest(v){return game&&game.score_mode==="score"?(v==null?"–":`${v} pts`):fmtMs(v)}
+function gBest(v){if(game&&game.slug==="cloche")return v==null?"–":`${Number(v).toLocaleString("fr-FR")} ms`;return game&&game.score_mode==="score"?(v==null?"–":`${v} pts`):fmtMs(v)}
 function rankLbl(i){return i===0?"1er":`${i+1}e`}
 function rewardTxt(r){if(!r)return "";const a=[];if(r.gold)a.push(`${r.gold} booster${r.gold>1?"s":""} OR`);if(r.bought)a.push(`${r.bought} booster${r.bought>1?"s":""}`);return a.join(" + ")}
 function dLeft(t){const ms=Date.parse(t)-Date.now(); if(ms<=0) return "terminé"; const d=Math.floor(ms/86400000), h=Math.floor(ms%86400000/3600000), m=Math.floor(ms%3600000/60000);
@@ -1090,6 +1143,149 @@ function playFlappy(){
       return `${r.record?"<b>Nouveau record !</b> ":""}${rankLbl(r.rank-1)} au classement`},
     onClose:()=>{try{render(true)}catch(e){}}});
 }
+/* ---------- La Cloche de 10h ---------- */
+const CLOCHE=(()=>{
+  const N=5, PEN=1000, LATE=1500, MIN_RT=90, SPEED=30; // horloge : 1 s réelle = 30 s au bureau
+  let S=null, AC=null;
+  const SVG=`<svg viewBox="0 0 300 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><defs>
+    <linearGradient id="clBrass" x1="0" x2="1"><stop offset="0" stop-color="#a87414"/><stop offset=".3" stop-color="#f7d778"/><stop offset=".55" stop-color="#d9a21e"/><stop offset="1" stop-color="#8a5e10"/></linearGradient>
+    <linearGradient id="clWood" x1="0" x2="1"><stop offset="0" stop-color="#4a2a12"/><stop offset=".5" stop-color="#8a5530"/><stop offset="1" stop-color="#3e220e"/></linearGradient>
+    <linearGradient id="clDesk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a5f37"/><stop offset="1" stop-color="#4f3218"/></linearGradient></defs>
+    <g transform="translate(150 62) scale(.82) translate(-150 -82)"><circle cx="150" cy="82" r="60" fill="#fbf7ea" stroke="#141a30" stroke-width="7"/>
+    <g stroke="#141a30" stroke-linecap="round">${Array.from({length:12},(_,i)=>{const a=i*Math.PI/6,r1=i%3?50:46;return `<line x1="${(150+Math.sin(a)*r1).toFixed(1)}" y1="${(82-Math.cos(a)*r1).toFixed(1)}" x2="${(150+Math.sin(a)*55).toFixed(1)}" y2="${(82-Math.cos(a)*55).toFixed(1)}" stroke-width="${i%3?2.5:4.5}"/>`}).join("")}</g>
+    <line class="cl-hh" x1="150" y1="82" x2="150" y2="54" stroke="#141a30" stroke-width="6" stroke-linecap="round"/>
+    <line class="cl-mh" x1="150" y1="82" x2="150" y2="36" stroke="#141a30" stroke-width="4" stroke-linecap="round"/>
+    <line class="cl-sh" x1="150" y1="90" x2="150" y2="32" stroke="#d62f2f" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="150" cy="82" r="4.5" fill="#d62f2f"/></g>
+    <rect x="112" y="122" width="76" height="22" rx="6" fill="#0a0f22" stroke="#2c3a6e" stroke-width="2"/>
+    <text class="cl-lcd" x="150" y="138" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="14" fill="#6dffac">09:57:00</text>
+    <rect x="-20" y="336" width="340" height="100" fill="url(#clDesk)"/><rect x="-20" y="332" width="340" height="8" fill="#a8774a"/>
+    <g class="cl-steam" fill="none" stroke="#b9c4d6" stroke-width="3" stroke-linecap="round"><path d="M236 286 q-5 -8 0 -16 q5 -8 0 -16"/><path d="M248 288 q-5 -8 0 -16 q5 -8 0 -16"/></g>
+    <path d="M262 304 q16 0 16 13 q0 13 -16 12" fill="none" stroke="#141a30" stroke-width="7"/><path d="M262 304 q16 0 16 13 q0 13 -16 12" fill="none" stroke="#eef2f7" stroke-width="3.5"/>
+    <path d="M222 294 h42 l-2 38 q0 4 -4 4 h-30 q-4 0 -4 -4z" fill="#f4f7fb" stroke="#141a30" stroke-width="3.5"/>
+    <ellipse cx="243" cy="294" rx="21" ry="4" fill="#5a3520" stroke="#141a30" stroke-width="3"/>
+    <ellipse cx="243" cy="315" rx="15" ry="9" fill="#a31f2a"/>
+    <text x="243" y="318" text-anchor="middle" font-family="Georgia, serif" font-style="italic" font-weight="700" font-size="7.5" fill="#fff">Restom</text>
+    <g class="cl-waves" fill="none" stroke="#ffcf2e" stroke-width="5" stroke-linecap="round"><path d="M86 246 q-12 30 0 60"/><path d="M70 234 q-18 42 0 84" opacity=".6"/><path d="M214 246 q12 30 0 60"/><path d="M230 234 q18 42 0 84" opacity=".6"/></g>
+    <g class="cl-ding"><text x="234" y="216" text-anchor="middle" font-family="Courier New, monospace" font-weight="900" font-size="28" fill="#ffcf2e" stroke="#141a30" stroke-width="2.5" paint-order="stroke">DING !</text></g>
+    <g transform="translate(150 332) scale(.74) translate(-150 -332)"><g class="cl-bell">
+      <path d="M142 186 q-4 -44 8 -58 q12 14 8 58z" fill="url(#clWood)" stroke="#141a30" stroke-width="4" stroke-linejoin="round"/>
+      <path d="M146 150 h8 M145 166 h10" stroke="#2a1708" stroke-width="2"/>
+      <circle cx="150" cy="124" r="9" fill="#d9a21e" stroke="#141a30" stroke-width="4"/>
+      <rect x="136" y="182" width="28" height="10" rx="3" fill="#b8861a" stroke="#141a30" stroke-width="4"/>
+      <path d="M134 192 q-6 44 -32 106 q-6 14 -20 22 h136 q-14 -8 -20 -22 q-26 -62 -32 -106z" fill="url(#clBrass)" stroke="#141a30" stroke-width="4.5" stroke-linejoin="round"/>
+      <path d="M80 318 h140 q9 0 9 7 q0 7 -9 7 h-140 q-9 0 -9 -7 q0 -7 9 -7z" fill="#c9951e" stroke="#141a30" stroke-width="4.5"/>
+      <path d="M126 204 q-4 50 -26 100" stroke="#fff6cf" stroke-width="6" stroke-linecap="round" fill="none" opacity=".7"/>
+    </g></g></svg>`;
+  function ac(){try{AC=AC||window.__ac||(window.__ac=new (window.AudioContext||window.webkitAudioContext)());if(AC.state==="suspended")AC.resume()}catch(e){AC=null}return AC}
+  function ding(at){const A=ac();if(!A)return;const t=A.currentTime+(at||0);
+    [[1,.5],[2.76,.2],[5.4,.1],[8.93,.05]].forEach(([m,g])=>{const o=A.createOscillator(),v=A.createGain();o.type="sine";o.frequency.value=760*m;
+      v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g*.55,t+.004);v.gain.exponentialRampToValueAtTime(.0001,t+1.7/Math.pow(m,.35));
+      o.connect(v);v.connect(A.destination);o.start(t);o.stop(t+2)})}
+  function blip(type,f,g,d){const A=ac();if(!A)return;const t=A.currentTime,o=A.createOscillator(),v=A.createGain();o.type=type;o.frequency.value=f;
+    v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(v);v.connect(A.destination);o.start(t);o.stop(t+d+.02)}
+  const q=s=>S.ov.querySelector(s);
+  function setClock(sec){const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=Math.floor(sec%60);
+    q(".cl-hh").setAttribute("transform",`rotate(${(h%12)*30+m*.5+s/120} 150 82)`);q(".cl-mh").setAttribute("transform",`rotate(${m*6+s*.1} 150 82)`);
+    q(".cl-sh").setAttribute("transform",`rotate(${s*6} 150 82)`);q(".cl-lcd").textContent=[h,m,s].map(x=>String(x).padStart(2,"0")).join(":")}
+  const total=()=>S.res.reduce((a,r)=>a+r.ms,0);
+  function hud(){q("#clR").textContent=`Sonnerie ${Math.min(N,S.i+1)} / ${N}`;q("#clTot").textContent=total().toLocaleString("fr-FR");
+    q("#clPips").innerHTML=Array.from({length:N},(_,k)=>{const r=S.res[k];return `<i class="${r?(r.bad?"bad":"ok"):k===S.i&&S.state!=="end"?"cur":""}"></i>`}).join("")}
+  function say(t,go){const h=q("#clHint");h.textContent=t;h.className="cl-hint"+(go?" go":"");q("#clHit").classList.toggle("go",!!go)}
+  function card(html){const o=q("#clOver");o.innerHTML=html;o.hidden=!html;q("#clHit").disabled=!!html;o.querySelectorAll("[data-cl]").forEach(b=>b.onclick=e=>{e.stopPropagation();if(b.dataset.cl==="go")run();else close()})}
+  function toast(ms,c,cls){const t=q("#clToast");t.innerHTML=`<div class="ms ${cls}">${ms}</div><div class="c ${cls}">${c}</div>`;t.hidden=false;t.classList.remove("pop");void t.offsetWidth;t.classList.add("pop")}
+  function comment(rt){return rt<200?["Réflexe de pilote !","good"]:rt<260?["Bien réveillé","good"]:rt<340?["Pas mal du tout","mid"]:rt<480?["Encore un café ?","mid"]:["Tu dormais ?","bad"]}
+  function clear(){S.timers.forEach(clearTimeout);S.timers=[];cancelAnimationFrame(S.raf)}
+  function open(opts){
+    if(S) close();
+    const ov=document.createElement("div");ov.className="mg-ov cl";ov.id="mgov";
+    ov.innerHTML=`<div class="cl-hud"><div><div class="cl-lbl" id="clR"></div><div class="cl-pips" id="clPips"></div></div>
+      <div class="cl-tot"><span id="clTot">0</span> ms<small>TOTAL</small></div><button class="mg-x" aria-label="Quitter">×</button></div>
+      <div class="cl-stage" id="clStage">${SVG}<div class="cl-toast" id="clToast" hidden></div><div class="cl-over" id="clOver"></div></div>
+      <div class="cl-hint" id="clHint">&nbsp;</div>
+      <button class="cl-hit" id="clHit" type="button" disabled>J'ai entendu !</button>`;
+    document.body.appendChild(ov);document.body.classList.add("mg-open");
+    S={opts:opts||{},ov,i:0,res:[],state:"intro",timers:[],raf:0};
+    ov.querySelector(".mg-x").onclick=close;
+    const hb=ov.querySelector("#clHit");hb.addEventListener("pointerdown",e=>{e.preventDefault();hit(e.timeStamp)});hb.addEventListener("click",e=>e.preventDefault());
+    addEventListener("keydown",kd);
+    intro();
+  }
+  function kd(e){if(!S)return;if(e.key==="Escape"){close();return}
+    if((e.code==="Space"||e.key==="Enter")&&q("#clOver").hidden){e.preventDefault();if(!e.repeat)hit(e.timeStamp)}}
+  function intro(){
+    clear();Object.assign(S,{i:0,res:[],state:"intro"});setClock(9*3600+57*60);hud();q("#clToast").hidden=true;say(" ");
+    const best=S.opts.getBest?S.opts.getBest():null;
+    card(`<div class="mg-card"><div class="mg-title">LA CLOCHE DE 10H</div><div class="mg-txt cl-rules"><ul>
+      <li>La cloche sonne vers 10 h… parfois à 9 h 58.</li><li>Appuie sur le bouton <b>dès qu'elle sonne</b> : ton temps de réaction est chronométré.</li>
+      <li>Appuie trop tôt et c'est un <b>faux départ</b> : +1 000 ms.</li><li>Attention, elle fait parfois semblant.</li><li>5 sonneries. Le plus petit total gagne.</li></ul></div>
+      ${best!=null?`<div class="mg-txt">Ton record : <b>${best.toLocaleString("fr-FR")} ms</b></div>`:""}
+      <div class="mg-btns"><button class="mg-btn" data-cl="go">Je suis prêt</button></div></div>`);
+  }
+  function run(){
+    ac();Object.assign(S,{i:0,res:[]});card("");
+    if(S.opts.onStart)S.runP=Promise.resolve(S.opts.onStart()).catch(()=>null);
+    next();
+  }
+  function next(){
+    clear();const st=q("#clStage");st.classList.remove("ring","fake");q("#clToast").hidden=true;
+    if(S.i>=N)return end();
+    S.state="wait";hud();say("Attends la cloche…");
+    const start=performance.now(),delay=1800+Math.random()*3800,c0=9*3600+57*60+Math.floor(Math.random()*40);S.clock=c0;
+    const tick=now=>{if(!S||S.state!=="wait")return;S.clock=c0+(now-start)/1000*SPEED;setClock(S.clock);S.raf=requestAnimationFrame(tick)};
+    S.raf=requestAnimationFrame(tick);
+    if(S.i>=1&&Math.random()<.65){const f=700+Math.random()*(delay-1300);
+      if(f>500)S.timers.push(setTimeout(()=>{if(!S||S.state!=="wait")return;st.classList.remove("fake");void st.offsetWidth;st.classList.add("fake");blip("square",1900,.05,.04)},f))}
+    S.timers.push(setTimeout(()=>{if(!S||S.state!=="wait")return;
+      requestAnimationFrame(()=>{if(!S||S.state!=="wait")return;
+        S.state="ring";st.classList.remove("fake");st.classList.add("ring");S.t0=performance.now();ding();ding(.22);
+        const late=S.clock<10*3600?"en avance !":S.clock<10*3600+60?"pile à l'heure":"en retard";
+        say(`MAINTENANT ! (${q(".cl-lcd").textContent.slice(0,5).replace(":","h")}, ${late})`,true);
+        S.timers.push(setTimeout(()=>{if(S&&S.state==="ring")record(LATE,"Trop tard, la pause est finie","bad",true)},LATE));
+      })},delay));
+  }
+  function record(ms,c,cls,bad){
+    clear();S.state="shown";S.res.push({ms,bad:!!bad});S.i++;hud();
+    toast(bad&&ms===PEN?"+1 000 ms":`${ms} ms`,c,cls);say(S.i<N?"Prochaine sonnerie…":" ");
+    S.timers.push(setTimeout(()=>{if(S)next()},bad?1500:1200));
+  }
+  function hit(ts){
+    if(!S)return;const st=q("#clStage");
+    if(S.state==="wait"){st.classList.remove("oops");void st.offsetWidth;st.classList.add("oops");blip("sawtooth",120,.06,.3);return record(PEN,"Faux départ ! Elle n'avait pas sonné","bad",true)}
+    if(S.state!=="ring")return;
+    const now=performance.now(),t=(typeof ts==="number"&&ts>0&&ts<=now+5)?ts:now,rt=Math.round(t-S.t0);
+    if(rt<MIN_RT){blip("sawtooth",120,.06,.3);return record(PEN,"Trop rapide pour être honnête : anticipé !","bad",true)}
+    const [c,cls]=comment(rt);record(rt,c,cls,false);
+  }
+  async function end(){
+    clear();S.state="end";hud();say(" ");q("#clStage").classList.remove("ring","fake");
+    const tot=total(),fs=S.res.filter(r=>r.bad).length,ok=S.res.filter(r=>!r.bad),avg=ok.length?Math.round(ok.reduce((a,r)=>a+r.ms,0)/ok.length):null;
+    const rows=`<div class="cl-rows">${S.res.map(r=>`<span class="${r.bad?"bad":""}">${r.bad&&r.ms===PEN?"Faux départ":r.ms+" ms"}</span>`).join("")}</div>`;
+    const head=`<div class="mg-title">${fs>=3?"LA CLOCHE A GAGNÉ":"PAUSE CAFÉ !"}</div><div class="mg-big">${tot.toLocaleString("fr-FR")} ms</div>
+      <div class="mg-txt" style="margin:0">Total des 5 sonneries${avg!=null?` · moyenne ${avg} ms sans les faux départs`:""}</div>${rows}`;
+    card(`<div class="mg-card">${head}<div class="mg-txt">Enregistrement…</div></div>`);
+    let extra="";
+    if(S.opts.onDone){try{await S.runP;extra=await S.opts.onDone(tot)||""}catch(e){extra=e.message||"Score non enregistré."}}
+    if(!S||S.state!=="end")return;
+    const best=S.opts.getBest?S.opts.getBest():null;
+    card(`<div class="mg-card">${head}<div class="mg-txt">${best!=null?`Ton record : <b>${best.toLocaleString("fr-FR")} ms</b>`:""}${extra?`<br>${extra}`:""}</div>
+      <div class="mg-btns"><button class="mg-btn" data-cl="go">Rejouer</button><button class="mg-btn ghost" data-cl="quit">Quitter</button></div></div>`);
+  }
+  function close(){if(!S)return;clear();S.ov.remove();document.body.classList.remove("mg-open");removeEventListener("keydown",kd);const cb=S.opts.onClose;S=null;cb&&cb()}
+  return {open,_s:()=>S};
+})();
+function playCloche(){
+  let run=null;const gid=game.id;
+  const myBest=()=>{const x=(game.board||[]).find(r=>r.player===uid);return x?x.best:null};
+  CLOCHE.open({
+    getBest:myBest,
+    onStart:()=>{run=rpc("game_start",{game_id:gid});return run},
+    onDone:async(tot)=>{const id=await run;if(!id)throw new Error("Score non enregistré : relance une partie.");
+      const r=await rpc("game_finish",{run_id:id,ms:tot});try{await loadGame()}catch(e){}
+      return `${r.record?"<b>Nouveau record !</b> ":""}${rankLbl(r.rank-1)} au classement`},
+    onClose:()=>{try{render(true)}catch(e){}}});
+}
+
 /* ---------- Kart rétro ---------- */
 const KART=(()=>{
   const PTS=[[300,1300],[300,720],[420,430],[700,330],[1000,420],[1110,640],[1010,850],[800,910],[760,1060],[900,1190],[1300,1180],[1550,1000],[1600,700],[1800,450],[2060,420],[2210,620],[2210,1150],[2050,1400],[1700,1500],[700,1500],[420,1460]];
@@ -2010,8 +2206,8 @@ function viewFeed(){
       if(r==="wins")return me1?`${b} a gagné 3 défis et t'a refilé ${nm}`:me2?`Tes victoires ont chassé ${nm} : il file chez ${a}`:`${b} a chassé le Chat Noir à coups de victoires : il file chez ${a}`;
       if(cat)return me1?`${Nm} a traversé la route… et s'installe chez toi`:me2?`${Nm} a quitté ta maison pour celle de ${a}`:`${Nm} a quitté ${b} pour s'installer chez ${a}`;
       return me1?`${Nm} s'est envolé jusqu'à toi`:me2?`${Nm} s'est envolé de chez toi pour rejoindre ${a}`:`${Nm} s'est envolé de chez ${b} pour rejoindre ${a}`;}
-    if(f.kind==="game_best"){const r=f.price;return me1?`Nouveau record au ${esc(f.note||"jeu de la semaine")} : tu passes ${rankLbl(r-1)} !`:`${a} pointe à la ${r===1?"1re":r+"e"} place du ${esc(f.note||"jeu de la semaine")}`}
-    if(f.kind==="game_reward"){const [rk,g,bo,ti]=String(f.note||"").split(";"),rw=rewardTxt({gold:+g,bought:+bo});return me1?`Tu termines ${rankLbl(+rk-1)} au ${esc(ti||"jeu de la semaine")} : +${rw} !`:`${a} termine ${rankLbl(+rk-1)} au ${esc(ti||"jeu de la semaine")} (+${rw})`}
+    if(f.kind==="game_best"){const r=f.price;return me1?`Nouveau record à « ${esc(f.note||"jeu de la semaine")} » : tu passes ${rankLbl(r-1)} !`:`${a} pointe à la ${r===1?"1re":r+"e"} place de « ${esc(f.note||"jeu de la semaine")} »`}
+    if(f.kind==="game_reward"){const [rk,g,bo,ti]=String(f.note||"").split(";"),rw=rewardTxt({gold:+g,bought:+bo});return me1?`Tu termines ${rankLbl(+rk-1)} à « ${esc(ti||"jeu de la semaine")} » : +${rw} !`:`${a} termine ${rankLbl(+rk-1)} à « ${esc(ti||"jeu de la semaine")} » (+${rw})`}
     if(f.kind==="clover_fail")return me1?`Tu as tenté de voler le Trèfle de ${b}… raté (−${f.price} bidons)`:me2?`${a} a tenté de te voler le Trèfle… raté ! Tu empoches ${f.price} bidons`:`${a} a tenté de voler le Trèfle de ${b}… raté`;
     if(f.kind==="news")return `<span class="news-line"><b>Annonce</b> · ${esc(f.note||"")}</span>`;
     if(f.kind==="fine"){const mo=f.note?` pour ${esc(f.note)}`:"", L=esc(lord()), n=f.price;
@@ -2405,7 +2601,7 @@ document.addEventListener("click",async e=>{
   if(ds.upl){uploadFor(ds.upl);return}
   switch(ds.act){
     case "free": openBooster(false); break;
-    case "gameplay": if(game&&game.slug==="kart") KART.open(); else if(game&&game.slug==="flappy") playFlappy(); break;
+    case "gameplay": if(game&&game.slug==="kart") KART.open(); else if(game&&game.slug==="flappy") playFlappy(); else if(game&&game.slug==="cloche") playCloche(); break;
     case "catpass": {const C=(charmSt&&charmSt.cfg)||{}; if(!confirm(`Payer ${C.cat_pay} bidons pour que le Chat Noir parte chez un joueur tiré au sort ?`)) break; t.disabled=true; await act(()=>rpc("cat_pass",{}),"Ouf ! Le Chat Noir est parti chez quelqu'un d'autre."); break}
     case "steal": {t.disabled=true; await act(()=>rpc("clover_steal",{}),r=>r&&r.ok?"Bien joué ! Le Trèfle à 4 feuilles est à toi.":`Raté ! Tes ${r?r.cost:""} bidons partent chez son propriétaire.`); break}
     case "paid": t.disabled=true; await buyBooster(); break;
