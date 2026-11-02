@@ -763,6 +763,7 @@ nav.tabs button{position:relative}
 .bigwrap .burst.go-P,.deck .burst.go-P{background:radial-gradient(circle,rgba(255,255,255,.85),rgba(190,220,255,.2) 45%,transparent 65%);animation:burst 1.5s ease-out}
 .dots i.r-P.seen{background:#fff;box-shadow:0 0 8px #bfe0ff}
 .uniq-note{font-size:13.5px;line-height:1.45;color:var(--soft);max-width:30ch}
+.lb-bonus{display:inline-block;font-size:11.5px;font-weight:800;color:#FF7A1A;background:rgba(255,122,26,.12);padding:1px 6px;border-radius:999px;white-space:nowrap}
 /* rareté Halloween */
 .card.r-H{padding:7px;background:linear-gradient(115deg,#2B1840,#FF7A1A 18%,#3A1D5C 36%,#FFB347 52%,#2B1840 70%,#FF7A1A 86%,#2B1840);background-size:250% 250%;animation:gold 6s linear infinite;box-shadow:0 0 0 1px rgba(255,160,70,.7),0 0 24px rgba(255,122,26,.55),0 6px 22px rgba(43,24,64,.4)}
 .card.r-H .inner{background:radial-gradient(circle at 70% 0%,#4A2470,#22102F 60%,#12081B);color:#FFE6C7;box-shadow:inset 0 0 0 1px rgba(255,160,70,.45)}
@@ -778,6 +779,21 @@ nav.tabs button{position:relative}
 .bigwrap .burst.go-H,.deck .burst.go-H{background:radial-gradient(circle,rgba(255,150,60,.8),rgba(123,63,196,.25) 45%,transparent 65%);animation:burst 1.3s ease-out}
 .dots i.r-H.seen{background:#FF7A1A}
 .tb-tile.r-H{border-color:#FF7A1A}
+/* rareté Monument (les bâtiments) : acier brossé, plan d'architecte */
+.card.r-B{padding:7px;background:linear-gradient(115deg,#6E7A8C,#EEF2F7 16%,#9AA6B8 32%,#FFFFFF 48%,#7D899C 64%,#DDE4EE 80%,#6E7A8C);background-size:250% 250%;animation:gold 7s linear infinite;box-shadow:0 0 0 1px rgba(230,236,245,.8),0 0 22px rgba(120,170,255,.45),0 6px 22px rgba(10,20,50,.35)}
+.card.r-B .inner{color:#EAF1FF;background-color:#163A6E;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:14px 14px;box-shadow:inset 0 0 0 1px rgba(200,220,255,.45)}
+.card.r-B .inner::before{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(0,0,0,.2))}
+.card.r-B .rlab{background:linear-gradient(90deg,#FFFFFF,#C9D3E2);color:#163A6E}
+.card.r-B .art{background:#0F2A52;box-shadow:inset 0 0 0 1px rgba(200,220,255,.6)}
+.card.r-B .nm{color:#fff;text-shadow:0 0 10px rgba(140,190,255,.6)}
+.card.r-B .ds{opacity:.88}
+.card.r-B .st span{background:rgba(255,255,255,.12);color:#EAF1FF}
+.rpill.r-B{background:linear-gradient(90deg,#E9EEF5,#9AA6B8);color:#163A6E}
+.cback.hint-B,.flip .back.hint-B{box-shadow:0 0 0 3px #DDE4EE,0 0 28px rgba(140,190,255,.9);animation:pulseB 1.2s infinite}
+@keyframes pulseB{50%{box-shadow:0 0 0 3px #7D899C,0 0 10px rgba(140,190,255,.5)}}
+.bigwrap .burst.go-B,.deck .burst.go-B{background:radial-gradient(circle,rgba(220,235,255,.85),rgba(120,170,255,.2) 45%,transparent 65%);animation:burst 1.3s ease-out}
+.dots i.r-B.seen{background:#BFD4F2}
+.tb-tile.r-B{border-color:#9AA6B8}
 
 .ann-body .ann-h{margin:14px 0 4px;font-size:15px;font-weight:900;font-stretch:110%;color:#0b1736}
 .ann-body .ann-h:first-child{margin-top:0}
@@ -1009,7 +1025,7 @@ const LOGIN_DOMAIN      = "winamasters.adavan.fr";  // sert juste à fabriquer u
 
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const PACK_SIZE = 5;
-const RORDER = ["C","U","R","E","H","Q","L","S","P"];
+const RORDER = ["C","U","R","E","H","Q","L","B","S","P"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={}, charmSt=null;
@@ -1905,7 +1921,7 @@ function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) ope
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
-function cardBack(c){return `<div class="cback ${c&&["R","E","H","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
+function cardBack(c){return `<div class="cback ${c&&["R","E","H","Q","L","B","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
 function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
 const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
 function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
@@ -2024,7 +2040,7 @@ async function finishTear(){
 function buildPile(){
   const st=ovState, pile=document.getElementById("pile"); if(!pile||!st.ids) return;
   pile.innerHTML=st.ids.map((id,i)=>{const c=cardById[id];
-    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","H","Q","L","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
+    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","H","Q","L","B","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
   layoutPile(); bindSwipe();
 }
 function layoutPile(){
@@ -2049,8 +2065,8 @@ function revealTop(){
   hud();
   const already=el&&el.classList.contains("on");
   setTimeout(()=>{ if(ovState!==st||!el) return; el.classList.add("on"); st.seen.add(st.idx); hud();
-    if(["R","E","H","Q","L","S","P"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
-      try{navigator.vibrate&&navigator.vibrate(["L","S","P"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
+    if(["R","E","H","Q","L","B","S","P"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
+      try{navigator.vibrate&&navigator.vibrate(["L","B","S","P"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
   },already?0:150);
 }
 function throwTop(dir){
@@ -2370,9 +2386,9 @@ function viewTrades(){
 function plink(id,label){ if(!id) return esc(label||"Un collègue"); return `<button class="plink" data-player="${esc(id)}">${esc(label||who(id))}</button>`; }
 function viewRanking(){
   const total=cards.filter(live).length;
-  return `<h2>Classement</h2><p class="sub">Le score additionne les points de chaque carte différente selon sa rareté, moins les points perdus à cause du Chat Noir. Clique sur un joueur pour voir sa collection.</p>
+  return `<h2>Classement</h2><p class="sub">Le score additionne les points de chaque carte différente selon sa rareté, moins les points perdus à cause du Chat Noir. Le chiffre orange compte les cartes qui ne sortent plus des boosters, comme celles d'Halloween. Clique sur un joueur pour voir sa collection.</p>
   <div class="tablewrap"><table class="lb"><thead><tr><th>#</th><th>Joueur</th><th>Score</th><th>Collection</th><th>Boosters</th></tr></thead><tbody>
-  ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}" ><td class="rk">${i+1}</td><td>${p.id===uid?`<button class="plink" data-tab="collection">${esc(p.pseudo)} (toi)</button>`:plink(p.id,p.pseudo)}${charmIcons(p.id)}</td><td><b>${p.score}</b>${p.malus?`<span class="malus" title="Points perdus à cause du Chat Noir">−${p.malus}</span>`:""}</td><td>${p.uniq} / ${total}</td><td>${p.opened}</td></tr>`).join("")}
+  ${board.map((p,i)=>`<tr class="${p.id===uid?"me":""}" ><td class="rk">${i+1}</td><td>${p.id===uid?`<button class="plink" data-tab="collection">${esc(p.pseudo)} (toi)</button>`:plink(p.id,p.pseudo)}${charmIcons(p.id)}</td><td><b>${p.score}</b>${p.malus?`<span class="malus" title="Points perdus à cause du Chat Noir">−${p.malus}</span>`:""}</td><td>${p.uniq_live??p.uniq} / ${total}${p.uniq_live!=null&&p.uniq>p.uniq_live?` <span class="lb-bonus" title="Cartes qui ne sortent plus des boosters (Halloween…)">+${p.uniq-p.uniq_live}</span>`:""}</td><td>${p.opened}</td></tr>`).join("")}
   </tbody></table></div>${viewFeed()}`;
 }
 
