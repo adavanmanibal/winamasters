@@ -794,6 +794,34 @@ nav.tabs button{position:relative}
 .bigwrap .burst.go-B,.deck .burst.go-B{background:radial-gradient(circle,rgba(220,235,255,.85),rgba(120,170,255,.2) 45%,transparent 65%);animation:burst 1.3s ease-out}
 .dots i.r-B.seen{background:#BFD4F2}
 .tb-tile.r-B{border-color:#9AA6B8}
+/* rareté Noël */
+.card.r-N{padding:7px;background:linear-gradient(115deg,#0F5A2E,#E23A3A 18%,#F7E08A 30%,#0F5A2E 46%,#E23A3A 62%,#FFFFFF 74%,#0F5A2E 90%);background-size:250% 250%;animation:gold 7s linear infinite;box-shadow:0 0 0 1px rgba(255,240,200,.7),0 0 22px rgba(226,58,58,.45),0 6px 22px rgba(15,60,30,.35)}
+.card.r-N .inner{background:radial-gradient(circle at 70% 0%,#1F7A44,#0E4A28 60%,#072E18);color:#FFF6E6;box-shadow:inset 0 0 0 1px rgba(255,230,170,.45)}
+.card.r-N .inner::before{background:radial-gradient(2px 2px at 12% 18%,#fff,transparent),radial-gradient(1.5px 1.5px at 34% 8%,#fff,transparent),radial-gradient(2px 2px at 86% 28%,#fff,transparent),radial-gradient(1.5px 1.5px at 62% 92%,#fff,transparent),radial-gradient(1.5px 1.5px at 20% 70%,#fff,transparent),radial-gradient(2px 2px at 78% 60%,#fff,transparent)}
+.card.r-N .rlab{background:linear-gradient(90deg,#E23A3A,#B01C29);color:#fff}
+.card.r-N .art{background:radial-gradient(circle at 50% 40%,#FFFFFF,#E3EEFB 70%);box-shadow:inset 0 0 0 1px rgba(255,230,170,.8)}
+.card.r-N .nm{color:#FFE3A3;text-shadow:0 0 10px rgba(255,200,90,.5)}
+.card.r-N .ds{opacity:.9}
+.card.r-N .st span{background:rgba(255,255,255,.14);color:#FFF6E6}
+.rpill.r-N{background:linear-gradient(90deg,#E23A3A,#1F7A44);color:#fff}
+.cback.hint-N,.flip .back.hint-N{box-shadow:0 0 0 3px #E23A3A,0 0 26px rgba(226,58,58,.85);animation:pulseN 1.2s infinite}
+@keyframes pulseN{50%{box-shadow:0 0 0 3px #1F7A44,0 0 12px rgba(31,122,68,.7)}}
+.bigwrap .burst.go-N,.deck .burst.go-N{background:radial-gradient(circle,rgba(255,255,255,.85),rgba(226,58,58,.25) 45%,transparent 65%);animation:burst 1.3s ease-out}
+.dots i.r-N.seen{background:#E23A3A}
+.tb-tile.r-N{border-color:#E23A3A}
+.card.r-X{padding:7px;background:linear-gradient(115deg,#8A6212,#F7E08A 16%,#E23A3A 30%,#FFF6CF 46%,#1F7A44 60%,#F7E08A 76%,#8A6212 92%);background-size:250% 250%;animation:gold 7s linear infinite;box-shadow:0 0 0 1px rgba(255,230,150,.9),0 0 30px rgba(247,224,138,.75),0 6px 24px rgba(15,60,30,.4)}
+.card.r-X .inner{background:radial-gradient(circle at 70% 0%,#1F7A44,#0E4A28 60%,#072E18);color:#FFF6E6;box-shadow:inset 0 0 0 1px rgba(255,230,170,.45)}
+.card.r-X .inner::before{background:radial-gradient(2px 2px at 12% 18%,#fff,transparent),radial-gradient(1.5px 1.5px at 34% 8%,#fff,transparent),radial-gradient(2px 2px at 86% 28%,#fff,transparent),radial-gradient(1.5px 1.5px at 62% 92%,#fff,transparent),radial-gradient(1.5px 1.5px at 20% 70%,#fff,transparent),radial-gradient(2px 2px at 78% 60%,#fff,transparent)}
+.card.r-X .rlab{background:linear-gradient(90deg,#F7E08A,#D9A21E);color:#3A2600}
+.card.r-X .art{background:radial-gradient(circle at 50% 40%,#FFFFFF,#E3EEFB 70%);box-shadow:inset 0 0 0 1px rgba(255,230,170,.8)}
+.card.r-X .nm{color:#FFE3A3;text-shadow:0 0 10px rgba(255,200,90,.5)}
+.card.r-X .ds{opacity:.9}
+.card.r-X .st span{background:rgba(255,255,255,.14);color:#FFF6E6}
+.rpill.r-X{background:linear-gradient(90deg,#F7E08A,#E23A3A,#1F7A44);color:#fff;text-shadow:0 1px 0 rgba(0,0,0,.35)}
+.cback.hint-X,.flip .back.hint-X{box-shadow:0 0 0 3px #F7E08A,0 0 30px rgba(247,224,138,.95);animation:pulseN 1s infinite}
+.bigwrap .burst.go-X,.deck .burst.go-X{background:radial-gradient(circle,rgba(255,240,180,.9),rgba(226,58,58,.3) 45%,transparent 65%);animation:burst 1.5s ease-out}
+.dots i.r-X.seen{background:#F7E08A}
+.tb-tile.r-X{border-color:#F7E08A}
 
 .ann-body .ann-h{margin:14px 0 4px;font-size:15px;font-weight:900;font-stretch:110%;color:#0b1736}
 .ann-body .ann-h:first-child{margin-top:0}
@@ -1025,7 +1053,7 @@ const LOGIN_DOMAIN      = "winamasters.adavan.fr";  // sert juste à fabriquer u
 
 const sb = (SUPABASE_URL && SUPABASE_ANON_KEY) ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
 const PACK_SIZE = 5;
-const RORDER = ["C","U","R","E","H","Q","L","B","S","P"];
+const RORDER = ["C","U","R","E","H","N","Q","L","B","X","S","P"];
 
 let uid=null, cfg={booster_price:60,free_per_slot:2,free_hours:[10,15],is_admin:false}, bstate={available:0,bought:0,per_slot:2,next_at:null};
 let RAR={}, brands={}, cards=[], cardById={}, charmSt=null;
@@ -1921,7 +1949,7 @@ function openNext(){ if(tokens()>0) openBooster(false); else if(reserve()>0) ope
 /* ---------- ouverture animée ---------- */
 let ovState=null;
 function scaledCard(inner,s){return `<div class="sc" style="width:${Math.round(200*s)}px;height:${Math.round(296*s)}px"><div class="sci" style="transform:scale(${s})">${inner}</div></div>`}
-function cardBack(c){return `<div class="cback ${c&&["R","E","H","Q","L","B","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
+function cardBack(c){return `<div class="cback ${c&&["R","E","H","N","Q","L","B","X","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div>`}
 function rpill(r){return `<span class="rpill r-${esc(r)}">${esc(rlabel(r))}</span>`}
 const ZOOM_ICON='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M20 20l-4.8-4.8M10.5 7.5v6M7.5 10.5h6"/></svg>';
 function zoomBtn(c,s=0.42,count=0){if(!c)return "";return `<button class="zoomable" data-zoom="${esc(c.id)}" aria-label="Agrandir ${esc(c.name)}">${scaledCard(cardHTML(c,{count}),s)}<span class="zi">${ZOOM_ICON}</span></button>`}
@@ -2040,7 +2068,7 @@ async function finishTear(){
 function buildPile(){
   const st=ovState, pile=document.getElementById("pile"); if(!pile||!st.ids) return;
   pile.innerHTML=st.ids.map((id,i)=>{const c=cardById[id];
-    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","H","Q","L","B","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
+    return `<div class="dk2" data-i="${i}" style="--rot:${(((i*37)%7)-3)*0.8}deg"><div class="flip ${i>0?"on":""}"><div class="fi"><div class="back ${["R","E","H","N","Q","L","B","X","S","P"].includes(c.rarity)?"hint-"+c.rarity:""}"><span>W</span></div><div class="face">${cardHTML(c)}</div></div></div></div>`}).join("");
   layoutPile(); bindSwipe();
 }
 function layoutPile(){
@@ -2065,8 +2093,8 @@ function revealTop(){
   hud();
   const already=el&&el.classList.contains("on");
   setTimeout(()=>{ if(ovState!==st||!el) return; el.classList.add("on"); st.seen.add(st.idx); hud();
-    if(["R","E","H","Q","L","B","S","P"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
-      try{navigator.vibrate&&navigator.vibrate(["L","B","S","P"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
+    if(["R","E","H","N","Q","L","B","X","S","P"].includes(c.rarity)){const bu=document.getElementById("burst"); if(bu){bu.className="burst"; void bu.offsetWidth; setTimeout(()=>{ if(bu.isConnected) bu.className="burst go-"+c.rarity },220)}
+      try{navigator.vibrate&&navigator.vibrate(["L","B","X","S","P"].includes(c.rarity)?[20,40,30]:15)}catch(e){}}
   },already?0:150);
 }
 function throwTop(dir){
@@ -2265,7 +2293,7 @@ function viewBooster(){
     </aside>
   </div>${last}${viewFeed()}`;
 }
-function live(c){return c.active&&!(c.drop_until&&new Date(c.drop_until)<=new Date())}
+function live(c){const n=new Date();return c.active&&!(c.drop_until&&new Date(c.drop_until)<=n)&&!(c.drop_from&&new Date(c.drop_from)>n)}
 function visibleCards(){return cards.filter(c=>live(c)||has(c.id))}
 function viewCollection(){
   const vis=visibleCards();
