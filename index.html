@@ -1055,6 +1055,8 @@ body.mg-open{overflow:hidden}
 .mg-ov.br{background:radial-gradient(120% 70% at 50% 0%,#12301f,#080d14 70%)}
 .mg-ov.br .mg-top{justify-content:space-between;padding-right:48px;gap:8px}
 .br-side{font-family:"Courier New",monospace;font-weight:900;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:#9fe0b4;min-width:84px}
+.br-pause{position:absolute;right:46px;top:2px;width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.8);background:rgba(0,0,0,.35);color:#fff;font:900 14px/1 "Courier New",monospace;letter-spacing:1px;cursor:pointer}
+.mg-ov.br .mg-top{padding-right:94px!important}
 .br-side.r{text-align:right;color:#ffb347;font-size:18px;letter-spacing:.12em}.br-side.r i{font-style:normal;opacity:.22}
 .mg-ov.br .mg-wrap canvas{image-rendering:auto;border-radius:12px;box-shadow:0 0 0 3px #0c2417,0 0 0 5px #2fbf5b,0 14px 40px rgba(0,0,0,.6)}
 .br-hint{text-align:center;font-size:13px;font-weight:700;color:#9fe0b4;opacity:.8;padding:8px 0 2px;min-height:20px}
@@ -1328,21 +1330,22 @@ const BRILL=(()=>{
   function open(opts){
     if(S)close();
     const ov=document.createElement("div");ov.className="mg-ov br";ov.id="mgov";
-    ov.innerHTML=`<div class="mg-top"><div class="br-side" id="brL"></div><div class="mg-score" id="brScore">0</div><div class="br-side r" id="brR"></div><button class="mg-x" aria-label="Quitter">×</button></div>
+    ov.innerHTML=`<div class="mg-top"><div class="br-side" id="brL"></div><div class="mg-score" id="brScore">0</div><div class="br-side r" id="brR"></div><button class="br-pause" id="brP" aria-label="Mettre en pause">II</button><button class="mg-x" aria-label="Quitter">×</button></div>
       <div class="mg-wrap" id="brWrap"><canvas id="brc"></canvas><div class="fb-lvl" id="brLvl"></div></div>
       <div class="br-hint" id="brHint">Glisse le doigt pour diriger la lustreuse</div>
       <div class="mg-mid" id="brMid"></div>`;
     document.body.appendChild(ov);document.body.classList.add("mg-open");
     const cv=ov.querySelector("#brc");
     S={opts:opts||{},ov,cv,ctx:cv.getContext("2d"),raf:0,k:20};
-    ov.querySelector(".mg-x").onclick=close;
+    ov.querySelector(".mg-x").onclick=close;ov.querySelector("#brP").onclick=()=>pause();
+    document.addEventListener("visibilitychange",vis);
     let p0=null,swiped=false;
     ov.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;p0=[e.clientX,e.clientY];swiped=false;if(S.state==="ready"&&!e.target.closest(".mg-card"))start()});
     ov.addEventListener("pointermove",e=>{if(!p0||!S)return;const dx=e.clientX-p0[0],dy=e.clientY-p0[1],ax=Math.abs(dx),ay=Math.abs(dy);
       // premier mouvement du geste : 12 px suffisent ; pour changer d'avis dans le même geste, il faut un mouvement franc
       if(Math.max(ax,ay)<(swiped?30:12))return;if(swiped&&Math.max(ax,ay)<1.6*Math.min(ax,ay))return;
       steer(ax>ay?[Math.sign(dx),0]:[0,Math.sign(dy)]);swiped=true;p0=[e.clientX,e.clientY]});
-    ov.addEventListener("pointerup",e=>{if(p0&&!swiped&&S&&S.state==="play"&&!e.target.closest("button,.mg-card")){
+    ov.addEventListener("pointerup",e=>{if(p0&&!swiped&&S&&S.state==="play"&&!e.target.closest(".mg-mid")&&!e.target.closest("button,.mg-card")){
       // simple toucher ou clic : on part du côté touché par rapport à la lustreuse
       const r=S.cv.getBoundingClientRect(),k=r.width/C,q=px(S.pl),dx=e.clientX-(r.left+(q[0]+.5)*k),dy=e.clientY-(r.top+(q[1]+.5)*k);
       if(Math.max(Math.abs(dx),Math.abs(dy))>k*.6)steer(Math.abs(dx)>Math.abs(dy)?[Math.sign(dx),0]:[0,Math.sign(dy)])}p0=null});
@@ -1351,7 +1354,18 @@ const BRILL=(()=>{
     reset();fit();requestAnimationFrame(fit);S.last=performance.now();S.raf=requestAnimationFrame(loop);
   }
   function kd(e){if(!S)return;const m={ArrowRight:[1,0],ArrowLeft:[-1,0],ArrowDown:[0,1],ArrowUp:[0,-1],d:[1,0],q:[-1,0],a:[-1,0],s:[0,1],z:[0,-1],w:[0,-1]}[e.key];
+    if(S.state==="pause"){if(["p","P"," ","Enter"].includes(e.key)){e.preventDefault();pause()}else if(e.key==="Escape")close();return}
+    if(e.key==="p"||e.key==="P"||(e.key===" "&&S.state==="play")){e.preventDefault();pause();return}
     if(m){e.preventDefault();if(S.state==="ready")start();steer(m)}else if(e.key==="Escape")close();else if((e.key===" "||e.key==="Enter")&&S.state==="ready"){e.preventDefault();start()}}
+  // pause : le jeu et le chrono s'arrêtent, les taches aussi
+  function pause(on){
+    if(!S)return;
+    if(S.state==="play"&&on!==false){S.state="pause";beep(330,.05);
+      mid(`<div class="mg-card"><div class="mg-title">PAUSE</div><div class="mg-txt">Score : <b>${S.score}</b> · niveau ${S.level}</div><div class="mg-btns"><button class="mg-btn" data-mg="resume">Reprendre</button><button class="mg-btn ghost" data-mg="quit">Quitter</button></div></div>`)}
+    else if(S.state==="pause"&&on!==true){mid("");S.state="play";S.last=performance.now();S.acc=0}
+    const b=S.ov.querySelector("#brP");if(b){b.textContent=S.state==="pause"?"▶":"II";b.setAttribute("aria-label",S.state==="pause"?"Reprendre":"Mettre en pause")}
+  }
+  function vis(){if(document.hidden)pause(true)}
   function steer(d){if(!S||S.state==="over")return;S.pl.want=d}
   function fit(){if(!S)return;const r=S.ov.querySelector("#brWrap").getBoundingClientRect();if(!r.width)return;const k=Math.max(8,Math.floor(Math.min(r.width/C,r.height/R)));const dpr=Math.min(2,devicePixelRatio||1);
     S.cv.style.width=k*C+"px";S.cv.style.height=k*R+"px";S.cv.width=k*C*dpr;S.cv.height=k*R*dpr;S.k=k*dpr;S.bg=null}
@@ -1382,7 +1396,7 @@ const BRILL=(()=>{
   }
   function banner(a,b,cls){const e=S.ov.querySelector("#brLvl");e.innerHTML=`<b>${a}</b><span>${b}</span>`;e.className="fb-lvl show "+(cls||"");clearTimeout(S.bt);S.bt=setTimeout(()=>{if(S)e.className="fb-lvl"},1500)}
   function mid(h){const m=S.ov.querySelector("#brMid");m.innerHTML=h;m.style.display=h?"flex":"none";
-    m.querySelectorAll("[data-mg]").forEach(b=>b.onclick=ev=>{ev.stopPropagation();const a=b.dataset.mg;if(a==="go")start();else if(a==="again"){reset();start()}else close()})}
+    m.querySelectorAll("[data-mg]").forEach(b=>b.onclick=ev=>{ev.stopPropagation();const a=b.dataset.mg;if(a==="go")start();else if(a==="resume")pause(false);else if(a==="again"){reset();start()}else close()})}
   function hud(){const q=s=>S.ov.querySelector(s);q("#brScore").textContent=S.score;q("#brL").textContent="Niveau "+S.level;q("#brR").innerHTML="●".repeat(Math.max(0,S.lives))+`<i>${"●".repeat(Math.max(0,3-S.lives))}</i>`}
   function add(n,c,r){S.score+=n;if(n>=10)S.pops.push({x:c,y:r,n,t:.9});hud()}
   // --- déplacements : chaque personnage va d'une case à la suivante ---
@@ -1537,8 +1551,8 @@ const BRILL=(()=>{
     for(const p of S.pops)p.t-=dt;S.pops=S.pops.filter(p=>p.t>0);if(S.shake>0)S.shake-=dt;
     draw();S.raf=requestAnimationFrame(loop);
   }
-  function close(){if(!S)return;cancelAnimationFrame(S.raf);clearTimeout(S.bt);S.ov.remove();document.body.classList.remove("mg-open");removeEventListener("keydown",kd);removeEventListener("resize",fit);const cb=S.opts.onClose;S=null;cb&&cb()}
-  return {open,_s:()=>S,_map:MAP,_step:step,_steer:steer,_open:open_};
+  function close(){if(!S)return;cancelAnimationFrame(S.raf);clearTimeout(S.bt);S.ov.remove();document.body.classList.remove("mg-open");removeEventListener("keydown",kd);removeEventListener("resize",fit);document.removeEventListener("visibilitychange",vis);const cb=S.opts.onClose;S=null;cb&&cb()}
+  return {open,_pause:pause,_s:()=>S,_map:MAP,_step:step,_steer:steer,_open:open_};
 })();
 function playBrill(){
   let run=null;const gid=game.id;
