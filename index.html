@@ -1125,6 +1125,11 @@ dialog[open]::backdrop{animation:fadein .2s ease}
 .sk i{display:block;border-radius:14px;background:linear-gradient(100deg,rgba(125,140,170,.16) 30%,rgba(125,140,170,.32) 50%,rgba(125,140,170,.16) 70%);background-size:300% 100%;animation:sk 1.2s linear infinite}
 .sk .a{height:120px}.sk .b{height:28px;width:55%}.sk .c{height:220px}
 @keyframes sk{from{background-position:100% 0}to{background-position:0 0}}
+.ban-dlg{position:relative;padding:26px 22px 22px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.ban-dlg h3{margin:0;font-size:24px;font-weight:900;font-stretch:115%;color:var(--danger)}
+.ban-dlg p{margin:0;max-width:34ch;line-height:1.45}.ban-dlg .ban-soft{color:var(--soft);font-size:14px}
+.ban-gyro{width:64px;height:40px;border-radius:32px 32px 6px 6px;background:radial-gradient(circle at 50% 70%,#fff 0 12%,#ff4d4d 14% 60%,#b3202a 62%);box-shadow:0 0 0 3px #141a30,0 0 26px rgba(255,77,77,.7);animation:gyro .7s ease-in-out infinite alternate}
+@keyframes gyro{to{box-shadow:0 0 0 3px #141a30,0 0 6px rgba(255,77,77,.3);filter:brightness(.75)}}
 </style>
 </head>
 <body>
@@ -1331,11 +1336,17 @@ const BRILL=(()=>{
     const cv=ov.querySelector("#brc");
     S={opts:opts||{},ov,cv,ctx:cv.getContext("2d"),raf:0,k:20};
     ov.querySelector(".mg-x").onclick=close;
-    let p0=null;
-    ov.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;p0=[e.clientX,e.clientY];if(S.state==="ready"&&!e.target.closest(".mg-card"))start()});
-    ov.addEventListener("pointermove",e=>{if(!p0||!S)return;const dx=e.clientX-p0[0],dy=e.clientY-p0[1];
-      if(Math.max(Math.abs(dx),Math.abs(dy))<16)return;steer(Math.abs(dx)>Math.abs(dy)?[Math.sign(dx),0]:[0,Math.sign(dy)]);p0=[e.clientX,e.clientY]});
-    const up=()=>{p0=null};ov.addEventListener("pointerup",up);ov.addEventListener("pointercancel",up);
+    let p0=null,swiped=false;
+    ov.addEventListener("pointerdown",e=>{if(e.target.closest("button"))return;p0=[e.clientX,e.clientY];swiped=false;if(S.state==="ready"&&!e.target.closest(".mg-card"))start()});
+    ov.addEventListener("pointermove",e=>{if(!p0||!S)return;const dx=e.clientX-p0[0],dy=e.clientY-p0[1],ax=Math.abs(dx),ay=Math.abs(dy);
+      // premier mouvement du geste : 12 px suffisent ; pour changer d'avis dans le même geste, il faut un mouvement franc
+      if(Math.max(ax,ay)<(swiped?30:12))return;if(swiped&&Math.max(ax,ay)<1.6*Math.min(ax,ay))return;
+      steer(ax>ay?[Math.sign(dx),0]:[0,Math.sign(dy)]);swiped=true;p0=[e.clientX,e.clientY]});
+    ov.addEventListener("pointerup",e=>{if(p0&&!swiped&&S&&S.state==="play"&&!e.target.closest("button,.mg-card")){
+      // simple toucher ou clic : on part du côté touché par rapport à la lustreuse
+      const r=S.cv.getBoundingClientRect(),k=r.width/C,q=px(S.pl),dx=e.clientX-(r.left+(q[0]+.5)*k),dy=e.clientY-(r.top+(q[1]+.5)*k);
+      if(Math.max(Math.abs(dx),Math.abs(dy))>k*.6)steer(Math.abs(dx)>Math.abs(dy)?[Math.sign(dx),0]:[0,Math.sign(dy)])}p0=null});
+    ov.addEventListener("pointercancel",()=>{p0=null});
     addEventListener("keydown",kd);addEventListener("resize",fit);
     reset();fit();requestAnimationFrame(fit);S.last=performance.now();S.raf=requestAnimationFrame(loop);
   }
@@ -1378,6 +1389,7 @@ const BRILL=(()=>{
   function movePl(dt){
     const p=S.pl,w=p.want;
     if((p.dir[0]||p.dir[1])&&w[0]===-p.dir[0]&&w[1]===-p.dir[1]&&(w[0]||w[1])){p.c=(p.c+p.dir[0]+C)%C;p.r+=p.dir[1];p.dir=[w[0],w[1]];p.t=1-p.t}
+    if((p.dir[0]||p.dir[1])&&(w[0]||w[1])&&w[0]*p.dir[0]+w[1]*p.dir[1]===0&&p.t<.45&&open_(p.c+w[0],p.r+w[1])){p.dir=[w[0],w[1]];p.t=0}
     if(!p.dir[0]&&!p.dir[1]){if((w[0]||w[1])&&open_(p.c+w[0],p.r+w[1])){p.dir=[w[0],w[1]];p.t=0}else return}
     p.face=p.dir;p.spin+=dt*14;p.t+=p.sp*dt;
     while(p.t>=1){p.t-=1;p.c=(p.c+p.dir[0]+C)%C;p.r+=p.dir[1];eat(p.c,p.r);
@@ -1386,7 +1398,7 @@ const BRILL=(()=>{
   }
   function eat(c,r){
     const k=key(c,r);S.clean.add(k);
-    if(S.dots.delete(k)){add(1);if((S.dots.size&1)===0)beep(420+((S.dots.size%4)*40),.03,"triangle",.03)}
+    if(S.dots.delete(k)){add(1);S.pl.gulp=.16;S.parts.push({x:c+.5,y:r+.5,vx:(Math.random()-.5)*2,vy:(Math.random()-.5)*2,t:.25,c:"#ffe9b8"});if((S.dots.size&1)===0)beep(420+((S.dots.size%4)*40),.03,"triangle",.03)}
     else if(S.pows.delete(k)){add(5);S.fright=Math.max(3,6.5-.5*S.level);S.chain=0;S.foes.forEach(f=>{if(f.st==="go"){f.dir=[-f.dir[0],-f.dir[1]];f.c=(f.c-f.dir[0]+C)%C;f.r-=f.dir[1];f.t=1-f.t}});
       beep(520,.08);setTimeout(()=>beep(780,.1),80);banner("FLACON GS27 !","Les taches deviennent de la mousse","fap");
       for(let i=0;i<14;i++)S.parts.push({x:c+.5,y:r+.5,vx:(Math.random()-.5)*6,vy:(Math.random()-.5)*6,t:.6,c:"#9fe3ff"})}
@@ -1485,6 +1497,7 @@ const BRILL=(()=>{
   function pad(c,x,y,k){
     const p=S.pl,a=Math.atan2(p.face[1],p.face[0]);
     c.save();c.translate(x,y);
+    const g=Math.max(0,p.gulp||0)/.16,sq=1+.2*Math.sin(g*Math.PI);c.scale(sq,sq);
     c.save();c.rotate(a);c.fillStyle="#1E6B3A";c.strokeStyle="#0c2417";c.lineWidth=Math.max(1.5,k*.06);
     c.beginPath();c.roundRect?c.roundRect(-k*.5,-k*.15,k*.42,k*.3,k*.1):c.rect(-k*.5,-k*.15,k*.42,k*.3);c.fill();c.stroke();c.restore();
     c.fillStyle="#ffb347";c.beginPath();c.arc(0,0,k*.4,0,7);c.fill();c.lineWidth=Math.max(2,k*.08);c.strokeStyle="#b85a08";c.stroke();
@@ -1501,7 +1514,8 @@ const BRILL=(()=>{
     // sol nettoyé : il brille
     for(const q of S.clean){const x=q%C,r=(q-x)/C;c.fillStyle="rgba(70,150,215,.26)";c.fillRect(x*k,r*k,k,k);
       const s=(S.t*.9+x*.37+r*.23)%3;if(s<1){c.fillStyle=`rgba(255,255,255,${.5*Math.sin(s*Math.PI)})`;c.fillRect(x*k+k*.62,r*k+k*.22,k*.08,k*.08)}}
-    c.fillStyle="#d9b77a";for(const q of S.dots){const x=q%C,r=(q-x)/C;c.beginPath();c.arc(x*k+k/2,r*k+k/2,k*.1,0,7);c.fill()}
+    const pp=px(S.pl);c.fillStyle="#d9b77a";for(const q of S.dots){const x=q%C,r=(q-x)/C;let dx=pp[0]-x,dy=pp[1]-r;const d=Math.hypot(dx,dy),pull=d<1.3&&d>0?(1.3-d)/1.3*.45:0;
+      c.beginPath();c.arc((x+dx*pull)*k+k/2,(r+dy*pull)*k+k/2,k*.1*(1-pull*.6),0,7);c.fill()}
     for(const q of S.pows){const x=q%C,r=(q-x)/C,cx=x*k+k/2,cy=r*k+k/2,s=1+.1*Math.sin(S.t*6);
       c.fillStyle="rgba(47,191,91,.3)";c.beginPath();c.arc(cx,cy,k*.44*s,0,7);c.fill();
       c.fillStyle="#2fbf5b";c.strokeStyle="#0c2417";c.lineWidth=Math.max(1.2,k*.05);c.beginPath();c.rect(cx-k*.17,cy-k*.14,k*.34,k*.42);c.fill();c.stroke();
@@ -1518,6 +1532,8 @@ const BRILL=(()=>{
     if(!S)return;let dt=Math.min(.05,(now-S.last)/1000);S.last=now;S.acc+=dt;
     while(S.acc>=1/120){step(1/120);S.acc-=1/120}
     for(const p of S.parts){p.x+=p.vx*dt;p.y+=p.vy*dt;p.t-=dt}S.parts=S.parts.filter(p=>p.t>0).slice(-120);
+    if(S.pl.gulp>0)S.pl.gulp-=dt;
+    // les poussières juste devant la lustreuse sont aspirées vers elle
     for(const p of S.pops)p.t-=dt;S.pops=S.pops.filter(p=>p.t>0);if(S.shake>0)S.shake-=dt;
     draw();S.raf=requestAnimationFrame(loop);
   }
@@ -2120,8 +2136,20 @@ function scheduleReload(){clearTimeout(reloadTimer);reloadTimer=setTimeout(async
 async function act(fn,okMsg){
   if(busy) return; busy=true;
   try{const r=await fn(); if(okMsg) toast(typeof okMsg==="function"?okMsg(r):okMsg); await loadGame(); render(); return r;}
-  catch(e){toast(errMsg(e))}
+  catch(e){ if(/^Soupçon de triche/.test(errMsg(e))) banDlg(errMsg(e)); else toast(errMsg(e)); }
   finally{busy=false}
+}
+// échange refusé pour soupçon de triche : on l'explique au joueur, et le fil du groupe est prévenu
+function banDlg(msg){
+  const d=$("#dlg");
+  d.innerHTML=`<div class="ban-dlg"><button class="close" data-act="close" aria-label="Fermer">×</button>
+    <div class="ban-gyro" aria-hidden="true"></div>
+    <h3>Halte-là !</h3>
+    <p><b>${esc(msg)}</b></p>
+    <p class="ban-soft">La brigade anti-triche a repéré un peu trop de cartes qui font la navette. Vos échanges à deux sont mis au frigo, le temps que ça refroidisse. Tu peux toujours échanger avec les autres joueurs.</p>
+    <button class="btn" data-act="close">Compris, chef</button></div>`;
+  if(!d.open) d.showModal();
+  rpc("trade_ban_report",{}).then(()=>loadGame()).then(()=>render()).catch(()=>{});
 }
 async function rpc(name,args){const {data,error}=await sb.rpc(name,args);if(error)throw error;return data}
 
@@ -2659,6 +2687,7 @@ function viewFeed(){
     if(f.kind==="duel_tie")return me1||me2?`Égalité parfaite à l'Arène entre ${a} et ${b} : mises remboursées`:`${a} et ${b} ont fait match nul à l'Arène`;
     if(f.kind==="team"){const bn=esc(brands[f.note]?.name||f.note||"");return me1?`Tu as complété l'équipe ${bn} ! Prime d'équipe : +${f.price} bidons`:`${a} a complété l'équipe ${bn} (+${f.price} bidons)`}
     if(f.kind==="refuse")return me1?`Tu as refusé de prêter serment. Les Orques t'acclament.`:`${a} a refusé de prêter serment. Honte sur sa lignée.`;
+    if(f.kind==="trade_ban"){const d=esc(f.note||"");return (me1||me2)?`<b>Brigade anti-triche :</b> tes échanges avec ${me1?b:a} sont au frigo jusqu'au ${d}. On t'a à l'œil !`:`<b>Brigade anti-triche :</b> ${a} et ${b} pris la main dans le sac de cartes ! Leurs échanges sont au frigo jusqu'au ${d}. Circulez, y a rien à échanger.`}
     if(f.kind==="trade"){const x=+f.note||0, n2=x?`${n} et ${x} autre${x>1?"s":""} carte${x>1?"s":""}`:n;const pc=f.price?` (avec ${f.price} bidons)`:"";return me1?`Tu as échangé ${n2} avec ${b}${pc}`:me2?`${a} a échangé ${n2} avec toi${pc}`:`${a} et ${b} ont échangé ${n2}${pc}`;}return""};
   return `<section class="feed"><h3>Dans le groupe</h3><ul>${feed.map(f=>`<li>${line(f)}${cfg.is_admin?`<span class="when">${ago(f.created_at)}</span>`:""}</li>`).join("")}</ul></section>`;
 }
